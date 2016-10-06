@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+
+        <!--project select modal-->
+        <div class="modal fade" id="project_select" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="software_selection">Software Selection</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Please Select the project</h3>
+                        <form name="project_select">
+                            <div class="form-group">
+                                <select name="project_name" id="project_name" class="selectpicker" data-width="120px">
+
+                                </select>
+                                <a class="btn btn-default" id="project_submit" data-dismiss="modal">OK</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Create a new Project</h3>
+                        <button type="button" class="btn btn-primary" id="new_project">New Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- head -->
+        <div class="row">
+
+
+        <form class="form-inline page-head">
+                <div class="form-group">
+                    <label for="projectID">Project</label>
+                    <input type="text" class="form-control" id="projectID" placeholder="Project Number">
+                </div>
+                <button type="submit" class="btn btn-default" id="project_edit">Edit</button>
+                <button type="submit" class="btn btn-default" id="project_new">New</button>
+            </form>
+        </div>
+
+        <!-- body -->
+        <div class="row">
+            <!-- issue -->
+            <div class="col-md-8">
+                <form class="form-inline" name="issue">
+                <div class="row">
+                    <!-- left -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="DBID">DB ID</label>
+                            <input type="text" class="form-control" id="DBID" name="DBID" placeholder="Database Num">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <div class="input-group date" id="date" data-provide="datepicker">
+                                <input type="text" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="work">Work</label>
+                            <input type="text" class="form-control" id="work" name="work" placeholder="employee">
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="area" class="area">Area</label>
+                            <select name="area" id="area" class="selectpicker" data-width="140px">
+                                <option value="1">Volvo</option>
+                                <option value="2">Saab</option>
+                                <option value="3">Fiat</option>
+                                <option value="4">Audi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="key" class="key">Key</label>
+                            <select name="Key" id="key" class="selectpicker" data-width="140px">
+                                <option value="1">Volvo</option>
+                                <option value="2">Saab</option>
+                                <option value="3">Fiat</option>
+                                <option value="4">Audi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- middle -->
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="defect">Defect</label>
+                            <input type="text" name="defect" class="form-control" id="defect" placeholder="Defect">
+                        </div>
+                        <div class="form-group">
+                            <label for="charm">CHARM</label>
+                            <input type="text" name="charm" class="form-control" id="charm" placeholder="CHARM">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <input type="text" class="form-control" id="status" placeholder="Status">
+                            <input type="checkbox" name="no_further_action" value="no_further_action"> No further action<br>
+                        </div>
+                        <div class="form-group">
+                            <label for="baseline">Baseline</label>
+                            <input type="text" class="form-control" id="baseline" placeholder="Baseline">
+                        </div>
+                        <div class="form-group">
+                            <label for="reproducible" class="reproducible">Reproducible</label>
+                            <select name="reproducible" id="reproducible" class="selectpicker" data-width="120px">
+                                <option value="1">Volvo</option>
+                                <option value="2">Saab</option>
+                                <option value="3">Fiat</option>
+                                <option value="4">Audi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority" class="priority">Priority</label>
+                            <select name="priority" id="priority" class="selectpicker" data-width="120px">
+                                <option value="1">Volvo</option>
+                                <option value="2">Saab</option>
+                                <option value="3">Fiat</option>
+                                <option value="4">Audi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="messenger" class="messenger">Messenger</label>
+                            <select name="messenger" id="messenger" class="selectpicker" data-width="120px">
+                                <option value="1">Volvo</option>
+                                <option value="2">Saab</option>
+                                <option value="3">Fiat</option>
+                                <option value="4">Audi</option>
+                            </select>
+                            <button class="btn btn-default" id="messenger_btn" type="submit">Open</button>
+                        </div>
+                    </div>
+
+                    <!-- right -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="costumer">Costumer</label>
+                            <input type="text" class="form-control" id="costumer" placeholder="costumer">
+                        </div>
+
+                        <fieldset>
+                            <ul class="list-group costumer_list">
+                                <li class="list-group-item ">Munchen</li>
+                                <li class="list-group-item ">Bremen</li>
+                                <li class="list-group-item ">Frankfurt</li>
+                                <li class="list-group-item ">Basel</li>
+                                <li class="list-group-item ">ludwigshafen</li>
+                                <li class="list-group-item ">hamburg</li>
+                                <li class="list-group-item ">Munchen</li>
+
+                            </ul>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="summary">Summary</label>
+                            <input type="text" class="form-control" id="summary" placeholder="issue summary">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="issue description">sdasdas</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="action">Action</label>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist" id="action">
+                                <li role="presentation" class="active"><a href="#current" aria-controls="current" role="tab" data-toggle="tab">Current</a></li>
+                                <li role="presentation"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New</a></li>
+                                <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">History</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="current">sdfsdf</div>
+                                <div role="tabpanel" class="tab-pane fade" id="new">fffff</div>
+                                <div role="tabpanel" class="tab-pane fade" id="history">..dddd.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="solution">Solution</label>
+                            <input type="text" name="solution" class="form-control" id="solution" placeholder="issue solution">
+                        </div>
+                        <div class="form-group">
+                            <label for="solution_baseline" class="solution_baseline">Baseline</label>
+                            <input type="text" name="solution_baseline" class="form-control" id="solution_baseline">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="c2c">Communication<br> to  customer</label>
+                            <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description">sdasdas</textarea>
+                        </div>
+                        <a class="btn btn-default" id="submit">Submit</a>
+                    </div>
+                </div>
+
+                </form>
+            </div>
+
+
+
+            <!-- advance search -->
+            <div class="col-md-4 advance_search">
+                <form name="advance_search" class="form-inline">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="as_defect" class="as_defect">Defect</label>
+                                <input type="text" class="form-control" id="as_defect">
+                            </div>
+                            <div class="form-group">
+                                <label for="as_customer" class="as_customer">Customer</label>
+                                <input type="text" class="form-control" id="as_customer">
+                            </div>
+                            <div class="form-group">
+                                <label for="as_summary" class="as_summary">Summary</label>
+                                <input type="text" class="form-control" id="as_summary">
+                            </div>
+                            <div class="form-group">
+                                <label for="as_status" class="as_status">Status</label>
+                                <input type="text" class="form-control" id="as_status">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="checkbox" name="as_open_issues" id="as_open_issues" value="as_open_issues">
+                                <label for="as_open_issues">Open Issues</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="as_all_issues" id="as_all_issues" value="as_all_issues">
+                                <label for="as_all_issues">All Issues</label>
+                            </div>
+                            <a class="btn btn-default advance_search-btn">Advanced Search</a>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group as_list">
+                            <li class="list-group-item list-group-item-success">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-success">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item ">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-warning">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-info">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-danger">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item ">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-warning">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-info">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                            <li class="list-group-item list-group-item-danger">
+                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
+                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pagination_btn ">
+            <div class="col-md-4">
+                <a class="btn btn-default" id="new_issue">New</a>
+                <a class="btn btn-default" id="delete_issue">Delete</a>
+            </div>
+            <div class="col-md-4 text-center">
+                <a class="btn btn-default" id="first_issue"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
+                <a class="btn btn-default" id="previous_issue"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
+                <a class="btn btn-default" id="next_issue"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+                <a class="btn btn-default" id="last_issue"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-3.1.1.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datepicker.min.js"></script>
+<script src="js/bootstrap-select.min.js"></script>
+<script src="js/bootstrap-notify.min.js"></script>
+<script src="js/index.js"></script>
+    <script>if (window.module) module = window.module;</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+body {
+    background: #8e9eab; /* fallback for old browsers */
+    background: -webkit-linear-gradient( #8e9eab , #eef2f3); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient( #8e9eab , #eef2f3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    min-width : 992px;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.5);
+    width : 96%;
+}
+
+.page-head {
+    margin: 30px 10px;
+}
+#DBID {
+    width: 140px;
+    margin: 10px 0;
+}
+
+#date {
+    width: 140px;
+    margin-left: 7px;
+}
+
+#work {
+    width: 140px;
+    margin: 10px 0 5px 3px;
+}
+
+.key {
+    margin-right: 12px;
+    margin-top: 15px;
+}
+
+.area {
+    margin-right: 7px;
+    margin-top: 10px;
+}
+
+#defect {
+    width: 225px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+#charm {
+    width: 225px;
+    margin-left: 6px;
+    margin-bottom: 10px;
+}
+#status {
+    width: 80px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+#baseline {
+    width: 225px;
+    margin-bottom: 10px;
+}
+
+.reproducible {
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+.priority {
+    margin-right: 53px;
+    margin-bottom: 15px;
+}
+.messenger {
+    margin-right: 26px;
+    margin-bottom: 15px;
+}
+
+#costumer {
+    width: 90px;
+    margin-bottom: 10px;
+}
+
+.costumer_list {
+    height: 228px;
+}
+.costumer_list > li {
+    padding: 6px;
+    text-align: center;
+}
+
+fieldset {
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 1px #8E9EAB;
+    height: 248px;
+}
+
+#summary {
+    width: 625px;
+    margin-left: 55px;
+}
+
+#description {
+    resize: vertical;
+    max-height:80px;
+    width: 625px;
+    margin: 10px 0 0 39px;
+}
+
+#action {
+    margin-left: 122px;
+}
+.tab-pane {
+    background-color: #fff;
+    margin : 0 0 0 122px;
+    padding: 10px;
+    width:625px;
+    height: 140px;
+    border: solid 1px #CCCCCC ;
+    border-top-style: hidden;
+
+}
+
+#solution {
+    margin : 10px 0 0 60px;
+    width: 352px;
+}
+label.solution_baseline {
+    margin: 15px 0 0 10px;
+}
+
+#c2c {
+    resize:vertical;
+    max-height:80px;
+    width: 625px;
+    margin : 10px 0 30px 10px;
+}
+
+
+
+.advance_search {
+    margin-left: -7px;
+    padding: 10px ;
+    border:solid 1px #8E9EAB ;
+    border-radius: 3px;
+}
+
+#as_defect {
+    width: 70%;
+    margin: 10px 0 0 24px;
+}
+
+#as_customer {
+    width: 70%;
+    margin: 10px 0 0 2px;
+}
+
+#as_summary {
+    width: 70%;
+    margin: 10px 0 0 5px;
+}
+#as_status {
+    width: 70%;
+    margin: 10px 0 0 24px;
+}
+
+#as_open_issues {
+    margin-top:10px;
+}
+
+.advance_search-btn {
+    margin-left: -20px;
+}
+
+.list-group {
+    overflow-y:auto;
+    overflow-x:auto;
+}
+.as_list {
+    margin: 10px 0;
+    height: 535px;
+}
+
+.pagination_btn {
+
+    margin: 10px 0 30px 0;
+}
+
+#new_project {
+    margin-bottom: 30px;
+}

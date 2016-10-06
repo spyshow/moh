@@ -1,0 +1,154 @@
+/**
+ * Created by jihad.kherfan on 9/25/2016.
+ */
+
+/* TODO
+ 1- change document.issue. to get element by ID
+ 2- check the date option
+ */
+
+var mysql = require('mysql');
+
+// DatePicker
+$('.datepicker').datepicker({
+    format: 'yyyy-mm-dd'
+});
+
+//Tabs
+$('#myTabs a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+});
+
+//notification
+function showNotification(msg,type,icon){
+    $.notify({
+        icon: icon,
+        message: msg}, {
+        type: type
+    });
+}
+
+//getDate
+
+function getDate(){
+    var currentTime = new Date();
+    var month = currentTime.getMonth() + 1;
+    var day = currentTime.getDate();
+    var year = currentTime.getFullYear();
+    return year+'-'+month+'-'+day;
+}
+
+//create Mysql connection
+var connection = mysql.createPool({
+    connectionLimit : 10,
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database: 'test'
+});
+
+
+$(document).ready(function(){
+
+    // select all project names for the first screen
+    $('#project_select').modal({show: true, backdrop : "static" , keyboard: false}); // show modal which cannot escape
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT id,project_name FROM projects', function (error, data) { // select project_name and ID from project
+            if(error){
+                showNotification('Error :'+error,'danger','glyphicon glyphicon-tasks');
+            }
+            var project_list='';   // variable to carry the options for the select
+            data.forEach(function(data){
+                project_list += '<option value="'+data.id+'">'+data.project_name+'</option>'; //make an option for every project
+            });
+
+            $('#project_name').html(project_list).selectpicker('refresh'); // put them in the select div and refresh the select to show the new values
+        });
+        conn.release(); // release the connection to be use in other query
+    });
+
+});
+
+$('#project_submit').click(function(e){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT * FROM issues WHERE project_id = ?',[project_ID], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            }
+            document.getElementById('DBID').value = data[0].dbid;
+            document.getElementById('work').value = data[0].work;
+            $('#date').datepicker('update', data[0].date);
+            $('#area').val(data[0].area).selectpicker('refresh');
+            $('#key').val(data[0].key).selectpicker('refresh');
+            document.getElementById('defect').value = data[0].defect;
+            document.getElementById('charm').value = data[0].charm;
+            document.getElementById('status').value = data[0].status;
+            //document.getElementById('no_further_action').checked = data[0].no_further_action;
+            document.getElementById('baseline').value = data[0].baseline;
+            $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+            $('#priority').val(data[0].priority).selectpicker('refresh');
+            $('#messenger').val(data[0].messenger).selectpicker('refresh');
+            document.getElementById('summary').value = data[0].summary;
+            document.getElementById('description').value = data[0].description;
+            document.getElementById('solution').value = data[0].solution;
+            document.getElementById('solution_baseline').value = data[0].solution_baseline;
+            document.getElementById('c2c').value = data[0].c2c;
+            $('#project_select').modal({show: false});
+        });
+    });
+});
+
+$('#submit').click(function (e) {
+    e.preventDefault();
+
+    var dbid = document.getElementById('DBID').value;
+    var work = document.getElementById('work').value;
+    var date = getDate();
+    var area = document.getElementById('area').options.value;
+    var key = document.getElementById('key').options.value;
+    var defect = document.getElementById('defect').value;
+    var charm = document.getElementById('charm').value;
+    var status = document.getElementById('status').value;
+    var no_further_action = document.getElementById('no_further_action').checked;
+    var baseline =  document.getElementById('baseline').value;
+    var reproducible = document.getElementById('reproducible').options.value;
+    var priority = document.getElementById('priority').options.value;
+    var messenger = document.getElementById('messenger').options.value;
+    var summary = document.getElementById('summary').value;
+    var description = document.getElementById('description').value;
+    var solution = document.getElementById('solution').value;
+    var solution_baseline = document.getElementById('solution_baseline').value;
+    var c2c = document.getElementById('c2c').value;
+
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('INSERT INTO test SET ?',
+            [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
+            function (error, results) {
+            if(error){
+                showNotification('Error :'+error,'danger','glyphicon glyphicon-tasks');
+            }
+            showNotification('Data saved to the database','success','glyphicon glyphicon-tasks');
+        });
+        conn.release();
+    });
+
+});
+
+
+
+
