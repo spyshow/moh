@@ -3,9 +3,9 @@
  */
 
 /* TODO
-    1- check the New Project button.
-    2- check getDate() output.
-    3- make a confirmation modal for delete button
+    1- check getDate() output.
+    2- make a confirmation modal for delete button.
+    3- make new project button take us to new project page .
  */
 
 var mysql = require('mysql');
@@ -90,11 +90,11 @@ $('#project_submit').click(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT * FROM issues WHERE project_id = ? ',[project_ID], function (error, data) {
+        conn.query('SELECT * FROM issues WHERE  ? ',[{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
-                console.log(data[0].id);
+
                 document.getElementById('issueID').value = data[0].id;
                 document.getElementById('form_type').value = 'update';
                 document.getElementById('DBID').value = data[0].dbid;
@@ -125,7 +125,9 @@ $('#project_submit').click(function(){
 
 $('#submit').click(function (e) {
     e.preventDefault();
-    var issueID = document.getElementById('issue_id').value;
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    var issueID = document.getElementById('issueID').value;
     var dbid = document.getElementById('DBID').value;
     var work = document.getElementById('work').value;
     var date = getDate();
@@ -152,16 +154,17 @@ $('#submit').click(function (e) {
                 showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
                 return;
             }
-            console.log(area);
-            conn.query('UPDATE issues SET ? Where id = ?',
+
+            conn.query('UPDATE issues SET ? Where ?',
                 [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  },{id: issueID}],
                 function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
                     } else {
-                        showNotification('Data saved to the database', 'success', 'glyphicon glyphicon-tasks');
+                        showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
                     }
                 });
+
             conn.release();
         });
 
@@ -174,7 +177,7 @@ $('#submit').click(function (e) {
                 return;
             }
             conn.query('INSERT INTO issues SET ?',
-                [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
+                [{project_id: project_ID,dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
                 function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
@@ -186,7 +189,7 @@ $('#submit').click(function (e) {
             conn.release();
         });
     }
-
+    document.getElementById('form_type').value = 'update';
 
 });
 
@@ -219,51 +222,22 @@ $('#new_issue').click(function(e){
 //======================================================================================================================
 //new project button
 
-$('#new_project').click(function(e){
-    $('#project_select').modal({show: false});
-    e.preventDefault();
-
-    document.getElementById('form_type').value = 'insert';
-    document.getElementById('DBID').value = '';
-    document.getElementById('work').value = '';
-    $('#date').datepicker('update', getDate());
-    $('#area').val(1).selectpicker('refresh');
-    $('#key').val(1).selectpicker('refresh');
-    document.getElementById('defect').value = '';
-    document.getElementById('charm').value = '';
-    document.getElementById('status').value = '';
-    document.getElementById('no_further_action').checked = 0;
-    document.getElementById('baseline').value = '';
-    $('#reproducible').val(1).selectpicker('refresh');
-    $('#priority').val(1).selectpicker('refresh');
-    $('#messenger').val(1).selectpicker('refresh');
-    document.getElementById('summary').value = '';
-    document.getElementById('description').value = '';
-    document.getElementById('solution').value = '';
-    document.getElementById('solution_baseline').value = '';
-    document.getElementById('c2c').value = '';
-
-});
-
 //======================================================================================================================
 //delete button
 
 $('#delete_issue').click(function(e){
     e.preventDefault();
     var issueID = document.getElementById('issueID').value;
-    console.log(issueID);
+
     if(issueID){
         connection.getConnection(function(err, conn) {
             if (err) {
                 showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
                 return;
             }
-            conn.query('DELETE FROM issues WHERE ?',
-                [{id: issueID }],
+            conn.query('DELETE FROM issues WHERE ?', [{id: issueID }],
                 function (error) {
                     if(error){
-                        console.log(conn.query('DELETE FROM issues WHERE id  ?',
-                            [{id: issueID }]));
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
                     }
                     else {
