@@ -124,7 +124,7 @@
                         <div class="form-group">
                             <label for="status">Status</label>
                             <input type="text" class="form-control" id="status" placeholder="Status">
-                            <input type="checkbox" name="no_further_action" value="no_further_action"> No further action<br>
+                            <input type="checkbox" name="no_further_action" id="no_further_action" value="no_further_action"> <label for="no_further_action">No further action</label><br>
                         </div>
                         <div class="form-group">
                             <label for="baseline">Baseline</label>
@@ -220,11 +220,16 @@
                             <label for="c2c">Communication<br> to  customer</label>
                             <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description">sdasdas</textarea>
                         </div>
-                        <a class="btn btn-default" id="submit">Submit</a>
+                        <div class="form-group">
+                            <input type="hidden" id="form_type" name="form_type">
+                            <input type="hidden" id="issueID" name="issueID">
+                        </div>
+
                     </div>
                 </div>
-
+                    <a class="btn btn-default" id="submit">Submit</a>
                 </form>
+
             </div>
 
 
@@ -314,6 +319,7 @@
         </div>
         <div class="row pagination_btn ">
             <div class="col-md-4">
+
                 <a class="btn btn-default" id="new_issue">New</a>
                 <a class="btn btn-default" id="delete_issue">Delete</a>
             </div>
