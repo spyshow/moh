@@ -18,7 +18,7 @@ $('.datepicker').datepicker({
 
 //======================================================================================================================
 //Tabs
-$('#myTabs a').click(function (e) {
+$('#myTabs').find('a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');
 });
@@ -82,7 +82,7 @@ $(document).ready(function(){
 //======================================================================================================================
 //selected project submit button
 
-$('#project_submit').click(function(e){
+$('#project_submit').click(function(){
     var project_name =  document.getElementById('project_name');
     var project_ID = project_name.options[project_name.selectedIndex].value;
     connection.getConnection(function(err,conn) { //make connection to DB
@@ -155,7 +155,7 @@ $('#submit').click(function (e) {
             console.log(area);
             conn.query('UPDATE issues SET ? Where id = ?',
                 [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  },{id: issueID}],
-                function (error, results) {
+                function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
                     } else {
@@ -174,8 +174,8 @@ $('#submit').click(function (e) {
                 return;
             }
             conn.query('INSERT INTO issues SET ?',
-                [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  },],
-                function (error, results) {
+                [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
+                function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
                     }
