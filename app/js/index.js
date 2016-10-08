@@ -3,18 +3,13 @@
  */
 
 /* TODO
-    1- check getDate() output.
-    2- make a confirmation modal for delete button.
+
+
     3- make new project button take us to new project page .
+
  */
 
 var mysql = require('mysql');
-
-//======================================================================================================================
-// DatePicker
-$('.datepicker').datepicker({
-    format: 'yyyy-mm-dd'
-});
 
 //======================================================================================================================
 //Tabs
@@ -90,7 +85,7 @@ $('#project_submit').click(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT * FROM issues WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id DESC',[{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -99,7 +94,7 @@ $('#project_submit').click(function(){
                 document.getElementById('form_type').value = 'update';
                 document.getElementById('DBID').value = data[0].dbid;
                 document.getElementById('work').value = data[0].work;
-                $('#date').datepicker('update', data[0].date);
+                document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
                 $('#key').val(data[0].key).selectpicker('refresh');
                 document.getElementById('defect').value = data[0].defect;
@@ -130,7 +125,7 @@ $('#submit').click(function (e) {
     var issueID = document.getElementById('issueID').value;
     var dbid = document.getElementById('DBID').value;
     var work = document.getElementById('work').value;
-    var date = getDate();
+    var date = document.getElementById('date').value;
     var area = $('#area').val();
     var key = $('#key').val();
     var defect = document.getElementById('defect').value;
@@ -198,10 +193,12 @@ $('#submit').click(function (e) {
 
 $('#new_issue').click(function(e){
     e.preventDefault();
+    document.getElementById('issueID').value = '';
     document.getElementById('form_type').value = 'insert';
     document.getElementById('DBID').value = '';
     document.getElementById('work').value = '';
-    $('#date').datepicker('update', getDate());
+    document.getElementById('date').value = getDate();
+
     $('#area').val(1).selectpicker('refresh');
     $('#key').val(1).selectpicker('refresh');
     document.getElementById('defect').value = '';
@@ -224,6 +221,10 @@ $('#new_issue').click(function(e){
 
 //======================================================================================================================
 //delete button
+$('#delete_btn').click(function(e){
+    e.preventDefault();
+    $('#confirm').modal({ show: true ,backdrop: 'static', keyboard: false });
+});
 
 $('#delete_issue').click(function(e){
     e.preventDefault();
@@ -247,6 +248,8 @@ $('#delete_issue').click(function(e){
             conn.release();
         });
     }
+
+    $('#project_submit').click();
 });
 
 //======================================================================================================================
