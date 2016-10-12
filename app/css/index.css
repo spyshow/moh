@@ -138,37 +138,37 @@ label.solution_baseline {
 
 
 
-.advance_search {
+.search {
     margin-left: -7px;
     padding: 10px ;
     border:solid 1px #8E9EAB ;
     border-radius: 3px;
 }
 
-#as_defect {
+#s_defect {
     width: 70%;
     margin: 10px 0 0 24px;
 }
 
-#as_customer {
+#s_customer {
     width: 70%;
     margin: 10px 0 0 2px;
 }
 
-#as_summary {
+#s_summary {
     width: 70%;
     margin: 10px 0 0 5px;
 }
-#as_status {
+#s_status {
     width: 70%;
     margin: 10px 0 0 24px;
 }
 
-#as_open_issues {
+#s_open_issues {
     margin-top:10px;
 }
 
-.advance_search-btn {
+.advance_search-btn , .search-btn{
     margin-left: -20px;
 }
 
@@ -176,7 +176,7 @@ label.solution_baseline {
     overflow-y:auto;
     overflow-x:auto;
 }
-.as_list {
+.s_list {
     margin: 10px 0;
     height: 535px;
 }

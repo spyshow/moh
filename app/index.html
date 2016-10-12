@@ -9,7 +9,6 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
- <!--   <link href="css/bootstrap-datepicker.min.css" rel="stylesheet">-->
     <link href="css/bootstrap-select.min.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
@@ -232,43 +231,44 @@
 
 
             <!-- advance search -->
-            <div class="col-md-4 advance_search">
-                <form name="advance_search" class="form-inline">
+            <div class="col-md-4 search">
+                <form name="search" class="form-inline">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <label for="as_defect" class="as_defect">Defect</label>
-                                <input type="text" class="form-control" id="as_defect">
+                                <label for="s_defect" class="s_defect">Defect</label>
+                                <input type="text" class="form-control" id="s_defect">
                             </div>
                             <div class="form-group">
-                                <label for="as_customer" class="as_customer">Customer</label>
-                                <input type="text" class="form-control" id="as_customer">
+                                <label for="s_customer" class="s_customer">Customer</label>
+                                <input type="text" class="form-control" id="s_customer">
                             </div>
                             <div class="form-group">
-                                <label for="as_summary" class="as_summary">Summary</label>
-                                <input type="text" class="form-control" id="as_summary">
+                                <label for="s_summary" class="s_summary">Summary</label>
+                                <input type="text" class="form-control" id="s_summary">
                             </div>
                             <div class="form-group">
-                                <label for="as_status" class="as_status">Status</label>
-                                <input type="text" class="form-control" id="as_status">
+                                <label for="s_status" class="s_status">Status</label>
+                                <input type="text" class="form-control" id="s_status">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <input type="checkbox" name="as_open_issues" id="as_open_issues" value="as_open_issues">
-                                <label for="as_open_issues">Open Issues</label>
+                                <input type="checkbox" name="s_open_issues" id="s_open_issues" value="s_open_issues">
+                                <label for="s_open_issues">Open Issues</label>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="as_all_issues" id="as_all_issues" value="as_all_issues">
-                                <label for="as_all_issues">All Issues</label>
+                                <input type="checkbox" name="s_all_issues" id="s_all_issues" value="s_all_issues">
+                                <label for="s_all_issues">All Issues</label>
                             </div>
-                            <a class="btn btn-default advance_search-btn">Advanced Search</a>
+                            <a class="btn btn-default search-btn">Search</a>
+                            <a class="btn btn-default advance-search-btn">Advanced Search</a>
                         </div>
                     </div>
                 </form>
                 <div class="row">
                     <div class="col-md-12">
-                        <ul class="list-group as_list">
+                        <ul class="list-group s_list">
                             <li class="list-group-item list-group-item-success">
                                 <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
                                 <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
@@ -319,10 +319,6 @@
 
                 <a class="btn btn-default" id="new_issue">New</a>
                 <a class="btn btn-default" id="delete_btn">Delete</a>
-
-
-
-
                 <div class="modal fade" id="confirm" tabindex="-1" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -336,11 +332,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
 
             </div>
             <div class="col-md-4 text-center">
@@ -357,7 +348,6 @@
 <script src="js/jquery-3.1.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
-<!--<script src="js/bootstrap-datepicker.min.js"></script>-->
 <script src="js/bootstrap-select.min.js"></script>
 <script src="js/bootstrap-notify.min.js"></script>
 <script src="js/index.js"></script>

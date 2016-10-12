@@ -4,12 +4,12 @@
 
 /* TODO
 
-
-    3- make new project button take us to new project page .
+    1- make new project button take us to new project page .
 
  */
 
 var mysql = require('mysql');
+
 
 //======================================================================================================================
 //Tabs
@@ -85,7 +85,7 @@ $('#project_submit').click(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id DESC',[{project_id: project_ID}], function (error, data) {
+        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id DESC LIMIT  1',[{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -113,7 +113,11 @@ $('#project_submit').click(function(){
                 $('#project_select').modal({show: false});
             }
         });
+        conn.release();
     });
+
+    $('#last_issue').hide();
+    $('#next_issue').hide();
 });
 //======================================================================================================================
 //submit or update issue button
@@ -253,3 +257,286 @@ $('#delete_issue').click(function(e){
 });
 
 //======================================================================================================================
+//issues navigation buttons
+
+
+//first issue
+$('#first_issue').click(function(){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id ASC LIMIT  1',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+
+                document.getElementById('issueID').value = data[0].id;
+                document.getElementById('form_type').value = 'update';
+                document.getElementById('DBID').value = data[0].dbid;
+                document.getElementById('work').value = data[0].work;
+                document.getElementById('date').value = data[0].date;
+                $('#area').val(data[0].area).selectpicker('refresh');
+                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('defect').value = data[0].defect;
+                document.getElementById('charm').value = data[0].charm;
+                document.getElementById('status').value = data[0].status;
+                document.getElementById('no_further_action').checked = data[0].no_further_action;
+                document.getElementById('baseline').value = data[0].baseline;
+                $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                $('#priority').val(data[0].priority).selectpicker('refresh');
+                $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                document.getElementById('summary').value = data[0].summary;
+                document.getElementById('description').value = data[0].description;
+                document.getElementById('solution').value = data[0].solution;
+                document.getElementById('solution_baseline').value = data[0].solution_baseline;
+                document.getElementById('c2c').value = data[0].c2c;
+                $('#project_select').modal({show: false});
+            }
+        });
+        conn.release();
+    });
+
+    $('#first_issue').hide();
+    $('#previous_issue').hide();
+    $('#last_issue').show();
+    $('#next_issue').show();
+});
+
+
+//last issue
+$('#last_issue').click(function(){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id DESC LIMIT  1',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+
+                document.getElementById('issueID').value = data[0].id;
+                document.getElementById('form_type').value = 'update';
+                document.getElementById('DBID').value = data[0].dbid;
+                document.getElementById('work').value = data[0].work;
+                document.getElementById('date').value = data[0].date;
+                $('#area').val(data[0].area).selectpicker('refresh');
+                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('defect').value = data[0].defect;
+                document.getElementById('charm').value = data[0].charm;
+                document.getElementById('status').value = data[0].status;
+                document.getElementById('no_further_action').checked = data[0].no_further_action;
+                document.getElementById('baseline').value = data[0].baseline;
+                $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                $('#priority').val(data[0].priority).selectpicker('refresh');
+                $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                document.getElementById('summary').value = data[0].summary;
+                document.getElementById('description').value = data[0].description;
+                document.getElementById('solution').value = data[0].solution;
+                document.getElementById('solution_baseline').value = data[0].solution_baseline;
+                document.getElementById('c2c').value = data[0].c2c;
+                $('#project_select').modal({show: false});
+            }
+        });
+        conn.release();
+    });
+
+    $('#last_issue').hide();
+    $('#next_issue').hide();
+    $('#first_issue').show();
+    $('#previous_issue').show();
+});
+
+//next issue
+$('#next_issue').click(function(e){
+    var issueID = document.getElementById('issueID').value;
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('select * from issues where id = (select min(id) from issues where id > ?) AND ? LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+
+                document.getElementById('issueID').value = data[0].id;
+                document.getElementById('form_type').value = 'update';
+                document.getElementById('DBID').value = data[0].dbid;
+                document.getElementById('work').value = data[0].work;
+                document.getElementById('date').value = data[0].date;
+                $('#area').val(data[0].area).selectpicker('refresh');
+                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('defect').value = data[0].defect;
+                document.getElementById('charm').value = data[0].charm;
+                document.getElementById('status').value = data[0].status;
+                document.getElementById('no_further_action').checked = data[0].no_further_action;
+                document.getElementById('baseline').value = data[0].baseline;
+                $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                $('#priority').val(data[0].priority).selectpicker('refresh');
+                $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                document.getElementById('summary').value = data[0].summary;
+                document.getElementById('description').value = data[0].description;
+                document.getElementById('solution').value = data[0].solution;
+                document.getElementById('solution_baseline').value = data[0].solution_baseline;
+                document.getElementById('c2c').value = data[0].c2c;
+
+            }
+        });
+        conn.release();
+    });
+
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where ?',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                console.log(document.getElementById('issueID').value+' '+data[0].max_id);
+                if(document.getElementById('issueID').value == data[0].max_id){
+
+                    $('#last_issue').hide();
+                    $('#next_issue').hide();
+                }
+            }
+        });
+        conn.release();
+    });
+
+
+    $('#first_issue').show();
+    $('#previous_issue').show();
+});
+//previous issue
+
+$('#previous_issue').click(function () {
+    var issueID = document.getElementById('issueID').value;
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('select * from issues where id = (select max(id) from issues where id < ?) AND ? LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+
+                document.getElementById('issueID').value = data[0].id;
+                document.getElementById('form_type').value = 'update';
+                document.getElementById('DBID').value = data[0].dbid;
+                document.getElementById('work').value = data[0].work;
+                document.getElementById('date').value = data[0].date;
+                $('#area').val(data[0].area).selectpicker('refresh');
+                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('defect').value = data[0].defect;
+                document.getElementById('charm').value = data[0].charm;
+                document.getElementById('status').value = data[0].status;
+                document.getElementById('no_further_action').checked = data[0].no_further_action;
+                document.getElementById('baseline').value = data[0].baseline;
+                $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                $('#priority').val(data[0].priority).selectpicker('refresh');
+                $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                document.getElementById('summary').value = data[0].summary;
+                document.getElementById('description').value = data[0].description;
+                document.getElementById('solution').value = data[0].solution;
+                document.getElementById('solution_baseline').value = data[0].solution_baseline;
+                document.getElementById('c2c').value = data[0].c2c;
+
+            }
+        });
+        conn.release();
+    });
+
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where ?',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                console.log(document.getElementById('issueID').value+' '+data[0].min_id);
+                if(document.getElementById('issueID').value == data[0].min_id){
+
+                    $('#first_issue').hide();
+                    $('#previous_issue').hide();
+                }
+            }
+        });
+        conn.release();
+    });
+
+
+    $('#last_issue').show();
+    $('#next_issue').show();
+});
+
+
+//======================================================================================================================
+//search
+
+$('.search-btn').click(function(e){
+    e.preventDefault();
+    var defect = document.getElementById('s_defect').value ;
+    var customer = document.getElementById('s_customer').value;
+    var summary = document.getElementById('s_summary').value;
+    var status = document.getElementById('s_status').value;
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    var sql = [];
+    var final_sql = 'SELECT id,summary,dbid FROM issues WHERE ';
+    if(defect){
+        final_sql += ' defect REGEXP ? AND ';
+        sql.push(defect);
+    }
+   /* if(customer){
+        final_sql += '  customer REGEXP ? AND ';
+        sql.push(customer);
+    }
+    */
+    if(status){
+        final_sql += '  status REGEXP ? AND ';
+        sql.push(status);
+    }
+    if(summary){
+        final_sql += '  MATCH(summary) AGAINST(? IN NATURAL LANGUAGE MODE ) AND' ;
+        sql.push(summary);
+    }
+
+    final_sql += ' ? ';
+    sql.push({project_id: project_ID});
+
+
+
+    connection.getConnection(function(err,conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }console.log(conn.query(final_sql,sql));
+        conn.query(final_sql,sql, function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                for(var i =0 ; i<data.length;i++){
+                    $('.s_list').append('<li class="list-group-item list-group-item-success"><h4 class="list-group-item-heading">'+data[i].dbid+'</h4> <p class="list-group-item-text">'+data[i].summary+'</p></li>');
+                }
+            }
+        });
+
+        conn.release();
+    });
+});
