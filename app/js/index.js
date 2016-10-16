@@ -4,9 +4,11 @@
 
 /* TODO
 
-    1- make new project button take us to new project page .
+    3- try to change scroll bar style
 
  */
+var electron = require('electron');
+var ipc = electron.ipcRenderer;
 
 var mysql = require('mysql');
 
@@ -58,20 +60,30 @@ $(document).ready(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT id,project_name FROM projects', function (error, data) { // select project_name and ID from project
+        conn.query('SELECT id,project_name,cpf_doc_id FROM projects', function (error, data) { // select project_name , cpf_doc_id and ID from project
             if(error){
                 showNotification('Error :'+error,'danger','glyphicon glyphicon-tasks');
-            }
-            var project_list='';   // variable to carry the options for the select
-            data.forEach(function(data){
-                project_list += '<option value="'+data.id+'">'+data.project_name+'</option>'; //make an option for every project
-            });
+            } else {
+                var project_list = '';   // variable to carry the options for the select
+                data.forEach(function (data) {
+                    project_list += '<option value="' + data.id + '">' + data.project_name + '</option>'; //make an option for every project
+                });
 
-            $('#project_name').html(project_list).selectpicker('refresh'); // put them in the select div and refresh the select to show the new values
+                $('#project_name').html(project_list).selectpicker('refresh'); // put them in the select div and refresh the select to show the new values
+
+            }
         });
         conn.release(); // release the connection to be use in other query
     });
 
+});
+
+//======================================================================================================================
+//new project btn clicked
+
+$('.project_new').click(function(e){
+    e.preventDefault();
+    ipc.send('show-project-win');
 });
 
 //======================================================================================================================
@@ -80,15 +92,20 @@ $(document).ready(function(){
 $('#project_submit').click(function(){
     var project_name =  document.getElementById('project_name');
     var project_ID = project_name.options[project_name.selectedIndex].value;
+    document.getElementById('projectID').value = project_ID;
     connection.getConnection(function(err,conn) { //make connection to DB
         if (err) { //error handling
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT * FROM issues WHERE  ? ORDER BY id DESC LIMIT  1',[{project_id: project_ID}], function (error, data) {
+        conn.query('SELECT issues.id , issues.dbid ,issues.work,issues.date,issues.area,issues.key,issues.defect,issues.charm,issues.status,issues.no_further_action,issues.baseline,issues.reproducible,issues.priority,issues.messenger,issues.summary,issues.description,issues.solution,issues.solution_baseline,issues.c2c, projects.cpf_doc_id FROM issues ' +
+            ' INNER JOIN projects ON projects.id = issues.project_id ' +
+            ' WHERE ? ORDER BY id DESC LIMIT  1 ',[{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
+                document.getElementById('cpf-doc-id').textContent = data[0].cpf_doc_id;
+                document.getElementById('cpf-all').textContent = data[0].issues_num;
 
                 document.getElementById('issueID').value = data[0].id;
                 document.getElementById('form_type').value = 'update';
@@ -110,7 +127,25 @@ $('#project_submit').click(function(){
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
-                $('#project_select').modal({show: false});
+
+            }
+        });
+        conn.query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
+            ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                document.getElementById('cpf-all').textContent = data[0].issues_all;
+            }
+        });
+        console.log(conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
+            ' WHERE  ? AND no_further_action = ? ',[{project_id: project_ID},'0']));
+        conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
+            ' WHERE  ? AND no_further_action = ? ',[{project_id: project_ID},'0'], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                document.getElementById('cpf-open').textContent = data[0].issues_open;
             }
         });
         conn.release();
@@ -259,7 +294,6 @@ $('#delete_issue').click(function(e){
 //======================================================================================================================
 //issues navigation buttons
 
-
 //first issue
 $('#first_issue').click(function(){
     var project_name =  document.getElementById('project_name');
@@ -305,7 +339,6 @@ $('#first_issue').click(function(){
     $('#last_issue').show();
     $('#next_issue').show();
 });
-
 
 //last issue
 $('#last_issue').click(function(){
@@ -354,7 +387,7 @@ $('#last_issue').click(function(){
 });
 
 //next issue
-$('#next_issue').click(function(e){
+$('#next_issue').click(function(){
     var issueID = document.getElementById('issueID').value;
     var project_name =  document.getElementById('project_name');
     var project_ID = project_name.options[project_name.selectedIndex].value;
@@ -418,8 +451,8 @@ $('#next_issue').click(function(e){
     $('#first_issue').show();
     $('#previous_issue').show();
 });
-//previous issue
 
+//previous issue
 $('#previous_issue').click(function () {
     var issueID = document.getElementById('issueID').value;
     var project_name =  document.getElementById('project_name');
@@ -489,15 +522,24 @@ $('#previous_issue').click(function () {
 //======================================================================================================================
 //search
 
+//search btn
 $('.search-btn').click(function(e){
     e.preventDefault();
+    $('.search-result').addClass('hidden');
+
     var defect = document.getElementById('s_defect').value ;
-    var customer = document.getElementById('s_customer').value;
+    //var customer = document.getElementById('s_customer').value;
     var summary = document.getElementById('s_summary').value;
     var status = document.getElementById('s_status').value;
+    var open_issue = 0;
     var project_name =  document.getElementById('project_name');
     var project_ID = project_name.options[project_name.selectedIndex].value;
     var sql = [];
+    if(document.getElementById('s_open_issues').checked === false) {
+        open_issue = 1;
+    }
+
+
     var final_sql = 'SELECT id,summary,dbid FROM issues WHERE ';
     if(defect){
         final_sql += ' defect REGEXP ? AND ';
@@ -516,27 +558,100 @@ $('.search-btn').click(function(e){
         final_sql += '  MATCH(summary) AGAINST(? IN NATURAL LANGUAGE MODE ) AND' ;
         sql.push(summary);
     }
+    console.log(open_issue);
+    if(open_issue === 0){
+        final_sql += ' ?  AND ';
+        sql.push({no_further_action: '0'});
+    }
 
     final_sql += ' ? ';
     sql.push({project_id: project_ID});
 
+    if(!status && !summary && !defect) {
+        $('.search-ph').removeClass('hidden').addClass('show');
 
+    } else {
 
+        connection.getConnection(function (err, conn) { //make connection to DB
+            if (err) { //error handling
+                showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+                return;
+            }
+            console.log(conn.query(final_sql, sql));
+            conn.query(final_sql, sql, function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+
+                    if (data.length === 0) {
+                        $('.search-ph').removeClass('hidden').addClass('show');
+                        $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+                    } else {
+                        $('.search-ph').removeClass('show').addClass('hidden');
+                        for (var i = 0; i < data.length; i++) {
+                            $('.s_list').append('<a class="search-result" href="'+data[i].id+'"><li class="list-group-item list-group-item-success"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                        }
+                    }
+                }
+            });
+
+            conn.release();
+        });
+    }
+});
+
+//search result links
+$('.s_list').delegate('.search-result','click',function(e){
+    e.preventDefault();
+    var id= $(this).attr('href');
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
     connection.getConnection(function(err,conn) { //make connection to DB
         if (err) { //error handling
-            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
-        }console.log(conn.query(final_sql,sql));
-        conn.query(final_sql,sql, function (error, data) {
+        }
+        conn.query('SELECT * FROM issues WHERE  ?  AND ?',[{project_id: project_ID},{id: id}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
-                for(var i =0 ; i<data.length;i++){
-                    $('.s_list').append('<li class="list-group-item list-group-item-success"><h4 class="list-group-item-heading">'+data[i].dbid+'</h4> <p class="list-group-item-text">'+data[i].summary+'</p></li>');
-                }
+
+                document.getElementById('issueID').value = data[0].id;
+                document.getElementById('form_type').value = 'update';
+                document.getElementById('DBID').value = data[0].dbid;
+                document.getElementById('work').value = data[0].work;
+                document.getElementById('date').value = data[0].date;
+                $('#area').val(data[0].area).selectpicker('refresh');
+                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('defect').value = data[0].defect;
+                document.getElementById('charm').value = data[0].charm;
+                document.getElementById('status').value = data[0].status;
+                document.getElementById('no_further_action').checked = data[0].no_further_action;
+                document.getElementById('baseline').value = data[0].baseline;
+                $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                $('#priority').val(data[0].priority).selectpicker('refresh');
+                $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                document.getElementById('summary').value = data[0].summary;
+                document.getElementById('description').value = data[0].description;
+                document.getElementById('solution').value = data[0].solution;
+                document.getElementById('solution_baseline').value = data[0].solution_baseline;
+                document.getElementById('c2c').value = data[0].c2c;
+                showNotification('Issue loaded','success','glyphicon glyphicon-ok');
             }
         });
-
         conn.release();
     });
+
+});
+
+//search reset btn
+$('.search-reset-btn').click(function(e){
+    e.preventDefault();
+    document.getElementById('s_defect').value ='';
+    document.getElementById('s_customer').value ='';
+    document.getElementById('s_summary').value ='';
+    document.getElementById('s_status').value ='';
+    $('.search-ph').removeClass('hidden').addClass('show');
+    $('#search-ph-msg').text(' Search result will be shown here  ').removeClass('text-danger');
+    $('.search-result').remove();
 });

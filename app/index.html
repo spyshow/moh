@@ -41,7 +41,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>Create a new Project</h3>
-                        <button type="button" class="btn btn-primary" id="new_project" data-dismiss="modal">New Project</button>
+                        <button type="button" class="btn btn-primary project_new" >New Project</button>
                     </div>
                 </div>
             </div>
@@ -56,9 +56,12 @@
                 <div class="form-group">
                     <label for="projectID">Project</label>
                     <input type="text" class="form-control" id="projectID" placeholder="Project Number">
+                    <button type="submit" class="btn btn-default" id="project_edit">Edit</button>
+                    <button type="submit" class="btn btn-default project_new" >New</button>
+                    <p class="bg-info">All Issues: <span id="cpf-all"></span></p>
+                    <p class="bg-info">Open Issues: <span id="cpf-open"></span></p>
+                    <p class="bg-info">CPF-DOC-ID: <span id="cpf-doc-id"></span></p>
                 </div>
-                <button type="submit" class="btn btn-default" id="project_edit">Edit</button>
-                <button type="submit" class="btn btn-default" id="project_new">New</button>
             </form>
         </div>
 
@@ -88,17 +91,19 @@
                         <br />
                         <div class="form-group">
                             <label for="area" class="area">Area</label>
-                            <select name="area" id="area" class="selectpicker" data-width="140px">
-                                <option value="1">Volvo</option>
-                                <option value="2">Saab</option>
-                                <option value="3">Fiat</option>
-                                <option value="4">Audi</option>
+                            <select name="area" id="area" class="selectpicker" data-width="70%">
+                                <option value="1">Application</option>
+                                <option value="2">Software</option>
+                                <option value="3">Hardware</option>
+                                <option value="4">Documentation </option>
+                                <option value="5">Wish</option>
+                                <option value="6">Training</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="key" class="key">Key</label>
-                            <select name="Key" id="key" class="selectpicker" data-width="140px">
+                            <select name="Key" id="key" class="selectpicker" data-width="70%">
                                 <option value="1">Volvo</option>
                                 <option value="2">Saab</option>
                                 <option value="3">Fiat</option>
@@ -128,25 +133,23 @@
                         </div>
                         <div class="form-group">
                             <label for="reproducible" class="reproducible">Reproducible</label>
-                            <select name="reproducible" id="reproducible" class="selectpicker" data-width="120px">
-                                <option value="1">Volvo</option>
-                                <option value="2">Saab</option>
-                                <option value="3">Fiat</option>
-                                <option value="4">Audi</option>
+                            <select name="reproducible" id="reproducible" class="selectpicker" data-width="56%">
+                                <option value="1">Yes</option>
+                                <option value="2">No</option>
+                                <option value="3">Sporadic</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="priority" class="priority">Priority</label>
-                            <select name="priority" id="priority" class="selectpicker" data-width="120px">
-                                <option value="1">Volvo</option>
-                                <option value="2">Saab</option>
-                                <option value="3">Fiat</option>
-                                <option value="4">Audi</option>
+                            <select name="priority" id="priority" class="selectpicker" data-width="56%">
+                                <option value="1">High</option>
+                                <option value="2">Medium</option>
+                                <option value="3">Low</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="messenger" class="messenger">Messenger</label>
-                            <select name="messenger" id="messenger" class="selectpicker" data-width="120px">
+                            <select name="messenger" id="messenger" class="selectpicker" data-width="35%">
                                 <option value="1">Volvo</option>
                                 <option value="2">Saab</option>
                                 <option value="3">Fiat</option>
@@ -206,8 +209,6 @@
                         <div class="form-group">
                             <label for="solution">Solution</label>
                             <input type="text" name="solution" class="form-control" id="solution" placeholder="issue solution">
-                        </div>
-                        <div class="form-group">
                             <label for="solution_baseline" class="solution_baseline">Baseline</label>
                             <input type="text" name="solution_baseline" class="form-control" id="solution_baseline">
                         </div>
@@ -252,16 +253,17 @@
                                 <input type="text" class="form-control" id="s_status">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 search-btns">
                             <div class="form-group">
-                                <input type="checkbox" name="s_open_issues" id="s_open_issues" value="s_open_issues">
+                                <input type="radio" name="s_open_issues" id="s_open_issues" value="1" checked>
                                 <label for="s_open_issues">Open Issues</label>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="s_all_issues" id="s_all_issues" value="s_all_issues">
+                                <input type="radio" name="s_open_issues" id="s_all_issues" value="0">
                                 <label for="s_all_issues">All Issues</label>
                             </div>
                             <a class="btn btn-default search-btn">Search</a>
+                            <a class="btn btn-default search-reset-btn">Reset</a>
                             <a class="btn btn-default advance-search-btn">Advanced Search</a>
                         </div>
                     </div>
@@ -269,46 +271,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="list-group s_list">
-                            <li class="list-group-item list-group-item-success">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-success">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item ">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-warning">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-info">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-danger">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item ">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-warning">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-info">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
-                            <li class="list-group-item list-group-item-danger">
-                                <h4 class="list-group-item-heading">IM02229309 CUT WISH: MR:</h4>
-                                <p class="list-group-item-text">"Enable computed b-value" should be checked per default</p>
-                            </li>
+                            <div class="search-ph">
+                               <span id="search-ph-msg"> Search result will be shown here  </span><span class="glyphicon glyphicon-search animated infinite flash" aria-hidden="true"></span>
+                            </div>
                         </ul>
                     </div>
                 </div>
@@ -343,6 +308,9 @@
             <div class="col-md-4"></div>
         </div>
     </div>
+
+
+
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-3.1.1.min.js"></script>
