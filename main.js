@@ -7,24 +7,32 @@ const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const ipc = electron.ipcMain;
+const path = require('path');
 var mainWindow = null;
 
 
 app.on('window-all-closed', function() {
-    if (process.platform != 'darwin') {
+    if (process.platform !== 'darwin') {
         app.quit();
     }
 
 });
 
 app.on('ready', function() {
+
+    //Main window
+    const mainWindowPath = path.join('file://' + __dirname + '/app/index.html');
     mainWindow = new BrowserWindow({width: 1280, height: 700,minWidth:1280, minHeight: 700 ,maximizable : true});
-    mainWindow.loadURL('file://' + __dirname + '/app/index.html');
+    mainWindow.loadURL(mainWindowPath);
+    mainWindow.on('close', function () { mainWindow = null; });
+    mainWindow.on('closed', function() { mainWindow = null; });
 
 
-    var newProject = new BrowserWindow({width: 1000, height: 700 ,minWidth: 1000, minHeight: 700 ,maximizable : true,show: false})
-    newProject.loadURL('file://'+ __dirname +'/project/index.html');
 
+    //New project window
+    const newProjectPath = path.join('file://'+ __dirname +'/project/index.html');
+    var newProject = new BrowserWindow({width: 1280, height: 700 ,minWidth: 1280, minHeight: 700 ,maximizable : true,show: false})
+    newProject.loadURL(newProjectPath);
 
     ipc.on('show-project-win', function(){
        newProject.show();
@@ -33,10 +41,7 @@ app.on('ready', function() {
     newProject.on('close', function (event) {
         newProject.hide();
         event.preventDefault();
-    })
+    });
 
-    /* mainWindow.on('closed', function() {
-        connection.end();
-        mainWindow = null;
-    }); */
+    //
 });

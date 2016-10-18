@@ -23,45 +23,6 @@ body {
 }
 
 
-/* Let's get this party started */
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 2px rgba(200, 200, 200, 0.3);
-
-    background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar
-{
-    width: 9px;
-    background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar-thumb
-{
-    border-radius: 2px;
-    -webkit-box-shadow: inset 0 0 6px rgba(200, 200, 200, 0.3);
-    background-color: #b9b9b9;
-}
-
-::-webkit-scrollbar-button:horizontal:increment {
-    background-image: url('/app/img/up.png');
-}
-
-::-webkit-scrollbar-button:horizontal:decrement {
-    background-image: url('/app/img/down.png');
-}
-
-::-webkit-scrollbar-button:vertical:increment {
-    background-image: url('/app/img/right.png');
-}
-
-::-webkit-scrollbar-button:vertical:decrement {
-    background-image: url('/app/img/left.png');
-}
-
-
-
 /* =====================================================================================================================
    Main Form
 */
