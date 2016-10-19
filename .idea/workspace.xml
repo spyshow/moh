@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/css/animate.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/css/bootstrap-select.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/css/bootstrap.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/css/bootstrap.min.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/js/bootstrap-notify.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/js/bootstrap-select.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/js/bootstrap.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/js/jquery-3.1.1.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/js/npm.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/index.html" afterPath="$PROJECT_DIR$/project/index.html" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +26,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36147758">
-              <caret line="79" column="39" selection-start-line="79" selection-start-column="39" selection-end-line="79" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.35620052">
+              <caret line="69" column="62" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
               <folding>
                 <element signature="n#form#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
               </folding>
@@ -178,6 +159,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -280,7 +262,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -408,7 +389,13 @@
       <option name="project" value="LOCAL" />
       <updated>1476626079918</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="new project window">
+      <created>1476752238492</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1476752238492</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView">
@@ -462,7 +449,8 @@
     <MESSAGE value="add an sql test database" />
     <MESSAGE value="issues navigation button ready &#10;search form and functionality ready" />
     <MESSAGE value="search done&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="search done&#10;" />
+    <MESSAGE value="new project window" />
+    <option name="LAST_COMMIT_MESSAGE" value="new project window" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1027,8 +1015,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/project/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36147758">
-          <caret line="79" column="39" selection-start-line="79" selection-start-column="39" selection-end-line="79" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.35620052">
+          <caret line="69" column="62" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
           <folding>
             <element signature="n#form#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
           </folding>
