@@ -15,7 +15,6 @@ app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') {
         app.quit();
     }
-
 });
 
 app.on('ready', function() {
@@ -25,23 +24,33 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({width: 1280, height: 700,minWidth:1280, minHeight: 700 ,maximizable : true});
     mainWindow.loadURL(mainWindowPath);
     mainWindow.on('close', function () { mainWindow = null; });
-    mainWindow.on('closed', function() { mainWindow = null; });
-
-
 
     //New project window
-    const newProjectPath = path.join('file://'+ __dirname +'/project/index.html');
+    const newProjectPath = path.join('file://'+ __dirname +'/project/project.html');
     var newProject = new BrowserWindow({width: 1280, height: 700 ,minWidth: 1280, minHeight: 700 ,maximizable : true,show: false})
     newProject.loadURL(newProjectPath);
-
-    ipc.on('show-project-win', function(){
-       newProject.show();
-    });
 
     newProject.on('close', function (event) {
         newProject.hide();
         event.preventDefault();
     });
 
-    //
+    ipc.on('show-project-win', function(){
+        newProject.show();
+    });
+
+    //report page
+    const reportPath = path.join('file://'+ __dirname +'/report/report.html');
+    var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: false})
+    report.loadURL(reportPath);
+
+    report.on('close', function (event) {
+        report.hide();
+        event.preventDefault();
+    });
+
+    ipc.on('show-report-win', function(){
+        report.show();
+    });
+
 });

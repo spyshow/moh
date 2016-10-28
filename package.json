@@ -13,6 +13,12 @@
     "devtron": "^1.4.0"
   },
   "dependencies": {
-    "path": "^0.12.7"
+    "docxtemplater": "^2.1.5",
+    "electron": "1.4.0",
+    "mysql": "^2.11.1",
+    "officegen": "^0.4.0",
+    "path": "^0.12.7",
+    "pdfkit": "^0.8.0",
+    "promise-mysql": "^2.0.0"
   }
 }

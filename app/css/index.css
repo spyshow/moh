@@ -47,9 +47,9 @@ div.input-group.date{
     margin: 10px 0 5px 3px;
 }
 
-.key {
-    margin-right: 12px;
-    margin-top: 15px;
+#key {
+    width: 70%;
+    margin: 10px 0 5px 12px;
 }
 
 .area {
@@ -94,17 +94,13 @@ div.input-group.date{
     width: 20%;
 }
 
-#costumer {
+#customer {
     width: 90px;
     margin-bottom: 10px;
 }
 
-.costumer_list {
+.customer_list {
     height: 228px;
-}
-.costumer_list > li {
-    padding: 6px;
-    text-align: center;
 }
 
 fieldset {
@@ -254,8 +250,5 @@ label.solution_baseline {
     padding: 5px 10px;
     border-radius: 3px;
     border: 1px solid #bce1f2  ;
-
-}
-#cpf-all {
 
 }

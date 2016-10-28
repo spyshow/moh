@@ -1,0 +1,85 @@
+<!-- ToDo -->
+<!-- implement word and pdf icons in the buttons -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Reports</title>
+
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="../css/animate.css" rel="stylesheet">
+    <link href="css/report.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <!-- head -->
+        <form class="form-inline page-head">
+        <div class="row">
+            <div class="form-group">
+                <label for="projectID">Project</label>
+                <input type="text" class="form-control" id="projectID" placeholder="Project Number" value="1" disabled>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="report-type" class="report-type" id="all-issues" value="all-issues" checked>
+                <label for="all-issues">All issues of the project</label>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="report-type" class="report-type" id="all-issues-customer" value="all-issues-customer" >
+                <label for="all-issues-customer" class="all-issues-customer">All issues of customer</label>
+                <select name="customers" id="customers" class="selectpicker" data-width="200px">
+
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="report-type" class="report-type" id="all-issues-baseline" value="all-issues-baseline" >
+                <label for="all-issues-baseline" class="all-issues-baseline">All issues of baseline</label>
+                <select name="baselines" id="baselines" class="selectpicker" data-width="400px">
+
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="report-type" class="report-type" id="all-issues-both" value="all-issues-both" >
+                <label for="all-issues-both" class="all-issues-both">All issues of customer</label>
+                <select name="customers" id="both-customers" class="selectpicker" data-width="200px">
+
+                </select> <span> And </span>
+                <label for="all-issues-both" class="all-issues-both">All issues of baseline</label>
+                <select name="baselines" id="both-baselines" class="selectpicker" data-width="400px">
+
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="doc-id" id="doc-id" value="1">
+                <label for="doc-id">Add Doc ID</label>
+                <input type="text" class="form-control" id="doc-id-name" placeholder="Doc ID">
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="first-page" id="first-page" value="0">
+                <label for="first-page">First Page Empty</label>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" id="pdf">Create PDF file</button>
+                <button class="btn btn-default" id="word">Create word file</button>
+            </div>
+
+        </div>
+        </form>
+    </div>
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../js/jquery-3.1.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap-select.min.js"></script>
+<script src="../js/bootstrap-notify.min.js"></script>
+<script src="js/report2.js"></script>
+<script>if (window.module) module = window.module;</script>
+</body>
+</html>

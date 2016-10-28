@@ -1,0 +1,98 @@
+/* =====================================================================================================================
+   General
+*/
+
+body {
+    background: #8e9eab; /* fallback for old browsers */
+    background: -webkit-linear-gradient( #8e9eab , #eef2f3); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient( #8e9eab , #eef2f3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    min-width : 992px;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.5);
+    width : 96%;
+}
+
+.page-head {
+    margin: 30px 10px;
+}
+
+
+/* =====================================================================================================================
+   Main Form
+*/
+
+.form-group{
+    width: 100%;
+}
+
+#projectID {
+    margin: 5px 0 5px 40px;
+    width: 40%;
+}
+
+#cpf-doc-id {
+    margin: 5px 0 5px 10px;
+    width: 40%;
+}
+
+
+.project-type {
+    margin: 10px 0 5px 0;
+}
+#project-type {
+    font-weight: bold;
+}
+
+#label-syngo {
+    margin: 0 8px 0 25px;
+    font-weight: normal;
+}
+
+#label-mr {
+    margin: 0 5px 0 20px;
+    font-weight: normal;
+}
+#mr{
+    margin: 0 0 0 5px;
+}
+
+.database-type {
+    margin: 10px 0 5px 0;
+}
+
+#database-type {
+    font-weight: bold;
+}
+
+#label-charm {
+    margin: 0 5px 0 10px;
+    font-weight: normal;
+}
+
+#charm {
+    margin: 0 0 0 20px;
+}
+
+#label-tsf {
+    margin: 0 5px 0 20px;
+    font-weight: normal;
+}
+
+#Customer-name, #system , #sn{
+    margin: 0 10px 0 10px;
+    width: 20%;
+}
+
+.bootstrap-table{
+    margin:30px 0;
+}
+
+.delete-td{
+    width: 5%;
+}

@@ -9,8 +9,8 @@
  */
 var electron = require('electron');
 var ipc = electron.ipcRenderer;
-
 var mysql = require('mysql');
+var PDFDocument = require('pdfkit');
 
 
 //======================================================================================================================
@@ -113,7 +113,7 @@ $('#project_submit').click(function(){
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -130,6 +130,25 @@ $('#project_submit').click(function(){
 
             }
         });
+
+        //for customers list
+        conn.query('SELECT id,name,issue_id FROM customers  WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                var html='';
+                data.forEach(function(data){
+                    html += '<li>';
+                    html += '<input type="checkbox" data-id="'+data.id+' "name="customer" value="'+data.name+'"';
+                    if(data.issue_id == document.getElementById('issueID').value) { html += 'checked'; };
+                    html += '><span>'+data.name+'</span>';
+                    html += '</li>';
+                });
+                $('.customer_list').append(html);
+            }
+        });
+
+        //for cpf all
         conn.query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
             ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
             if (error) {
@@ -138,6 +157,8 @@ $('#project_submit').click(function(){
                 document.getElementById('cpf-all').textContent = data[0].issues_all;
             }
         });
+
+        //for cpf open
         console.log(conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
             ' WHERE  ? AND no_further_action = ? ',[{project_id: project_ID},'0']));
         conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
@@ -166,7 +187,7 @@ $('#submit').click(function (e) {
     var work = document.getElementById('work').value;
     var date = document.getElementById('date').value;
     var area = $('#area').val();
-    var key = $('#key').val();
+    var key = document.getElementById('key').value;
     var defect = document.getElementById('defect').value;
     var charm = document.getElementById('charm').value;
     var status = document.getElementById('status').value;
@@ -224,7 +245,32 @@ $('#submit').click(function (e) {
         });
     }
     document.getElementById('form_type').value = 'update';
+    var customer_cb = document.getElementsByName('customer');
 
+    /*
+    customer_cb.forEach(function (data) {
+
+        if(data.checked){
+            connection.getConnection(function(err, conn) {
+                if (err) {
+                    showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+                    return;
+                }
+                conn.query('INSERT INTO customers SET ?',
+                    [{}],
+                    function (error) {
+                        if(error){
+                            showNotification(error,'danger','glyphicon glyphicon-tasks');
+                        }
+                        else {
+                            showNotification('Data saved to the database','success','glyphicon glyphicon-tasks');
+                        }
+                    });
+                conn.release();
+            });
+        }
+    });
+     */
 });
 
 //======================================================================================================================
@@ -239,7 +285,7 @@ $('#new_issue').click(function(e){
     document.getElementById('date').value = getDate();
 
     $('#area').val(1).selectpicker('refresh');
-    $('#key').val(1).selectpicker('refresh');
+    document.getElementById('key').value = '';
     document.getElementById('defect').value = '';
     document.getElementById('charm').value = '';
     document.getElementById('status').value = '';
@@ -314,7 +360,7 @@ $('#first_issue').click(function(){
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -360,7 +406,7 @@ $('#last_issue').click(function(){
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -407,7 +453,7 @@ $('#next_issue').click(function(){
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -473,7 +519,7 @@ $('#previous_issue').click(function () {
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -622,7 +668,7 @@ $('.s_list').delegate('.search-result','click',function(e){
                 document.getElementById('work').value = data[0].work;
                 document.getElementById('date').value = data[0].date;
                 $('#area').val(data[0].area).selectpicker('refresh');
-                $('#key').val(data[0].key).selectpicker('refresh');
+                document.getElementById('key').value = data[0].key;
                 document.getElementById('defect').value = data[0].defect;
                 document.getElementById('charm').value = data[0].charm;
                 document.getElementById('status').value = data[0].status;
@@ -655,3 +701,8 @@ $('.search-reset-btn').click(function(e){
     $('#search-ph-msg').text(' Search result will be shown here  ').removeClass('text-danger');
     $('.search-result').remove();
 });
+
+//======================================================================================================================
+//create PDF
+
+var doc = new PDFDocument

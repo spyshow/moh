@@ -1,0 +1,58 @@
+
+body {
+    background: linear-gradient( #8e9eab , #eef2f3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    user-select: none;          /* Likely future */
+    min-width : 992px;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.5);
+    width : 96%;
+    padding: 0 30px;
+    height:100%;
+}
+
+.page-head {
+    margin: 30px 10px;
+}
+
+.form-group{
+    width: 100%;
+    margin-bottom: 15px !important;
+}
+
+#projectID {
+    width: 30%;
+    margin: 10px 20px;
+}
+
+.all-issues-customer{
+    margin: 0 19px 0 0;
+}
+
+.all-issues-baseline{
+    margin: 0 25px 0 0;
+}
+
+.all-issues-both{
+    margin: 0 19px 0 0;
+}
+
+.form-group>span {
+    margin:0 0 0 10px;
+}
+
+#doc-id-name{
+    margin:0  0 0 95px;
+}
+
+#pdf {
+    margin: 20px 0 50px 40px;
+}
+
+#word{
+    margin: 20px 0 50px 10px;
+}
