@@ -4,8 +4,7 @@
 
 /* TODO
 
-    3- try to change scroll bar style
-
+1- try $('parent').delegate('child','click',function(e){});
  */
 var electron = require('electron');
 var ipc = electron.ipcRenderer;
@@ -69,7 +68,6 @@ function refreshTable(tableName, projectID) {
                     html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
                     html += '</tr>';
                 });
-
                 $('tbody').append(html);
                 html='';
             }

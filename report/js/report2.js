@@ -2,9 +2,17 @@
  * Created by jihad.kherfan on 10/21/2016.
  */
 
+
+/**
+ TODO
+
+ 1- correct the word creation
+
+ */
+
 var electron = require('electron');
 var ipc = electron.ipcRenderer;
-var mysql = require("promise-mysql")
+var mysql = require("promise-mysql");
 var fs = require('fs');
 var officegen = require('officegen');
 var project_ID = 1;
@@ -72,7 +80,9 @@ $(document).ready(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT name,id FROM customers WHERE ? ',[{project_id: project_ID}], function (error, data) {
+        conn.query('SELECT name,id FROM customers ' +
+            'INNER JOIN projects_customers AS pc ON customers.id = pc.customer_id ' +
+            ' WHERE ? ',[{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -149,7 +159,7 @@ $(document).ready(function(){
                 if (error) {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
-
+                    var out;
                     data.forEach(function(data){
                         connection.getConnection(function(err,conn2) { //make connection to DB
                             if (err) { //error handling
@@ -161,7 +171,6 @@ $(document).ready(function(){
                                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                                 } else {
                                     var pObj = doc.createP();
-
                                     pObj.addText('Number :                '+data.dbid);
                                     pObj.addLineBreak();
                                     pObj.addText('Date   :                    '+data.date);
@@ -193,13 +202,11 @@ $(document).ready(function(){
                                     i=1;
                                     doc.putPageBreak ();
                                 }
-                                var out = fs.createWriteStream ( __dirname+'/../out.docx' );
-                                doc.generate ( out );
+                                out = fs.createWriteStream ( __dirname+'/../out.docx' );
+                                doc.generate (out);
                             });
                             conn2.release();
                         });
-
-
                     });
                 }
             });
@@ -232,7 +239,7 @@ $(document).ready(function(){
             pdf.addPage();
         }
         if (document.getElementById('doc-id').checked === true) {
-            pdf.fontSize(18).text('Doc ID :   ' + document.getElementById('doc-id-name').value, {align: 'center'});
+            pdf.fontSize(18).text('Doc ID :   ' + document.getElementById('doc-id-name').value, {align: 'center'}).moveDown();
         }
 
 
@@ -248,7 +255,7 @@ $(document).ready(function(){
                             pdf.text('Customers :            ');
                             pdf.text('Baseline :            ');
                             pdf.text('Error/Wish :            ' + data.key).moveDown();
-                            pdf.text('Charm :  ' + data.charm + ' / Defect :  ' + data.defect + '                   Status : ' + data.status);
+                            pdf.text('Charm :  ' + data.charm + ' / Defect :  ' + data.defect + '               Status : ' + data.status);
                             pdf.text('Summary :                ' + data.summary);
                             pdf.text('Description :            ' + data.description).moveDown();
                             pdf.text('Actions/ History :').moveDown();

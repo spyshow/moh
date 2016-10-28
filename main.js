@@ -32,7 +32,6 @@ app.on('ready', function() {
 
     newProject.on('close', function (event) {
         newProject.hide();
-        event.preventDefault();
     });
 
     ipc.on('show-project-win', function(){
@@ -41,12 +40,11 @@ app.on('ready', function() {
 
     //report page
     const reportPath = path.join('file://'+ __dirname +'/report/report.html');
-    var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: false})
+    var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: true})
     report.loadURL(reportPath);
 
     report.on('close', function (event) {
         report.hide();
-        event.preventDefault();
     });
 
     ipc.on('show-report-win', function(){
