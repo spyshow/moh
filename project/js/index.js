@@ -59,7 +59,6 @@ function refreshTable(tableName, projectID) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
                 var html = '';
-                console.log(data);
                 data.forEach(function(data){
                     html += '<tr>';
                     html += '<td class="td" data-type="name" data-pk="'+data.id+'">'+data.name+'</td>';
@@ -85,7 +84,7 @@ $(document).ready(function(){
             if (err) { //error handling
                 showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
                 return;
-            }console.log(conn.query('UPDATE customers SET '+el.dataset.type+' = ? WHERE id = ? ',[newValue , el.dataset.pk]));
+            }
             conn.query('UPDATE customers SET '+el.dataset.type+' = ? WHERE id = ? ',[newValue , el.dataset.pk], function (error, data) {
                 if (error) {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
