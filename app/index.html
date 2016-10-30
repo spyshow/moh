@@ -179,14 +179,23 @@
                             <label for="action">Action</label>
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist" id="action">
-                                <li role="presentation" class="active"><a href="#current" aria-controls="current" role="tab" data-toggle="tab">Current</a></li>
+                                <li role="presentation" class="active"><a href="#action-current" aria-controls="action-current" role="tab" data-toggle="tab">Current</a></li>
                                 <li role="presentation"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New</a></li>
                                 <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">History</a></li>
                             </ul>
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane fade in active" id="current">sdfsdf</div>
-                                <div role="tabpanel" class="tab-pane fade" id="new">fffff</div>
-                                <div role="tabpanel" class="tab-pane fade" id="history">..dddd.</div>
+                                <div role="tabpanel" class="tab-pane fade in active" id="action-current">No Action Yet!</div>
+                                <div role="tabpanel" class="tab-pane fade" id="new">
+                                    <form class="form-inline" name="action">
+                                        <div class="form-group">
+                                            <textarea class="form-control" rows="3" name="new-action" id="new-action" placeholder="New Action"></textarea>
+                                            <a href="#" class="btn btn-primary" id="new-action-btn">Submit</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="history">
+                                    <ul class="list-group" id="action-history"></ul>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

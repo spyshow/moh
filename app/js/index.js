@@ -3,13 +3,9 @@
  */
 
 /* TODO
-
-    1- empty customer list checked attribute in new issue btn
-    2- make search use like.
-    3- update customer database on click
+    1-new btn and issue id ( going between issues not working : make insert for issue on new btn and cancel modal and delete on ok)
     4- make english and dutch for summary and description
     5- make file upload
-    6- make new and history action
 
  */
 var electron = require('electron');
@@ -148,7 +144,7 @@ $('#project_submit').click(function(){
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
-                                '"name="customer" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                                '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
                         html += '</li>';
                     });
                     $('.customer_list').append(html);
@@ -169,6 +165,20 @@ $('#project_submit').click(function(){
 
                 }
             });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
 
         //for cpf all
@@ -182,8 +192,6 @@ $('#project_submit').click(function(){
         });
 
         //for cpf open
-        console.log(conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
-            ' WHERE  ? AND no_further_action = ? ',[{project_id: project_ID},'0']));
         conn.query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
             ' WHERE  ? AND no_further_action = ? ',[{project_id: project_ID},'0'], function (error, data) {
             if (error) {
@@ -192,12 +200,14 @@ $('#project_submit').click(function(){
                 document.getElementById('cpf-open').textContent = data[0].issues_open;
             }
         });
+
         conn.release();
     });
 
     $('#last_issue').hide();
     $('#next_issue').hide();
 });
+
 //======================================================================================================================
 //submit or update issue button
 
@@ -277,6 +287,8 @@ $('#submit').click(function (e) {
 
 $('#new_issue').click(function(e){
     e.preventDefault();
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
     document.getElementById('issueID').value = '';
     document.getElementById('form_type').value = 'insert';
     document.getElementById('DBID').value = '';
@@ -299,6 +311,10 @@ $('#new_issue').click(function(e){
     document.getElementById('solution_baseline').value = '';
     document.getElementById('c2c').value = '';
     $('.customer_list').empty();
+    $('#action-history').empty();
+    $('#action-current').text('No Action Yet!');
+    $('#new-action').val("Can't Add new Actions untill submitting the Issue !").attr('disabled','');
+    $('#new-action-btn').addClass("disabled");
     connection.getConnection(function(err,conn) { //make connection to DB
         if (err) { //error handling
             showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
@@ -310,6 +326,7 @@ $('#new_issue').click(function(e){
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
+                $('.customer_list').empty();
                 var html = '';
                 data.forEach(function (data) {
                     html += '<li>';
@@ -325,40 +342,45 @@ $('#new_issue').click(function(e){
 //======================================================================================================================
 //update customer database on click
 
-$('.customers').on('click', function (e) {
-    console.log($(this));
-    if($(this).checked === true){
+$('.customer_list').delegate('.customers','click',function() {
+
+    if($(this).is(":checked") === true){
+        let id = this.dataset.id;
+        let checkbox = this ;
+        console.log(id);
         connection.getConnection(function(err, conn) {
             if (err) {
                 showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
                 return;
             }
-            console.log(conn.query('INSERT INTO issues_customers (`issue_id`, `customer_id`) VALUES (?,?)',[document.getElementById('issueID').value,$(this).dataset.id ]));
             conn.query('INSERT INTO issues_customers (`issue_id`, `customer_id`) VALUES (?,?)',
-                [document.getElementById('issueID').value,$(this).dataset.id ],
+                [document.getElementById('issueID').value,checkbox.dataset.id ],
                 function (error) {
                     if(error){
                         showNotification('can\'t link the customer to the issue: '+error,'danger','glyphicon glyphicon-tasks');
                     } else {
-                        showNotification('customer '+$(this).value()+' has the issue', 'info', 'glyphicon glyphicon-tasks');
+                        showNotification('customer '+checkbox.value+' has the issue', 'info', 'glyphicon glyphicon-tasks');
                     }
                 });
             conn.release();
         });
-    }else if($(this).checked === false){
+    }else if($(this).is(":checked")  === false){
+
+        let checkbox = this ;
+
         connection.getConnection(function(err, conn) {
             if (err) {
                 showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
                 return;
             }
-            console.log(conn.query('DELETE FROM issues_customers WHERE issue_id = ? AND customer_ID = ? ',[document.getElementById('issueID').value,$(this).dataset.id ]));
+            console.log(conn.query('DELETE FROM issues_customers WHERE issue_id = ? AND customer_ID = ? ',[document.getElementById('issueID').value,checkbox.dataset.id ]));
             conn.query('DELETE FROM issues_customers WHERE issue_id = ? AND customer_ID = ? ',
-                [document.getElementById('issueID').value,$(this).dataset.id ],
+                [document.getElementById('issueID').value,checkbox.dataset.id ],
                 function (error) {
                     if(error){
                         showNotification('can\'t unlink the customer from the issue: '+error,'danger','glyphicon glyphicon-tasks');
                     } else {
-                        showNotification('customer '+$(this).value()+' doesn\'t have the issue', 'info', 'glyphicon glyphicon-tasks');
+                        showNotification('customer '+checkbox.value+' doesn\'t has the issue', 'info', 'glyphicon glyphicon-tasks');
                     }
                 });
             conn.release();
@@ -438,6 +460,52 @@ $('#first_issue').click(function(){
                 document.getElementById('c2c').value = data[0].c2c;
                 $('#project_select').modal({show: false});
             }
+            //for customers list
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
+                ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var html='';
+                    data.forEach(function(data){
+                        html += '<li>';
+                        html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
+                            '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                        html += '</li>';
+                    });
+                    $('.customer_list').append(html);
+                }
+            });
+            // to check the selected customers
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+                ' WHERE  ? ',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    data.forEach(function(data){
+                        if(document.getElementById(data.name).dataset.id == data.id){
+                            document.getElementById(data.name).setAttribute('checked','');
+                        }
+                    });
+
+                }
+            });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
         conn.release();
     });
@@ -484,6 +552,53 @@ $('#last_issue').click(function(){
                 document.getElementById('c2c').value = data[0].c2c;
                 $('#project_select').modal({show: false});
             }
+
+            //for customers list
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
+                ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var html='';
+                    data.forEach(function(data){
+                        html += '<li>';
+                        html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
+                            '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                        html += '</li>';
+                    });
+                    $('.customer_list').append(html);
+                }
+            });
+            // to check the selected customers
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+                ' WHERE  ? ',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    data.forEach(function(data){
+                        if(document.getElementById(data.name).dataset.id == data.id){
+                            document.getElementById(data.name).setAttribute('checked','');
+                        }
+                    });
+
+                }
+            });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
         conn.release();
     });
@@ -529,8 +644,54 @@ $('#next_issue').click(function(){
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
-
             }
+
+            //for customers list
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
+                ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var html='';
+                    data.forEach(function(data){
+                        html += '<li>';
+                        html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
+                            '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                        html += '</li>';
+                    });
+                    $('.customer_list').append(html);
+                }
+            });
+            // to check the selected customers
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+                ' WHERE  ? ',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    data.forEach(function(data){
+                        if(document.getElementById(data.name).dataset.id == data.id){
+                            document.getElementById(data.name).setAttribute('checked','');
+                        }
+                    });
+
+                }
+            });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
         conn.release();
     });
@@ -595,8 +756,54 @@ $('#previous_issue').click(function () {
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
-
             }
+
+            //for customers list
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
+                ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var html='';
+                    data.forEach(function(data){
+                        html += '<li>';
+                        html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
+                            '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                        html += '</li>';
+                    });
+                    $('.customer_list').append(html);
+                }
+            });
+            // to check the selected customers
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+                ' WHERE  ? ',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    data.forEach(function(data){
+                        if(document.getElementById(data.name).dataset.id == data.id){
+                            document.getElementById(data.name).setAttribute('checked','');
+                        }
+                    });
+
+                }
+            });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
         conn.release();
     });
@@ -685,7 +892,6 @@ $('.search-btn').click(function(e){
                 showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
                 return;
             }
-            console.log(conn.query(final_sql, sql));
             conn.query(final_sql, sql, function (error, data) {
                 if (error) {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
@@ -746,6 +952,52 @@ $('.s_list').delegate('.search-result','click',function(e){
                 document.getElementById('c2c').value = data[0].c2c;
                 showNotification('Issue loaded','success','glyphicon glyphicon-ok');
             }
+            //for customers list
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
+                ' WHERE  ? ',[{project_id: project_ID}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var html='';
+                    data.forEach(function(data){
+                        html += '<li>';
+                        html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
+                            '"name="customers" value="'+data.name+'"><label for="'+data.name+'">  '+data.name+'</label>';
+                        html += '</li>';
+                    });
+                    $('.customer_list').append(html);
+                }
+            });
+            // to check the selected customers
+            conn.query('SELECT id,name FROM customers ' +
+                ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+                ' WHERE  ? ',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
+                if (error) {
+                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    data.forEach(function(data){
+                        if(document.getElementById(data.name).dataset.id == data.id){
+                            document.getElementById(data.name).setAttribute('checked','');
+                        }
+                    });
+
+                }
+            });
+            // action current + history
+            conn.query('SELECT description FROM actions ' +
+                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                if (error) {
+                    showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    document.getElementById('action-current').textContent = data[0].description;
+                    let list = '';
+                    data.forEach(function(data){
+                        list += '<li class="list-group-item">' + data.description + '</li>';
+                    });
+                    $('#action-history').append(list);
+                }
+            });
         });
         conn.release();
     });
@@ -765,4 +1017,43 @@ $('.search-reset-btn').click(function(e){
 });
 
 //======================================================================================================================
-//create PDF
+//action
+
+$('#new-action-btn').on('click',function(e){
+    e.preventDefault();
+    let issueID = document.getElementById('issueID').value;
+    let desc = document.getElementById('new-action').value;
+    let date = getDate();
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }
+        console.log(conn.query("INSERT INTO actions ('issue_id','description','date') VALUES (? , ? ,?)",[issueID,desc,date]));
+        conn.query("INSERT INTO actions (issue_id,description,date) VALUES (? , ? ,?)",[issueID,desc,date], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
+            }
+            $('#new-action').val(' ');
+        });
+
+        conn.query('SELECT description FROM actions ' +
+            ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+            if (error) {
+                showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                document.getElementById('action-current').textContent = data[0].description;
+                let list = '';
+                data.forEach(function(data){
+                    list += '<li class="list-group-item">' + data.description + '</li>';
+                });
+                $('#action-history').append(list);
+                $('#current-action').tab('show');
+            }
+        });
+        conn.release();
+    });
+});
+

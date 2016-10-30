@@ -12,9 +12,8 @@ var mainWindow = null;
 
 
 app.on('window-all-closed', function() {
-    if (process.platform !== 'darwin') {
+    if (process.platform != 'darwin')
         app.quit();
-    }
 });
 
 app.on('ready', function() {
@@ -40,7 +39,7 @@ app.on('ready', function() {
 
     //report page
     const reportPath = path.join('file://'+ __dirname +'/report/report.html');
-    var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: true})
+    var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: false})
     report.loadURL(reportPath);
 
     report.on('close', function (event) {

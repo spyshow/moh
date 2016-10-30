@@ -133,7 +133,19 @@ fieldset {
     height: 140px;
     border: solid 1px #CCCCCC ;
     border-top-style: hidden;
+    overflow-y: auto;
+    position: relative;
+}
 
+#new-action {
+    width: 100%;
+    height: 8em;
+}
+
+#new-action-btn{
+    position: absolute;
+    top:55%;
+    left: 85%;
 }
 
 #solution {
