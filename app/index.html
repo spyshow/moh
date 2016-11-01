@@ -101,6 +101,15 @@
                             <label for="key" class="key">Key</label>
                             <input type="text" name="key" class="form-control" id="key" placeholder="Key">
                         </div>
+                        <div class="form-group">
+                            <label for="messenger" class="messenger">Messenger</label>
+                            <select name="messenger" id="messenger" class="selectpicker" data-width="50%">
+                                <option value="1">Customer</option>
+                                <option value="2">Application</option>
+                                <option value="3">monitoring</option>
+                                <option value="4">installation</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- middle -->
@@ -123,6 +132,10 @@
                             <input type="text" class="form-control" id="baseline" placeholder="Baseline">
                         </div>
                         <div class="form-group">
+                            <label for="cd">CD</label>
+                            <input type="text" class="form-control" id="cd" placeholder="Baseline CD">
+                        </div>
+                        <div class="form-group">
                             <label for="reproducible" class="reproducible">Reproducible</label>
                             <select name="reproducible" id="reproducible" class="selectpicker" data-width="56%">
                                 <option value="1">Yes</option>
@@ -137,16 +150,6 @@
                                 <option value="2">Medium</option>
                                 <option value="3">Low</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="messenger" class="messenger">Messenger</label>
-                            <select name="messenger" id="messenger" class="selectpicker" data-width="35%">
-                                <option value="1">Volvo</option>
-                                <option value="2">Saab</option>
-                                <option value="3">Fiat</option>
-                                <option value="4">Audi</option>
-                            </select>
-                            <button class="btn btn-default" id="messenger_btn" type="submit">Open</button>
                         </div>
                     </div>
 
@@ -173,7 +176,8 @@
 
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="issue description">sdasdas</textarea>
+                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="issue description [English]"></textarea>
+                            <textarea class="form-control" rows="3" name="description_de" id="description_de" placeholder="issue description [Dutch]"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="action">Action</label>
@@ -207,7 +211,11 @@
 
                         <div class="form-group">
                             <label for="c2c">Communication<br> to  customer</label>
-                            <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description">sdasdas</textarea>
+                            <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="save-file">Data</label>
+                            <textarea class="form-control" name="c2c" rows="3" id="save-file" placeholder="upload files"></textarea>
                         </div>
                         <div class="form-group">
                             <input type="hidden" id="form_type" name="form_type">
@@ -304,7 +312,7 @@
 
 
 
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="../js/jquery-3.1.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->

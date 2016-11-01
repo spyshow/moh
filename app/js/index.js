@@ -3,8 +3,7 @@
  */
 
 /* TODO
-    1-new btn and issue id ( going between issues not working : make insert for issue on new btn and cancel modal and delete on ok)
-    4- make english and dutch for summary and description
+
     5- make file upload
 
  */
@@ -100,7 +99,7 @@ $('#project_submit').click(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT issues.id , issues.dbid ,issues.work,issues.date,issues.area,issues.key,issues.defect,issues.charm,issues.status,issues.no_further_action,issues.baseline,issues.reproducible,issues.priority,issues.messenger,issues.summary,issues.description,issues.solution,issues.solution_baseline,issues.c2c, projects.cpf_doc_id FROM issues ' +
+        conn.query('SELECT issues.id , issues.dbid ,issues.work,issues.date,issues.area,issues.cd,issues.description_de,issues.key,issues.defect,issues.charm,issues.status,issues.no_further_action,issues.baseline,issues.reproducible,issues.priority,issues.messenger,issues.summary,issues.description,issues.solution,issues.solution_baseline,issues.c2c, projects.cpf_doc_id FROM issues ' +
             ' INNER JOIN projects ON projects.id = issues.project_id ' +
             ' WHERE ? ORDER BY id DESC LIMIT  1 ',[{project_id: project_ID}], function (error, data) {
             if (error) {
@@ -121,11 +120,13 @@ $('#project_submit').click(function(){
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
@@ -141,6 +142,7 @@ $('#project_submit').click(function(){
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -167,12 +169,13 @@ $('#project_submit').click(function(){
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
@@ -203,7 +206,7 @@ $('#project_submit').click(function(){
 
         conn.release();
     });
-
+    $('#cancel').hide();
     $('#last_issue').hide();
     $('#next_issue').hide();
 });
@@ -226,11 +229,13 @@ $('#submit').click(function (e) {
     var status = document.getElementById('status').value;
     var no_further_action = document.getElementById('no_further_action').checked;
     var baseline =  document.getElementById('baseline').value;
+    var cd = document.getElementById('cd').value;
     var reproducible = $('#reproducible').val();
     var priority = $('#priority').val();
     var messenger = $('#messenger').val();
     var summary = document.getElementById('summary').value;
     var description = document.getElementById('description').value;
+    var description_de = document.getElementById('description_de').value;
     var solution = document.getElementById('solution').value;
     var solution_baseline = document.getElementById('solution_baseline').value;
     var c2c = document.getElementById('c2c').value;
@@ -244,7 +249,7 @@ $('#submit').click(function (e) {
             }
 
             conn.query('UPDATE issues SET ? Where ?',
-                [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  },{id: issueID}],
+                [{dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,cd:cd,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,description_de: description_de,solution: solution,solution_baseline:solution_baseline,c2c: c2c  },{id: issueID}],
                 function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
@@ -266,7 +271,7 @@ $('#submit').click(function (e) {
                 return;
             }
             conn.query('INSERT INTO issues SET ?',
-                [{project_id: project_ID,dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
+                [{project_id: project_ID,dbid: dbid, work: work ,date: date,area: area, key: key, defect: defect, charm: charm , status: status , no_further_action: no_further_action , baseline: baseline,cd:cd ,reproducible: reproducible, priority: priority, messenger: messenger , summary:summary,description: description,description_de: description_de,solution: solution,solution_baseline:solution_baseline,c2c: c2c  }],
                 function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
@@ -295,7 +300,6 @@ $('#new_issue').click(function(e){
     document.getElementById('DBID').value = '';
     document.getElementById('work').value = '';
     document.getElementById('date').value = getDate();
-
     $('#area').val(1).selectpicker('refresh');
     document.getElementById('key').value = '';
     document.getElementById('defect').value = '';
@@ -303,11 +307,13 @@ $('#new_issue').click(function(e){
     document.getElementById('status').value = '';
     document.getElementById('no_further_action').checked = 0;
     document.getElementById('baseline').value = '';
+    document.getElementById('cd').value = '';
     $('#reproducible').val(1).selectpicker('refresh');
     $('#priority').val(1).selectpicker('refresh');
     $('#messenger').val(1).selectpicker('refresh');
     document.getElementById('summary').value = '';
     document.getElementById('description').value = '';
+    document.getElementById('description_de').value = '';
     document.getElementById('solution').value = '';
     document.getElementById('solution_baseline').value = '';
     document.getElementById('c2c').value = '';
@@ -350,6 +356,7 @@ $('#cancel').on('click',function(e){
     $('#project_submit').click();
     $('.nav-btn').show();
     $('#cancel').hide();
+    $('.customer_list').empty();
 });
 
 //======================================================================================================================
@@ -403,6 +410,7 @@ $('.customer_list').delegate('.customers','click',function() {
 
 //======================================================================================================================
 //delete button
+
 $('#delete_btn').click(function(e){
     e.preventDefault();
     $('#confirm').modal({ show: true ,backdrop: 'static', keyboard: false });
@@ -463,11 +471,13 @@ $('#first_issue').click(function(){
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
@@ -481,6 +491,7 @@ $('#first_issue').click(function(){
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -507,12 +518,13 @@ $('#first_issue').click(function(){
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
@@ -555,11 +567,13 @@ $('#last_issue').click(function(){
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
@@ -574,6 +588,7 @@ $('#last_issue').click(function(){
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -600,12 +615,13 @@ $('#last_issue').click(function(){
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
@@ -632,7 +648,7 @@ $('#next_issue').click(function(){
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('select * from issues where id = (select min(id) from issues where id > ?) AND ? LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
+        conn.query('select * from issues where id = (select min(id) from issues where id > ? AND ? )LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -649,11 +665,13 @@ $('#next_issue').click(function(){
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
@@ -667,6 +685,7 @@ $('#next_issue').click(function(){
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -693,12 +712,13 @@ $('#next_issue').click(function(){
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
@@ -743,8 +763,8 @@ $('#previous_issue').click(function () {
         if (err) { //error handling
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
-        }
-        conn.query('select * from issues where id = (select max(id) from issues where id < ?) AND ? LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
+        }console.log(conn.query('select * from issues where id = (select max(id) from issues where id < ? AND ? )LIMIT  1',[issueID,{project_id: project_ID}]));
+        conn.query('select * from issues where id = (select max(id) from issues where id < ? AND ?) LIMIT  1',[issueID,{project_id: project_ID}], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -761,16 +781,17 @@ $('#previous_issue').click(function () {
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
             }
-
             //for customers list
             conn.query('SELECT id,name FROM customers ' +
                 ' INNER JOIN projects_customers as pc ON customers.id = pc.customer_id' +
@@ -779,6 +800,7 @@ $('#previous_issue').click(function () {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -805,18 +827,20 @@ $('#previous_issue').click(function () {
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
                     $('#action-history').append(list);
                 }
             });
+
         });
         conn.release();
     });
@@ -830,9 +854,7 @@ $('#previous_issue').click(function () {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
-                console.log(document.getElementById('issueID').value+' '+data[0].min_id);
                 if(document.getElementById('issueID').value == data[0].min_id){
-
                     $('#first_issue').hide();
                     $('#previous_issue').hide();
                 }
@@ -854,7 +876,6 @@ $('#previous_issue').click(function () {
 $('.search-btn').click(function(e){
     e.preventDefault();
     $('.search-result').addClass('hidden');
-
     var defect = document.getElementById('s_defect').value ;
     //var customer = document.getElementById('s_customer').value;
     var summary = document.getElementById('s_summary').value;
@@ -866,8 +887,6 @@ $('.search-btn').click(function(e){
     if(document.getElementById('s_open_issues').checked === false) {
         open_issue = 1;
     }
-
-
     var final_sql = 'SELECT id,summary,dbid FROM issues WHERE ';
     if(defect){
         final_sql += ' defect LIKE ? AND ';
@@ -921,7 +940,6 @@ $('.search-btn').click(function(e){
                     }
                 }
             });
-
             conn.release();
         });
     }
@@ -955,11 +973,13 @@ $('.s_list').delegate('.search-result','click',function(e){
                 document.getElementById('status').value = data[0].status;
                 document.getElementById('no_further_action').checked = data[0].no_further_action;
                 document.getElementById('baseline').value = data[0].baseline;
+                document.getElementById('cd').value = data[0].cd;
                 $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
                 $('#priority').val(data[0].priority).selectpicker('refresh');
                 $('#messenger').val(data[0].messenger).selectpicker('refresh');
                 document.getElementById('summary').value = data[0].summary;
                 document.getElementById('description').value = data[0].description;
+                document.getElementById('description_de').value = data[0].description_de;
                 document.getElementById('solution').value = data[0].solution;
                 document.getElementById('solution_baseline').value = data[0].solution_baseline;
                 document.getElementById('c2c').value = data[0].c2c;
@@ -973,6 +993,7 @@ $('.s_list').delegate('.search-result','click',function(e){
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     var html='';
+                    $('.customer_list').empty();
                     data.forEach(function(data){
                         html += '<li>';
                         html += '<input type="checkbox" class="customers" data-id="'+data.id+'" id="'+data.name+'" ' +
@@ -999,12 +1020,13 @@ $('.s_list').delegate('.search-result','click',function(e){
             });
             // action current + history
             conn.query('SELECT description FROM actions ' +
-                ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+                ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
                 if (error) {
                     showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                     document.getElementById('action-current').textContent = data[0].description;
                     let list = '';
+                    $('#action-history').empty();
                     data.forEach(function(data){
                         list += '<li class="list-group-item">' + data.description + '</li>';
                     });
@@ -1042,7 +1064,6 @@ $('#new-action-btn').on('click',function(e){
             showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
             return;
         }
-        console.log(conn.query("INSERT INTO actions ('issue_id','description','date') VALUES (? , ? ,?)",[issueID,desc,date]));
         conn.query("INSERT INTO actions (issue_id,description,date) VALUES (? , ? ,?)",[issueID,desc,date], function (error, data) {
             if (error) {
                 showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
@@ -1051,17 +1072,19 @@ $('#new-action-btn').on('click',function(e){
             }
             $('#new-action').val(' ');
         });
-
         conn.query('SELECT description FROM actions ' +
-            ' WHERE ? ORDER BY date DESC',[{issue_id: document.getElementById('issueID').value},'0'], function (error, data) {
+            ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
             if (error) {
                 showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
                 document.getElementById('action-current').textContent = data[0].description;
                 let list = '';
+                $('#action-history').empty();
                 data.forEach(function(data){
+                    console.log(data);
                     list += '<li class="list-group-item">' + data.description + '</li>';
                 });
+                console.log(list);
                 $('#action-history').append(list);
                 $('#current-action').tab('show');
             }
