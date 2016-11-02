@@ -11,7 +11,6 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/bootstrap-select.min.css" rel="stylesheet">
     <link href="../css/animate.css" rel="stylesheet">
-    <link href="../css/bootstrap-editable.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
 
 </head>
@@ -48,6 +47,10 @@
 
                     <label for="TFS" id="label-tsf">TFS</label>
                     <input type="radio" name="database-type" id="TFS" value="1">
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-default" id="projectSubmit">Submit</a>
                 </div>
             </form>
         </div>
@@ -99,7 +102,41 @@
 
         <!-- baseline -->
         <div class="row">
+            <fieldset class="Baseline">
+                <legend class="Baseline">Baseline management</legend>
+                <form class="form-inline page-head">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="baseline">Baseline</label>
+                                <input type="text" class="form-control" id="baseline" placeholder="Baseline">
 
+                                <label for="cd">CD#</label>
+                                <input type="text" class="form-control" id="cd" placeholder="CD number">
+                                <button class="btn btn-default" id="add-baseline">Add</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="baselineTable" class="baseline-table table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Baseline</th>
+                                    <th>CD#</th>
+                                    <th></th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
         </div>
     </div>
 
@@ -109,7 +146,7 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/bootstrap-notify.min.js"></script>
-    <script src="../js/bootstrap-editable.min.js"></script>
+
     <script src="js/index.js"></script>
     <script>if (window.module) module = window.module;</script>
 </body>
