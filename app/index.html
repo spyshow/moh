@@ -102,13 +102,8 @@
                             <input type="text" name="key" class="form-control" id="key" placeholder="Key">
                         </div>
                         <div class="form-group">
-                            <label for="messenger" class="messenger">Messenger</label>
-                            <select name="messenger" id="messenger" class="selectpicker" data-width="50%">
-                                <option value="1">Customer</option>
-                                <option value="2">Application</option>
-                                <option value="3">monitoring</option>
-                                <option value="4">installation</option>
-                            </select>
+                            <label for="baseline">Baseline</label>
+                            <input type="text" class="form-control" id="baseline" placeholder="Baseline">
                         </div>
                     </div>
 
@@ -127,13 +122,15 @@
                             <input type="text" class="form-control" id="status" placeholder="Status">
                             <input type="checkbox" name="no_further_action" id="no_further_action" value="no_further_action"> <label for="no_further_action">No further action</label><br>
                         </div>
+
+
                         <div class="form-group">
-                            <label for="baseline">Baseline</label>
-                            <input type="text" class="form-control" id="baseline" placeholder="Baseline">
-                        </div>
-                        <div class="form-group">
-                            <label for="cd">CD</label>
-                            <input type="text" class="form-control" id="cd" placeholder="Baseline CD">
+                            <label for="priority" class="priority">Priority</label>
+                            <select name="priority" id="priority" class="selectpicker" data-width="56%">
+                                <option value="1">High</option>
+                                <option value="2">Medium</option>
+                                <option value="3">Low</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="reproducible" class="reproducible">Reproducible</label>
@@ -144,11 +141,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="priority" class="priority">Priority</label>
-                            <select name="priority" id="priority" class="selectpicker" data-width="56%">
-                                <option value="1">High</option>
-                                <option value="2">Medium</option>
-                                <option value="3">Low</option>
+                            <label for="cd">Baseline #</label>
+                            <input type="text" class="form-control" id="cd" placeholder="Baseline #">
+                        </div>
+                        <div class="form-group">
+                            <label for="messenger" class="messenger">Messenger</label>
+                            <select name="messenger" id="messenger" class="selectpicker" data-width="56%">
+                                <option value="1">Customer</option>
+                                <option value="2">Application</option>
+                                <option value="3">monitoring</option>
+                                <option value="4">installation</option>
                             </select>
                         </div>
                     </div>

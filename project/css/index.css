@@ -47,6 +47,10 @@ legend{
     width: 40%;
 }
 
+.realvsn{
+    margin-left: 40px;
+}
+
 #cpf-doc-id {
     margin: 5px 0 5px 10px;
     width: 40%;

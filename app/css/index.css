@@ -32,7 +32,7 @@ body {
 }
 #DBID {
     width: 70%;
-    margin: 10px 0;
+    margin-bottom: 10px;
 }
 div.input-group.date{
     width: 70%;
@@ -73,14 +73,14 @@ div.input-group.date{
     margin-bottom: 10px;
 }
 #baseline {
-    width: 70%;
+    width: 61%;
     margin-bottom: 10px;
 }
 
 #cd{
-    width: 70%;
+    width: 56%;
     margin-bottom: 10px;
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .reproducible {
@@ -92,7 +92,7 @@ div.input-group.date{
     margin-bottom: 15px;
 }
 .messenger {
-    margin-right: 10px;
+    margin-right: 26px;
     margin-bottom: 15px;
 }
 

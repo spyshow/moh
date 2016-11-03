@@ -4,7 +4,8 @@
 
 /* TODO
 
-1- try $('parent').delegate('child','click',function(e){});
+    1-add realvsn
+     2-figure how to send project id from page to other
  */
 var electron = require('electron');
 var ipc = electron.ipcRenderer;
