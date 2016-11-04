@@ -220,6 +220,34 @@
                             <textarea class="form-control" name="c2c" rows="3" id="save-file" placeholder="upload files"></textarea>
                         </div>
                         <div class="form-group">
+                            <label for="save-file">Data</label>
+                            <textarea class="form-control" name="c2c" rows="3" id="save-file" placeholder="upload files"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="file-type" class="file-type">Type</label>
+                            <select name="messenger" id="file-type" class="selectpicker" data-width="15%">
+                                <option value="1">Savelog</option>
+                                <option value="2">Patient data</option>
+                                <option value="3">Backup</option>
+                                <option value="4">Raw data</option>
+                                <option value="5">Other</option>
+                            </select>
+                            <label for="file-path">Path</label>
+                            <input type="text" class="form-control" id="file-path" placeholder="File path">
+                            <a class="btn btn-default add-file">Add</a>
+                            <table id="files-table" class="files-table table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th id="type">Type</th>
+                                    <th id="path">Path</th>
+                                    <th id="delete"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="files-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group">
                             <input type="hidden" id="form_type" name="form_type">
                             <input type="hidden" id="issueID" name="issueID">
                         </div>
@@ -234,11 +262,15 @@
 
 
 
-            <!-- advance search -->
+            <!--  search -->
             <div class="col-md-4 search">
                 <form name="search" class="form-inline">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="s_charm" class="s_defect">Charm</label>
+                                <input type="text" class="form-control" id="s_charm">
+                            </div>
                             <div class="form-group">
                                 <label for="s_defect" class="s_defect">Defect</label>
                                 <input type="text" class="form-control" id="s_defect">
@@ -246,6 +278,10 @@
                             <div class="form-group">
                                 <label for="s_customer" class="s_customer">Customer</label>
                                 <input type="text" class="form-control" id="s_customer">
+                            </div>
+                            <div class="form-group">
+                                <label for="s_desc" class="s_summary">Description</label>
+                                <input type="text" class="form-control" id="s_desc" placeholder="Description in Dutch">
                             </div>
                             <div class="form-group">
                                 <label for="s_summary" class="s_summary">Summary</label>
@@ -256,18 +292,17 @@
                                 <input type="text" class="form-control" id="s_status">
                             </div>
                         </div>
-                        <div class="col-md-4 search-btns">
+                        <div class="col-md-3 search-btns">
                             <div class="form-group">
                                 <input type="radio" name="s_open_issues" id="s_open_issues" value="1" checked>
-                                <label for="s_open_issues">Open Issues</label>
+                                <label for="s_open_issues" class="s_open_issues">Open Issues</label>
                             </div>
                             <div class="form-group">
                                 <input type="radio" name="s_open_issues" id="s_all_issues" value="0">
-                                <label for="s_all_issues">All Issues</label>
+                                <label for="s_all_issues" class="s_open_issues">All Issues</label>
                             </div>
                             <a class="btn btn-default search-btn">Search</a>
                             <a class="btn btn-default search-reset-btn">Reset</a>
-                            <a class="btn btn-default advance-search-btn">Advanced Search</a>
                         </div>
                     </div>
                 </form>

@@ -184,6 +184,22 @@ label.solution_baseline {
     margin : 0 0 30px 87px;
 }
 
+.file-type {
+    margin: 0 85px 30px 0;
+}
+
+#file-path{
+    width: 56.5%;
+}
+
+#type {
+    width: 20%;
+}
+
+#delete{
+    width: 10%;
+}
+
 /* =====================================================================================================================
    Search panel
 */
@@ -214,29 +230,39 @@ label.solution_baseline {
 }
 
 #s_defect {
-    width: 70%;
-    margin: 10px 0 0 24px;
+    width: 65%;
+    margin: 10px 0 0 38px;
 }
 
 #s_customer {
-    width: 70%;
-    margin: 10px 0 0 2px;
+    width: 65%;
+    margin: 10px 0 0 16px;
 }
 
 #s_summary {
-    width: 70%;
-    margin: 10px 0 0 5px;
+    width: 65%;
+    margin: 10px 0 0 19px;
 }
 #s_status {
-    width: 70%;
-    margin: 10px 0 0 24px;
+    width: 65%;
+    margin: 10px 0 0 38px;
+}
+#s_desc {
+    width: 65%;
+    margin: 10px 0 0 3px;
+}
+#s_charm {
+    width: 65%;
+    margin: 10px 0 0 38px;
 }
 
 #s_open_issues {
     margin-top:10px;
 }
 
-
+.s_open_issues{
+    font-size: smaller;
+}
 
 .search-btns{
     padding-left: 0;

@@ -367,7 +367,6 @@ $('.customer_list').delegate('.customers','click',function() {
     if($(this).is(":checked") === true){
         let id = this.dataset.id;
         let checkbox = this ;
-        console.log(id);
         connection.getConnection(function(err, conn) {
             if (err) {
                 showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
@@ -408,6 +407,77 @@ $('.customer_list').delegate('.customers','click',function() {
     }
 });
 
+//======================================================================================================================
+//files table
+
+$('.add-file').on('click',function(e){
+    e.preventDefault();
+    let type = document.getElementById('file-type').options[document.getElementById('file-type').selectedIndex].value;
+    let path = document.getElementById('file-path').value;
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('INSERT INTO files (`issue_id`, `type`,`path` ) VALUES (?,?,?)',
+            [document.getElementById('issueID').value,type,path],
+            function (error) {
+                if(error){
+                    showNotification('can\'t add file: '+error,'danger','glyphicon glyphicon-tasks');
+                } else {
+                    showNotification('File has been Added', 'info', 'glyphicon glyphicon-tasks');
+                    refreshFiles(document.getElementById('issueID').value);
+                }
+            });
+        conn.release();
+    });
+});
+
+function refreshFiles(issueID){
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT id,type,path FROM files WHERE issue_id = ?',[issueID],
+            function (error,data) {
+                if(error){
+                    showNotification('can\'t get files: '+error,'danger','glyphicon glyphicon-tasks');
+                } else {
+                    let html= '';
+                    $('#files-table-body').empty();
+                    data.forEach(function(data){
+                        html += '<tr><td>'+data.type+'</td>' +
+                                '<td>'+data.path+'</td>' +
+                                '<td class="delete-td text-center"><button type="button" class="btn btn-danger file-delete btn-xs" data-id="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>'
+                    });
+                    $('#files-table-body').append(html);
+                }
+            });
+        conn.release();
+    });
+}
+
+
+$('.file-delete').on('click',function(e){
+    e.preventDefault();
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('DELETE FROM files WHERE id = ',[this.dataset.id],
+            function (error) {
+                if(error){
+                    showNotification('can\'t delete file: '+error,'danger','glyphicon glyphicon-tasks');
+                } else {
+                    showNotification('File deleted ','success','glyphicon glyphicon-tasks');
+                    refreshFiles(document.getElementById('issueID').value);
+                }
+            });
+        conn.release();
+    });
+});
 //======================================================================================================================
 //delete button
 
@@ -877,7 +947,9 @@ $('.search-btn').click(function(e){
     e.preventDefault();
     $('.search-result').addClass('hidden');
     var defect = document.getElementById('s_defect').value ;
-    //var customer = document.getElementById('s_customer').value;
+    var charm = document.getElementById('s_charm').value ;
+    var desc = document.getElementById('s_desc').value ;
+    var customer = document.getElementById('s_customer').value;
     var summary = document.getElementById('s_summary').value;
     var status = document.getElementById('s_status').value;
     var open_issue = 0;
@@ -887,25 +959,36 @@ $('.search-btn').click(function(e){
     if(document.getElementById('s_open_issues').checked === false) {
         open_issue = 1;
     }
-    var final_sql = 'SELECT id,summary,dbid FROM issues WHERE ';
+    var final_sql = 'SELECT i.id,i.summary,i.dbid FROM issues AS i';
+    if(customer){
+        final_sql += ' JOIN issues_customers AS ic ON i.id = ic.issue_id JOIN customers on customers.id = ic.customer_id WHERE customers.name LIKE ? AND ';
+        sql.push('%'+customer+'%');
+    }else{
+        final_sql += ' WHERE ';
+    }
+
     if(defect){
-        final_sql += ' defect LIKE ? AND ';
+        final_sql += ' i.defect LIKE ? AND ';
         sql.push('%'+defect+'%');
     }
-   /* if(customer){
-        final_sql += '  customer REGEXP ? AND ';
-        sql.push(customer);
+    if(charm){
+        final_sql += ' i.charm LIKE ? AND ';
+        sql.push('%'+charm+'%');
     }
-    */
+
+    if(desc){
+        final_sql += '  i.description_de LIKE ? AND ';
+        sql.push('%'+desc+'%');
+    }
+
     if(status){
-        final_sql += '  status LIKE %?% AND ';
+        final_sql += '  i.status LIKE %?% AND ';
         sql.push('%'+status+'%');
     }
     if(summary){
-        final_sql += '  MATCH(summary) AGAINST(? IN NATURAL LANGUAGE MODE ) AND' ;
+        final_sql += '  MATCH(i.summary) AGAINST(? IN NATURAL LANGUAGE MODE ) AND' ;
         sql.push('%'+summary+'%');
     }
-    console.log(open_issue);
     if(open_issue === 0){
         final_sql += ' ?  AND ';
         sql.push({no_further_action: '0'});
@@ -914,7 +997,7 @@ $('.search-btn').click(function(e){
     final_sql += ' ? ';
     sql.push({project_id: project_ID});
 
-    if(!status && !summary && !defect) {
+    if(!status && !summary && !defect && !charm && !customer && !desc) {
         $('.search-ph').removeClass('hidden').addClass('show');
 
     } else {
@@ -923,7 +1006,7 @@ $('.search-btn').click(function(e){
             if (err) { //error handling
                 showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
                 return;
-            }
+            }console.log(conn.query(final_sql, sql));
             conn.query(final_sql, sql, function (error, data) {
                 if (error) {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
@@ -1043,6 +1126,8 @@ $('.s_list').delegate('.search-result','click',function(e){
 $('.search-reset-btn').click(function(e){
     e.preventDefault();
     document.getElementById('s_defect').value ='';
+    document.getElementById('s_charm').value ='';
+    document.getElementById('s_desc').value ='';
     document.getElementById('s_customer').value ='';
     document.getElementById('s_summary').value ='';
     document.getElementById('s_status').value ='';
