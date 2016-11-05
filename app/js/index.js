@@ -182,6 +182,8 @@ $('#project_submit').click(function(){
                     $('#action-history').append(list);
                 }
             });
+            refreshFiles(document.getElementById('issueID').value);
+            $('.add-file').prop('disabled',false);
         });
 
         //for cpf all
@@ -255,6 +257,8 @@ $('#submit').click(function (e) {
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
                     } else {
                         showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
+                        $('.nav-btn').show();
+                        $('#cancel').hide();
                     }
             });
             conn.release();
@@ -275,17 +279,19 @@ $('#submit').click(function (e) {
                 function (error) {
                     if(error){
                         showNotification(error,'danger','glyphicon glyphicon-tasks');
+                        return;
                     }
                     else {
                         showNotification('Data saved to the database','success','glyphicon glyphicon-tasks');
+                        $('.nav-btn').show();
+                        $('#cancel').hide();
                     }
                 });
             conn.release();
         });
     }
     document.getElementById('form_type').value = 'update';
-    $('.nav-btn').show();
-    $('#cancel').hide();
+
 });
 
 //======================================================================================================================
@@ -346,6 +352,7 @@ $('#new_issue').click(function(e){
     });
     $('.nav-btn').hide();
     $('#cancel').show();
+    $('.add-file').prop('disabled',true);
 });
 
 //======================================================================================================================
@@ -357,6 +364,7 @@ $('#cancel').on('click',function(e){
     $('.nav-btn').show();
     $('#cancel').hide();
     $('.customer_list').empty();
+    $('.add-file').prop('disabled',false);
 });
 
 //======================================================================================================================
@@ -431,6 +439,8 @@ $('.add-file').on('click',function(e){
             });
         conn.release();
     });
+    document.getElementById('file-path').value = '';
+    $('#file-type').val('Savelog').selectpicker('refresh');
 });
 
 function refreshFiles(issueID){
@@ -449,7 +459,7 @@ function refreshFiles(issueID){
                     data.forEach(function(data){
                         html += '<tr><td>'+data.type+'</td>' +
                                 '<td>'+data.path+'</td>' +
-                                '<td class="delete-td text-center"><button type="button" class="btn btn-danger file-delete btn-xs" data-id="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>'
+                                '<td class="delete-td text-center"><button type="button" class="btn btn-danger file-delete btn-xs" data-id="'+data.id+'" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>'
                     });
                     $('#files-table-body').append(html);
                 }
@@ -459,14 +469,15 @@ function refreshFiles(issueID){
 }
 
 
-$('.file-delete').on('click',function(e){
+$('#files-table').delegate('.file-delete','click',function(e){
     e.preventDefault();
+    let id = this.dataset.id;
     connection.getConnection(function(err, conn) {
         if (err) {
             showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('DELETE FROM files WHERE id = ',[this.dataset.id],
+        conn.query('DELETE FROM files WHERE id = ? ',[id],
             function (error) {
                 if(error){
                     showNotification('can\'t delete file: '+error,'danger','glyphicon glyphicon-tasks');
