@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2016 at 12:14 AM
+-- Generation Time: Nov 05, 2016 at 12:39 AM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -78,6 +78,27 @@ INSERT INTO `customers` (`id`, `name`, `system`, `sn`) VALUES
 (4, 'sham ', 'msi', 332244),
 (5, 'dada', 'msirr', 1111111),
 (6, 'dady', 'system(1)', 11111);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `files`
+--
+
+CREATE TABLE `files` (
+  `id` int(11) NOT NULL,
+  `issue_id` int(10) NOT NULL,
+  `type` varchar(15) COLLATE utf8_german2_ci NOT NULL,
+  `path` varchar(100) COLLATE utf8_german2_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_german2_ci;
+
+--
+-- Dumping data for table `files`
+--
+
+INSERT INTO `files` (`id`, `issue_id`, `type`, `path`) VALUES
+(8, 10, '3', 'e:/files'),
+(12, 10, 'Raw data', 'data');
 
 -- --------------------------------------------------------
 
@@ -157,18 +178,19 @@ CREATE TABLE `projects` (
   `project_name` varchar(15) NOT NULL,
   `charm` tinyint(1) NOT NULL,
   `tsf` tinyint(1) NOT NULL,
-  `cpf_doc_id` int(8) NOT NULL
+  `cpf_doc_id` int(8) NOT NULL,
+  `realvsn` varchar(15) CHARACTER SET utf8 COLLATE utf8_german2_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `projects`
 --
 
-INSERT INTO `projects` (`id`, `project_name`, `charm`, `tsf`, `cpf_doc_id`) VALUES
-(1, 'VE11A', 1, 0, 34545321),
-(2, 'VF6454', 0, 1, 99937711),
-(4, 'VE2A44', 1, 0, 34542123),
-(5, 'SF6454', 0, 1, 1111122);
+INSERT INTO `projects` (`id`, `project_name`, `charm`, `tsf`, `cpf_doc_id`, `realvsn`) VALUES
+(1, 'VE11A', 1, 0, 34545321, '1'),
+(2, 'VF6454', 0, 1, 99937711, '2'),
+(4, 'VE2A44', 1, 0, 34542123, '4'),
+(5, 'SF6454', 0, 1, 1111122, '5');
 
 -- --------------------------------------------------------
 
@@ -206,6 +228,13 @@ ALTER TABLE `actions`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `files`
+--
+ALTER TABLE `files`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `issue_id` (`issue_id`);
 
 --
 -- Indexes for table `issues`
@@ -249,6 +278,11 @@ ALTER TABLE `actions`
 ALTER TABLE `customers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
+-- AUTO_INCREMENT for table `files`
+--
+ALTER TABLE `files`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+--
 -- AUTO_INCREMENT for table `issues`
 --
 ALTER TABLE `issues`
@@ -267,6 +301,12 @@ ALTER TABLE `projects`
 --
 ALTER TABLE `actions`
   ADD CONSTRAINT `actions_ibfk_1` FOREIGN KEY (`issue_id`) REFERENCES `issues` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `files`
+--
+ALTER TABLE `files`
+  ADD CONSTRAINT `files_ibfk_1` FOREIGN KEY (`issue_id`) REFERENCES `issues` (`id`);
 
 --
 -- Constraints for table `issues_customers`
