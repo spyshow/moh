@@ -77,6 +77,14 @@ div.input-group.date{
     margin-bottom: 10px;
 }
 
+#baseline-submit {
+    margin: 0 10px 0 0;
+}
+
+#baseline-cancel {
+    margin: 0 0 0 10px;
+}
+
 #cd{
     width: 56%;
     margin-bottom: 10px;
@@ -158,17 +166,15 @@ fieldset {
 }
 
 #solution {
-    margin : 0 0 0 60px;
+    margin : 10px 0 0 60px;
     width: 42%;
 }
-label.solution_baseline {
-    margin: 15px 0 0 10px;
-    width:9%;
+#solution_de {
+    width: 41%;
+    margin: 10px 0 0 4px;
 }
 
-#solution_baseline{
-    width: 30.5%;
-}
+
 
 #c2c {
     resize:vertical;
@@ -210,6 +216,8 @@ label.solution_baseline {
     border:solid 1px #8E9EAB ;
     border-radius: 3px;
 }
+
+
 .s_list {
     margin: 10px 0 0 0 ;
     height: 535px;
@@ -229,6 +237,16 @@ label.solution_baseline {
     padding: 50% 0;
 }
 
+#s_dbid {
+    width: 65%;
+    margin: 10px 0 0 48px;
+}
+
+#s_charm {
+    width: 65%;
+    margin: 10px 0 0 38px;
+}
+
 #s_defect {
     width: 65%;
     margin: 10px 0 0 38px;
@@ -237,6 +255,15 @@ label.solution_baseline {
 #s_customer {
     width: 65%;
     margin: 10px 0 0 16px;
+}
+#s_desc {
+    width: 65%;
+    margin: 10px 0 0 3px;
+}
+
+#s_desc_de {
+    width: 65%;
+    margin: 10px 0 0 3px;
 }
 
 #s_summary {
@@ -247,14 +274,7 @@ label.solution_baseline {
     width: 65%;
     margin: 10px 0 0 38px;
 }
-#s_desc {
-    width: 65%;
-    margin: 10px 0 0 3px;
-}
-#s_charm {
-    width: 65%;
-    margin: 10px 0 0 38px;
-}
+
 
 #s_open_issues {
     margin-top:10px;

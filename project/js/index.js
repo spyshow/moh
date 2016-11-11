@@ -63,9 +63,9 @@ function refreshTable(tableName, projectID) {
                 var html = '';
                 data.forEach(function(data){
                     html += '<tr>';
-                    html += '<td class="td editable" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
-                    html += '<td class="td editable" data-type="system" data-pk="'+data.id+'" contenteditable>'+data.system+'</td>';
-                    html += '<td class="td editable" data-type="sn" data-pk="'+data.id+'" contenteditable>'+data.sn+'</td>';
+                    html += '<td class="td editable'+tableName+'" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
+                    html += '<td class="td editable'+tableName+'" data-type="system" data-pk="'+data.id+'" contenteditable>'+data.system+'</td>';
+                    html += '<td class="td editable'+tableName+'" data-type="sn" data-pk="'+data.id+'" contenteditable>'+data.sn+'</td>';
                     html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
                     html += '</tr>';
                 });
@@ -73,8 +73,8 @@ function refreshTable(tableName, projectID) {
                 html='';
             }
         });
-conn.release();
-});
+        conn.release();
+    });
 }
 
 function edit_data(id, type, newValue,table,el) {
@@ -107,16 +107,30 @@ function edit_data(id, type, newValue,table,el) {
 }
 
 $(document).ready(function(){
+    //customers table 
     refreshTable('customers',1);
-    $(document).on('focus', '.editable', function(){
+    $(document).on('focus', '.editablecustomers', function(){
         currentValue = $(this).text();
     });
-    $(document).on('blur', '.editable', function(){
+    $(document).on('blur', '.editablecustomers', function(){
         var el = $(this);
         var id = $(this).data("pk");
         var type = $(this).data("type");
         var newValue = $(this).text();
         edit_data(id,type, newValue,'customers',el);
+    });
+
+    //baseline table 
+    refreshTable('baselines',1);
+    $(document).on('focus', '.editablebaselines', function(){
+        currentValue = $(this).text();
+    });
+    $(document).on('blur', '.editablebaselines', function(){
+        var el = $(this);
+        var id = $(this).data("pk");
+        var type = $(this).data("type");
+        var newValue = $(this).text();
+        edit_data(id,type, newValue,'baselines',el);
     });
 
 });
