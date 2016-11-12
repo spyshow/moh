@@ -48,13 +48,13 @@ var connection = mysql.createPool({
 //customer table
 
 //draw table
-function refreshTable(tableName, projectID) {
+function refreshCustomer(projectID) {
     connection.getConnection(function (err, conn) { //make connection to DB
         if (err) { //error handling
             showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
             return;
         }
-        conn.query('SELECT * FROM '+tableName+
+        conn.query('SELECT * FROM customers'+
                    ' INNER JOIN projects_customers AS pc ON customers.id = pc.customer_id '+
                    ' WHERE  pc.project_id = ?',[projectID],function (error, data) {
             if (error) {
@@ -63,13 +63,41 @@ function refreshTable(tableName, projectID) {
                 var html = '';
                 data.forEach(function(data){
                     html += '<tr>';
-                    html += '<td class="td editable'+tableName+'" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
-                    html += '<td class="td editable'+tableName+'" data-type="system" data-pk="'+data.id+'" contenteditable>'+data.system+'</td>';
-                    html += '<td class="td editable'+tableName+'" data-type="sn" data-pk="'+data.id+'" contenteditable>'+data.sn+'</td>';
+                    html += '<td class="td editablecustomers" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
+                    html += '<td class="td editablecustomers" data-type="system" data-pk="'+data.id+'" contenteditable>'+data.system+'</td>';
+                    html += '<td class="td editablecustomers" data-type="sn" data-pk="'+data.id+'" contenteditable>'+data.sn+'</td>';
                     html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
                     html += '</tr>';
                 });
-                $('tbody').append(html);
+                $('#customerTable-body').append(html);
+                html='';
+            }
+        });
+        conn.release();
+    });
+}
+
+function refreshBaseline(projectID) {
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT * FROM baselines'+
+                   ' INNER JOIN projects_baselines AS pb ON baselines.id = pb.baseline_id '+
+                   ' WHERE  pb.project_id = ?',[projectID],function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                var html = '';
+                data.forEach(function(data){
+                    html += '<tr>';
+                    html += '<td class="td editablebaselines" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
+                    html += '<td class="td editablebaselines" data-type="cd" data-pk="'+data.id+'" contenteditable>'+data.cd+'</td>';
+                    html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="'+data.id+' aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
+                    html += '</tr>';
+                });
+                $('#baselineTable-body').append(html);
                 html='';
             }
         });
@@ -83,7 +111,7 @@ function edit_data(id, type, newValue,table,el) {
             if (err) { //error handling
                 showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
                 haveError = true;
-                if(haveError == true){
+                if(haveError === true){
                     el.text(currentValue) ;
                     haveError = false;
                 }
@@ -92,12 +120,12 @@ function edit_data(id, type, newValue,table,el) {
                 if (error) {
                     showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
                     haveError = true;
-                    if(haveError == true){
+                    if(haveError === true){
                         el.text(currentValue) ;
                         haveError = false;
                     }
                 } else {
-                    showNotification('Customer Updated successfully', 'success', 'glyphicon glyphicon-tasks');
+                    showNotification(table+' Updated successfully', 'success', 'glyphicon glyphicon-tasks');
 
                 }
             });
@@ -108,7 +136,7 @@ function edit_data(id, type, newValue,table,el) {
 
 $(document).ready(function(){
     //customers table 
-    refreshTable('customers',1);
+    refreshCustomer(1);
     $(document).on('focus', '.editablecustomers', function(){
         currentValue = $(this).text();
     });
@@ -121,7 +149,7 @@ $(document).ready(function(){
     });
 
     //baseline table 
-    refreshTable('baselines',1);
+    refreshBaseline(1);
     $(document).on('focus', '.editablebaselines', function(){
         currentValue = $(this).text();
     });

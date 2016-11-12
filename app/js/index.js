@@ -180,6 +180,7 @@ $('#baseline-submit').click(function(e){
     var cd = document.getElementById('cd').value ;
     var issue_id = document.getElementById('DBID').value;
     setBaseline(pre_id,name,cd,project_ID,issue_id);
+    getIssueBaseline(issue_id,project_id);
     $('#baseline-submit,#baseline-cancel').addClass('hidden');
     $('#baseline , #cd').blur();
 });
@@ -520,6 +521,7 @@ $('#new_issue').click(function(e){
     $('#files-table-body').empty();
     $('.add-file').prop('disabled',true);
 });
+    
 
 //======================================================================================================================
 //cancel btn
@@ -1349,7 +1351,7 @@ $('#new-action-btn').on('click',function(e){
             }
             $('#new-action').val(' ');
         });
-        conn.query('SELECT description FROM actions ' +
+        conn.query('SELECT description,date FROM actions ' +
             ' WHERE ? ORDER BY id DESC',[{issue_id: document.getElementById('issueID').value}], function (error, data) {
             if (error) {
                 showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
@@ -1358,7 +1360,7 @@ $('#new-action-btn').on('click',function(e){
                 let list = '';
                 $('#action-history').empty();
                 data.forEach(function(data){
-                    list += '<li class="list-group-item">' + data.description + '</li>';
+                    list += '<li class="list-group-item"><span class="badge">' + data.date + '</span>' + data.description + '</li>';
                 });
                 $('#action-history').append(list);
                 $('#current-action').tab('show');

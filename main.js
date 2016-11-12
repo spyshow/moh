@@ -22,8 +22,13 @@ app.on('ready', function() {
     const mainWindowPath = path.join('file://' + __dirname + '/app/index.html');
     mainWindow = new BrowserWindow({width: 1280, height: 700,minWidth:1280, minHeight: 700 ,maximizable : true});
     mainWindow.loadURL(mainWindowPath);
+    mainWindow.center();
     mainWindow.on('closed', function () { 
         mainWindow = null;
+        newProject.close();
+        newProject = null ;
+        report.close(); 
+        report = null;
      });
 
     //New project window
@@ -31,12 +36,14 @@ app.on('ready', function() {
     var newProject = new BrowserWindow({width: 1280, height: 700 ,minWidth: 1280, minHeight: 700 ,maximizable : true,show: false})
     newProject.loadURL(newProjectPath);
 
-    newProject.on('closed', function (event) {
-       newProject = null;
+    newProject.on('close', function (event) {
+       newProject.hide();
+       event.preventDefault();
     });
 
     ipc.on('show-project-win', function(){
         newProject.show();
+        newProject.center();
     });
 
     //report page
@@ -44,12 +51,15 @@ app.on('ready', function() {
     var report = new BrowserWindow({width: 1140, height: 584 ,minWidth: 1140, minHeight: 584,maxWidth: 1140, maxHeight: 584 ,maximizable : false,show: false})
     report.loadURL(reportPath);
 
-    report.on('closed', function (event) {
-        report = null;
+    report.on('close', function (event) {
+        report.hide();
+        event.preventDefault();
     });
+    
 
     ipc.on('show-report-win', function(){
         report.show();
+        report.center();
     });
 
 });

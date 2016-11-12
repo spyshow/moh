@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "devtron": "^1.4.0"
+    "devtron": "^1.4.0",
+    "jshint": "^2.9.4"
   },
   "dependencies": {
     "docxtemplater": "^2.1.5",
