@@ -19,7 +19,9 @@
             <form class="form-inline page-head">
                 <div class="form-group">
                     <label for="projectID">Project</label>
-                    <input type="text" class="form-control" id="projectID" placeholder="Project Number" >
+                    <input type="hidden" id="type" value="">
+                    <input type="hidden" id="project_id" value="">
+                    <input type="text" class="form-control" id="project_name" placeholder="Project Number" >
                     <label for="realvsn" class="realvsn">Real. Vsn</label>
                     <input type="text" class="form-control" id="realvsn" placeholder="Real Vsn" >
                 </div>
@@ -55,7 +57,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="Customer-name">Customer Name</label>
-                                <input type="text" class="form-control" id="Customer-name" placeholder="Customer Name">
+                                <input type="text" class="form-control" id="customer-name" placeholder="Customer Name">
                                 <label for="system">System</label>
                                 <input type="text" class="form-control" id="system" placeholder="System">
                                 <label for="sn">Serial Number</label>

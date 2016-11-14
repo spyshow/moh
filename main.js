@@ -8,12 +8,14 @@ const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const ipc = electron.ipcMain;
 const path = require('path');
+console.log("require('devtron').install()");
 var mainWindow = null;
 
 
 app.on('window-all-closed', function() {
-    if (process.platform != 'darwin')
+    if (process.platform != 'darwin'){
         app.quit();
+    }
 });
 
 app.on('ready', function() {
@@ -41,9 +43,16 @@ app.on('ready', function() {
        event.preventDefault();
     });
 
-    ipc.on('show-project-win', function(){
+    ipc.on('show-new-project', function(){
         newProject.show();
         newProject.center();
+        newProject.webContents.send('show-new-project');
+    });
+
+    ipc.on('show-edit-project', function(event , project_id){
+        newProject.show();
+        newProject.center();
+        newProject.webContents.send('show-edit-project', project_id);
     });
 
     //report page

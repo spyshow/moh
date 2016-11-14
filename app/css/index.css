@@ -239,7 +239,7 @@ fieldset {
 
 #s_dbid {
     width: 65%;
-    margin: 10px 0 0 48px;
+    margin: 10px 0 0 43px;
 }
 
 #s_charm {
@@ -282,6 +282,15 @@ fieldset {
 
 .s_open_issues{
     font-size: smaller;
+}
+
+#s-buttons{
+    width: 50%;
+    margin-top: 43px;
+}
+
+#s-info,#s-success,#s-danger,#s-warning{
+    height: 30px;
 }
 
 .search-btns{

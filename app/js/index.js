@@ -10,6 +10,9 @@ var electron = require('electron');
 var ipc = electron.ipcRenderer;
 var mysql = require('mysql');
 
+//======================================================================================================================
+//Tooltips
+$('[data-toggle="tooltip"]').tooltip();
 
 //======================================================================================================================
 //Tabs
@@ -68,20 +71,20 @@ function getIssueBaseline(issue_id,project_id){
             } else {
                 if(data.length > 0){
                     if(data[0].name === null){
-                        name = ' '
+                        name = ' ';
                     } else {
                         document.getElementById('baseline').value = data[0].name;
                         
                     }
                     if(data[0].cd === null){
-                         cd = ' '
+                         cd = ' ';
                     } else {
                          document.getElementById('cd').value = data[0].cd;
                          
                     }    
                     document.getElementById('baseline').dataset.id = data[0].id;
                 } else {
-                   getNewBaseline(project_id)
+                   getNewBaseline(project_id);
                 }
             }
         });
@@ -104,12 +107,12 @@ function getNewBaseline(project_id){
                 showNotification('Error on baseline:' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
                 if(data[0].name === null){
-                    name = ' '
+                    name = ' ';
                 } else {
                     name = data[0].name;
                 }
                 if(data[0].cd === null){
-                    cd = ' '
+                    cd = ' ';
                 } else {
                     cd = data[0].cd;
                 }
@@ -164,7 +167,7 @@ function setBaseline(pre_id,name,cd,project_id,issue_id){
             if (error) {
                 showNotification('Error on baseline:' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
-                getIssueBaseline(issue_id,project_id)
+                getIssueBaseline(issue_id,project_id);
             }});
         });
         conn.release();
@@ -241,11 +244,18 @@ $(document).ready(function(){
 });
 
 //======================================================================================================================
-//new project btn clicked
+//new and edit project
 
 $('.project_new').click(function(e){
     e.preventDefault();
-    ipc.send('show-project-win');
+    ipc.send('show-new-project');
+});
+
+$('#project_edit').click(function(e){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    e.preventDefault();
+    ipc.send('show-edit-project',project_ID);
 });
 
 //======================================================================================================================
@@ -420,9 +430,9 @@ $('#submit').click(function (e) {
                         showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
                     } else {
                         showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
-                        $('.nav-btn').removeClass('disabled');;
-                        $('#cancel').addClass('disabled');;
-                        $('#new_issue').removeClass('disabled');;
+                        $('.nav-btn').removeClass('disabled');
+                        $('#cancel').addClass('disabled');
+                        $('#new_issue').removeClass('disabled');
                     }
                 }
             );
@@ -497,7 +507,7 @@ $('#new_issue').click(function(e){
     document.getElementById('charm').value = '';
     document.getElementById('status').value = '';
     document.getElementById('no_further_action').checked = 0;
-    getNewBaseline(project_ID)
+    getNewBaseline(project_ID);
     $('#reproducible').val(1).selectpicker('refresh');
     $('#priority').val(1).selectpicker('refresh');
     $('#messenger').val(1).selectpicker('refresh');
@@ -515,9 +525,9 @@ $('#new_issue').click(function(e){
 
     refreshFiles(document.getElementById('issueID').value);
     $('.add-file').prop('disabled',false);
-    $('.nav-btn').addClass('disabled');;
+    $('.nav-btn').addClass('disabled');
     $('#new_issue').addClass('disabled');
-    $('#cancel').removeClass('disabled');;
+    $('#cancel').removeClass('disabled');
     $('#files-table-body').empty();
     $('.add-file').prop('disabled',true);
 });
@@ -551,9 +561,9 @@ $('#cancel').on('click',function(e){
     }
 
     $('#files-table-body').empty();
-    $('.nav-btn').removeClass('disabled');;
-    $('#new_issue').removeClass('disabled');;
-    $('#cancel').addClass('disabled');;
+    $('.nav-btn').removeClass('disabled');
+    $('#new_issue').removeClass('disabled');
+    $('#cancel').addClass('disabled');
     $('#new-action').val(" ").attr('disabled',false);
     $('#new-action-btn').removeClass("disabled");
     $('.customer_list').empty();
@@ -652,7 +662,7 @@ function refreshFiles(issueID){
                     data.forEach(function(data){
                         html += '<tr><td>'+data.type+'</td>' +
                                 '<td>'+data.path+'</td>' +
-                                '<td class="delete-td text-center"><button type="button" class="btn btn-danger file-delete btn-xs" data-id="'+data.id+'" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>'
+                                '<td class="delete-td text-center"><button type="button" class="btn btn-danger file-delete btn-xs" data-id="'+data.id+'" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>';
                     });
                     $('#files-table-body').append(html);
                 }
@@ -660,7 +670,6 @@ function refreshFiles(issueID){
         conn.release();
     });
 }
-
 
 $('#files-table').delegate('.file-delete','click',function(e){
     e.preventDefault();
@@ -1186,7 +1195,7 @@ $('.search-btn').click(function(e){
                         $('.search-ph').removeClass('show').addClass('hidden');
                         for (let i = 0; i < data.length; i++) {
                             $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-                                                    ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id + '"><li class="list-group-item"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                                                    ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
                         }
 
                         $('.search-result').each(function (index, value){
@@ -1217,21 +1226,13 @@ $('.search-btn').click(function(e){
                                 });
                                 conn2.release();
                             });
-
                         });
                     }
-
-
                 }
             });
-
-
             conn.release();
         });
     }
-
-
-
 });
 
 //search result links
@@ -1330,6 +1331,130 @@ $('.search-reset-btn').click(function(e){
     $('.search-result').remove();
 });
 
+$('#s-success').on('click',function(e){
+    e.preventDefault();
+    $('.search-div').empty();
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT i.id,i.summary,i.no_further_action,i.charm,i.defect FROM issues AS i WHERE i.no_further_action = 1', function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                if (data.length == 0) {
+                    $('.search-ph').removeClass('hidden').addClass('show');
+                    $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+                } else {
+                    $('.search-ph').removeClass('show').addClass('hidden');
+                    for (let i = 0; i < data.length; i++) {
+                        $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                                                ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id + '"><li class="list-group-item list-group-item-success animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                    }
+                }
+            }
+        });
+    });
+});
+
+$('#s-danger').on('click',function(e){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    e.preventDefault();
+    $('.search-div').empty();
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT issues.id,issues.no_further_action,issues.charm ,issues.defect,issues.summary FROM issues LEFT JOIN actions ON actions.issue_id = issues.id WHERE actions.issue_id IS NULL AND issues.project_id = ?',[project_ID], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                if (data.length == 0) {
+                    $('.search-ph').removeClass('hidden').addClass('show');
+                    $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+                } else {
+                    $('.search-ph').removeClass('show').addClass('hidden');
+                    for (let i = 0; i < data.length; i++) {
+                        $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                                                ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id +
+                                                 '"><li class="list-group-item list-group-item-danger animated fadeInDown"><h4 class="list-group-item-heading">' +
+                                                 data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                    }
+                }
+            }
+        });
+    });
+});
+
+$('#s-info').on('click',function(e){
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    e.preventDefault();
+    $('.search-div').empty();
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }
+        conn.query('SELECT issues.id,issues.summary,issues.charm , issues.defect , issues.no_further_action FROM issues ' + 
+                   'LEFT JOIN actions ON actions.issue_id = issues.id'+
+                   ' WHERE actions.issue_id IS NOT NULL AND issues.no_further_action = 0 '+
+                   'AND (issues.charm IS NOT NULL OR issues.defect IS NOT NULL ) AND issues.project_id = ? '+
+                   'GROUP BY issues.id',[project_ID], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                if (data.length == 0) {
+                    $('.search-ph').removeClass('hidden').addClass('show');
+                    $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+                } else {
+                    $('.search-ph').removeClass('show').addClass('hidden');
+                    for (let i = 0; i < data.length; i++) {
+                        $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                                                ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id + '"><li class="list-group-item list-group-item-info animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                    }
+                }
+            }
+        });
+    });
+});
+
+$('#s-warning').on('click',function(e){
+    e.preventDefault();
+    var project_name =  document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    $('.search-div').empty();
+    connection.getConnection(function (err, conn) { //make connection to DB
+        if (err) { //error handling
+            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+            return;
+        }console.log();
+        conn.query('SELECT issues.id,issues.summary,issues.charm , issues.defect , issues.no_further_action FROM issues ' + 
+                   'LEFT JOIN actions ON actions.issue_id = issues.id'+
+                   ' WHERE actions.issue_id IS NOT NULL AND issues.no_further_action = 0 '+
+                   'AND (issues.charm IS NULL AND issues.defect IS NULL ) AND issues.project_id = ? '+
+                   'GROUP BY issues.id',[project_ID], function (error, data) {
+            if (error) {
+                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+                if (data.length == 0) {
+                    $('.search-ph').removeClass('hidden').addClass('show');
+                    $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+                } else {
+                    $('.search-ph').removeClass('show').addClass('hidden');
+                    for (let i = 0; i < data.length; i++) {
+                        $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                                                ' data-charm="'+data[i].charm+'" data-defect="'+data[i].defect+'" href="' + data[i].id + '"><li class="list-group-item list-group-item-warning animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                    }
+                }
+            }
+        });
+    });
+});
+
 //======================================================================================================================
 //action
 
@@ -1378,7 +1503,7 @@ function updateAction(issue_id){
             return;
         }
         conn.query('SELECT description,date FROM actions ' +
-                    ' WHERE ? ORDER BY id DESC', [{issue_id}, '0'], function (error, data) {
+                    ' WHERE ? ORDER BY id DESC', [{issue_id : issue_id}], function (error, data) {
             if (error) {
                 showNotification('Error on actions:' + error, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -1399,5 +1524,7 @@ function updateAction(issue_id){
         });
         conn.release();
     });
-};
+}
+
+
 
