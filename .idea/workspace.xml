@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sql/test.bak" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/js/index1.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/fileicon.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evaluations/css/evaluations.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evaluations/evaluations.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evaluations/js/evaluations.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/FileSaver.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/html-docx.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main.1.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/report/js/report5.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="moh.iws" />
@@ -490,7 +480,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484244760510</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="charm add">
+      <created>1484244831466</created>
+      <option name="number" value="00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1484244831466</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TodoView">
