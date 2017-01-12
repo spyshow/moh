@@ -1,0 +1,115 @@
+body {
+    background: #8e9eab; /* fallback for old browsers */
+    background: linear-gradient( #8e9eab , #eef2f3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    user-select: none;          /* Likely future */
+    min-width : 992px;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.5);
+    width : 96%;
+}
+
+.page-head {
+    margin: 0 10px 30px 10px;
+}
+
+fieldset{
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: solid 1px #8E9EAB;
+}
+
+legend{
+    width: 200px;
+    margin: 10px;
+    padding-left: 10px;
+    border: 0;
+}
+
+/* =====================================================================================================================
+   Main Form
+*/
+
+.form-group{
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 768px) {
+.form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 15px;
+    vertical-align: middle;
+}
+}
+
+#projectID {
+    width: 30%;
+    margin: 20px 20px 10px 20px;
+}
+
+#label-project-id{
+    margin: 20px 0 10px 48px;
+    vertical-align: middle;
+    font-size: 1.2em;
+}
+
+.table-type {
+    margin: 10px 0 5px 0;
+    font-weight: bold;
+}
+
+#label-dist {
+    margin: 0 8px 0 10px;
+    font-weight: bold;
+}
+
+#label-frag {
+    margin: 0 0 0 10px;
+    font-weight: bold;
+}
+
+#table-doc-id {
+    margin: 0 11px 0 0 ;
+}
+
+#table-doc-id-name{
+    margin: 0 0 0 15px;
+    width: 35%;
+    display: inline-block;
+}
+
+#chart-doc-id {
+    margin: 0 11px 0 0 ;
+}
+
+#chart-doc-id-name{
+    margin: 0 0 0 15px;
+    width: 75%;
+    display: inline-block;
+}
+
+#label-key-and-customers , #label-key-and-label {
+    margin-top: 7px;
+    margin-bottom: 8px;
+}
+
+/* =====================================================================================================================
+   buttons
+*/
+
+#pdf {
+    margin: 20px 0 20px 27px;
+}
+
+#word,#excel{
+    margin: 20px 0 20px 10px;
+}
+
+.file-icon {
+    display: inline-block;
+    margin: auto 5px;
+}
