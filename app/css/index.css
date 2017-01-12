@@ -75,20 +75,61 @@ div.input-group.date{
 #baseline {
     width: 61%;
     margin-bottom: 10px;
+    z-index: 2;
+    position: relative;
 }
-
+.baseline-label{
+    z-index: 2;
+    position: relative;
+}
 #baseline-submit {
     margin: 0 10px 0 0;
+    position: absolute;
+    top: 43px;
+    left: 140px;
+    z-index: 2;
 }
 
 #baseline-cancel {
     margin: 0 0 0 10px;
+    position: absolute;
+    top: 43px;
+    left: 56px;
+    z-index: 2;
+}
+
+
+
+#baseline-div{
+    width:90%;
+    height: 85px;
+    background: #eef2f3;
+    border: solid #8E9EAB 1px;
+    border-radius: 5px;
+    position: absolute;
+    top:212px;
+    left:10px;
+    z-index: 1;
+}
+
+
+#vsn {
+    width: 70%;
+    margin: 0 0 10px 10px;
+}
+
+.cd-label{
+    z-index: 2;
+    position: relative;
 }
 
 #cd{
     width: 56%;
-    margin-bottom: 10px;
+    margin-top: 3px;
+    margin-bottom: 7px;
     margin-left: 30px;
+    z-index: 2;
+    position: relative;
 }
 
 .reproducible {
@@ -102,6 +143,7 @@ div.input-group.date{
 .messenger {
     margin-right: 26px;
     margin-bottom: 15px;
+
 }
 
 #customer {
@@ -111,6 +153,8 @@ div.input-group.date{
 
 .customer_list {
     height: 228px;
+    overflow-y:auto;
+    overflow-x:auto;
 }
 
 fieldset {

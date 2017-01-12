@@ -1,10 +1,6 @@
 const electron = require('electron');
-const {
-    dialog
-} = require('electron').remote;
-const {
-    app
-} = require('electron').remote;
+const {dialog} = require('electron').remote;
+const {app} = require('electron').remote;
 const ipc = electron.ipcRenderer;
 const sql = require('mssql');
 const fs = require('fs');
@@ -180,6 +176,7 @@ function allIssues(project_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -328,6 +325,7 @@ function allIssuesCustomer(project_id, customer_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -476,6 +474,7 @@ function allIssuesBaseline(project_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -624,6 +623,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -809,6 +809,7 @@ function allIssuespdf(project_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -985,6 +986,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1162,6 +1164,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1338,6 +1341,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }

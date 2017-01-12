@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/js/report5.js" afterPath="$PROJECT_DIR$/report/js/report5.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,10 +31,16 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.3869348">
-              <caret line="131" column="16" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.41102758">
+              <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
               <folding>
                 <element signature="n#!!block;n#sendMail#0" expanded="false" />
+                <marker date="1484257969588" expanded="true" signature="6268:6301" placeholder="..." />
+                <marker date="1484257969588" expanded="true" signature="13438:13454" placeholder="..." />
+                <marker date="1484257969588" expanded="true" signature="13572:13592" placeholder="..." />
+                <marker date="1484257969588" expanded="true" signature="13785:13805" placeholder="..." />
+                <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
+                <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -80,8 +90,8 @@
         <option value="$PROJECT_DIR$/project/js/index.js" />
         <option value="$PROJECT_DIR$/app/css/index.css" />
         <option value="$PROJECT_DIR$/app/index.html" />
-        <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/app/js/index.js" />
+        <option value="$PROJECT_DIR$/main.js" />
       </list>
     </option>
   </component>
@@ -138,8 +148,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -486,7 +496,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484244831466</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="charm add">
+      <created>1484244845657</created>
+      <option name="number" value="00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1484244845657</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView">
@@ -500,18 +516,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17124394" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17124394" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23089172" sideWeight="0.51130855" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.517321" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32165605" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32114467" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23052464" sideWeight="0.48869145" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -577,7 +593,8 @@
     <MESSAGE value="adding baseline" />
     <MESSAGE value="project page finished (beta)" />
     <MESSAGE value="charm add" />
-    <option name="LAST_COMMIT_MESSAGE" value="charm add" />
+    <MESSAGE value="adjust baseline submit div" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjust baseline submit div" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -589,9 +606,31 @@
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#sendMail#0" expanded="false" />
+            <marker date="1484257969588" expanded="true" signature="6268:6301" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13438:13454" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13572:13592" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13785:13805" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding>
             <element signature="n#!!block;n#sendMail#0" expanded="false" />
+            <marker date="1484257969588" expanded="true" signature="6268:6301" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13438:13454" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13572:13592" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13785:13805" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -822,10 +861,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.3869348">
-          <caret line="131" column="16" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.41102758">
+          <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
           <folding>
             <element signature="n#!!block;n#sendMail#0" expanded="false" />
+            <marker date="1484257969588" expanded="true" signature="6268:6301" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13438:13454" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13572:13592" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13785:13805" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
           </folding>
         </state>
       </provider>

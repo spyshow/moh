@@ -71,6 +71,9 @@ app.on('ready', function () {
   });
   mainWindow.loadURL(mainWindowPath);
   mainWindow.center();
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
   //mainWindow.openDevTools();
   mainWindow.on('closed', function () {
     newProject.close();

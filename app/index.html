@@ -95,15 +95,20 @@
                                 <input type="text" name="key" class="form-control" id="key" placeholder="Key">
                             </div>
                             <div class="form-group">
-                                <label for="baseline">Baseline</label>
+                                <label for="baseline" class="baseline-label">Baseline</label>
                                 <input type="text" data-id="" class="form-control" id="baseline" placeholder="Baseline">
                             </div>
-                            <div id="baseline-div">
+                            <div id="baseline-div" class="hidden">
                                 <div class="form-group text-center">
                                     <button class="btn btn-default hidden" id="baseline-submit">Submit</button>
                                     <button class="btn btn-default hidden" id="baseline-cancel">Cancel</button>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="vsn">VSN</label>
+                                <input type="text" name="vsn" class="form-control" id="vsn" placeholder="VSN">
+                            </div>
+                            
                         </div>
                         <!-- middle -->
                         <div class="col-md-5">
@@ -137,10 +142,10 @@
                             </select>
                             </div>
                             <div class="form-group">
-                                <label for="cd">Baseline #</label>
+                                <label for="cd" class="cd-label">Baseline #</label>
                                 <input type="text" class="form-control" id="cd" placeholder="Baseline #">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group messenger-div" >
                                 <label for="messenger" class="messenger">Messenger</label>
                                 <select name="messenger" id="messenger" class="selectpicker" data-width="56%">
                                 <option value="1">Customer</option>
