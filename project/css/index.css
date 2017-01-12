@@ -32,6 +32,7 @@ legend{
     width: 300px;
     margin: 10px;
     padding-left: 10px;
+    border: 0;
 }
 
 /* =====================================================================================================================
@@ -42,13 +43,9 @@ legend{
     width: 100%;
 }
 
-#projectID {
+#project_name {
     margin: 5px 0 5px 40px;
     width: 40%;
-}
-
-.realvsn{
-    margin-left: 40px;
 }
 
 #cpf-doc-id {
@@ -75,6 +72,13 @@ legend{
 }
 #mr{
     margin: 0 0 0 5px;
+}
+
+#projectSubmit {
+    position: relative;
+    left : 92px;
+    top: 20px;
+    width: 100px;
 }
 
 .database-type {
@@ -110,4 +114,8 @@ legend{
 
 .delete-td{
     width: 5%;
+}
+
+#customerTable , #baselineTable{
+    margin: 30px 0;
 }

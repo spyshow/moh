@@ -2,4 +2,3 @@ mysql server info
 install sql
 backup 
 restore
-put the save location

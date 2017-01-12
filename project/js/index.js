@@ -1,7 +1,3 @@
-/**
- * Created by jihad.kherfan on 9/25/2016.
- */
-
 /* TODO
 
     1-add realvsn
@@ -9,40 +5,57 @@
  */
 var electron = require('electron');
 var ipc = electron.ipcRenderer;
-var mysql = require('mysql');
-var currentValue ='';
+var sql = require('mssql');
+var currentValue = '';
 var haveError = false;
 
 
 //======================================================================================================================
 //notification
-function showNotification(msg,type,icon){
+function showNotification(msg, type, icon) {
     $.notify({
         icon: icon,
-        message: msg}, {
+        message: msg
+    }, {
         type: type
     });
 }
 
 //======================================================================================================================
 //getDate
-function getDate(){
+function getDate() {
     var currentTime = new Date();
     var month = currentTime.getMonth() + 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
     var day = currentTime.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
     var year = currentTime.getFullYear();
-    return year+'-'+month+'-'+day;
+    return year + '-' + month + '-' + day;
 }
 
 //======================================================================================================================
-//create Mysql connection
-var connection = mysql.createPool({
-    connectionLimit : 10,
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database: 'test'
-});
+//create MsSQL connection
+
+var config = {
+    user: 'test',
+    password: '123456',
+    server: 'ENG3',
+    port: 1433,
+    database: 'test',
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000
+    },
+    options: {
+        instanceName: 'SQLEXPRESS'
+    }
+};
+
 
 //======================================================================================================================
 //customer table
@@ -50,115 +63,122 @@ var connection = mysql.createPool({
 //draw table
 function refreshCustomer(projectID) {
     $('#customerTable-body').empty();
-    connection.getConnection(function (err, conn) { //make connection to DB
-        if (err) { //error handling
-            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-            return;
-        }
-        conn.query('SELECT * FROM customers'+
-                   ' INNER JOIN projects_customers AS pc ON customers.id = pc.customer_id '+
-                   ' WHERE  pc.project_id = ?',[projectID],function (error, data) {
-            if (error) {
-                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-                var html = '';
-                data.forEach(function(data){
-                    html += '<tr>';
-                    html += '<td class="td editablecustomers" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
-                    html += '<td class="td editablecustomers" data-type="system" data-pk="'+data.id+'" contenteditable>'+data.system+'</td>';
-                    html += '<td class="td editablecustomers" data-type="sn" data-pk="'+data.id+'" contenteditable>'+data.sn+'</td>';
-                    html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="'+data.id+'" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
-                    html += '</tr>';
+
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting on refreshing customer: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('project_id', sql.Int, projectID)
+                .query('SELECT * FROM customers' +
+                    ' INNER JOIN projects_customers AS pc ON customers.id = pc.customer_id ' +
+                    ' WHERE  pc.project_id = @project_id')
+                .then(function (data) {
+                    var html = '';
+                    data.forEach(function (data) {
+                        html += '<tr>';
+                        html += '<td class="td editablecustomers" data-type="name" data-pk="' + data.id + '" contenteditable>' + data.name + '</td>';
+                        html += '<td class="td editablecustomers" data-type="system" data-pk="' + data.id + '" contenteditable>' + data.system + '</td>';
+                        html += '<td class="td editablecustomers" data-type="sn" data-pk="' + data.id + '" contenteditable>' + data.sn + '</td>';
+                        html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger customer-delete btn-xs" data-pk="' + data.id + '" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
+                        html += '</tr>';
+                    });
+                    $('#customerTable-body').append(html);
+                    html = '';
+                }).catch(function (error) {
+                    showNotification('Error on refreshing customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
-                $('#customerTable-body').append(html);
-                html='';
-            }
-        });
-        conn.release();
+        }
     });
 }
 
 function refreshBaseline(projectID) {
     $('#baselineTable-body').empty();
-    connection.getConnection(function (err, conn) { //make connection to DB
-        if (err) { //error handling
-            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-            return;
-        }
-        conn.query('SELECT * FROM baselines'+
-                   ' INNER JOIN projects_baselines AS pb ON baselines.id = pb.baseline_id '+
-                   ' WHERE  pb.project_id = ?',[projectID],function (error, data) {
-            if (error) {
-                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-                var html = '';
-                data.forEach(function(data){
-                    html += '<tr>';
-                    html += '<td class="td editablebaselines" data-type="name" data-pk="'+data.id+'" contenteditable>'+data.name+'</td>';
-                    html += '<td class="td editablebaselines" data-type="cd" data-pk="'+data.id+'" contenteditable>'+data.cd+'</td>';
-                    html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger baseline-delete btn-xs" data-pk="'+data.id+'" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
-                    html += '</tr>';
+
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting on refreshing baseline: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('project_id', sql.Int, projectID)
+                .query('SELECT * FROM baselines' +
+                    ' INNER JOIN projects_baselines AS pb ON baselines.id = pb.baseline_id ' +
+                    ' WHERE  pb.project_id = @project_id')
+                .then(function (data) {
+                    var html = '';
+                    data.forEach(function (data) {
+                        html += '<tr>';
+                        html += '<td class="td editablebaselines" data-type="name" data-pk="' + data.id + '" contenteditable>' + data.name + '</td>';
+                        html += '<td class="td editablebaselines" data-type="cd" data-pk="' + data.id + '" contenteditable>' + data.cd + '</td>';
+                        html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger baseline-delete btn-xs" data-pk="' + data.id + '" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
+                        html += '</tr>';
+                    });
+                    $('#baselineTable-body').append(html);
+                    html = '';
+                }).catch(function (error) {
+                    showNotification('Error on refreshing baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
-                $('#baselineTable-body').append(html);
-                html='';
-            }
-        });
-        conn.release();
+        }
     });
 }
 
-function edit_data(id, type, newValue,table,el) {
-    if(currentValue !== newValue) {
-        connection.getConnection(function (err, conn) { //make connection to DB
-            if (err) { //error handling
-                showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
+function edit_data(id, type, newValue, table, el) {
+    if (currentValue !== newValue) {
+
+        var conn = new sql.Connection(config, function (err) {
+            if (err) {
+                showNotification('error connecting for editing data: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                 haveError = true;
-                if(haveError === true){
-                    el.text(currentValue) ;
+                if (haveError === true) {
+                    el.text(currentValue);
                     haveError = false;
                 }
+            } else {
+                var request = new sql.Request(conn);
+                request
+                    .input('newValue', newValue)
+                    .input('id', sql.Int, id)
+                    .query('UPDATE ' + table + ' SET ' + type + ' = @newValue WHERE id = @id')
+                    .then(function (data) {
+                        showNotification(table + ' Updated successfully', 'success', 'glyphicon glyphicon-tasks');
+                    }).catch(function (error) {
+                        showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
+                        haveError = true;
+                        if (haveError === true) {
+                            el.text(currentValue);
+                            haveError = false;
+                        }
+                    });
             }
-            conn.query('UPDATE '+table+' SET ' + type + ' = ? WHERE id = ? ', [newValue, id], function (error, data) {
-                if (error) {
-                    showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
-                    haveError = true;
-                    if(haveError === true){
-                        el.text(currentValue) ;
-                        haveError = false;
-                    }
-                } else {
-                    showNotification(table+' Updated successfully', 'success', 'glyphicon glyphicon-tasks');
-
-                }
-            });
-            conn.release();
         });
     }
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
     //customers table 
-    $(document).on('focus', '.editablecustomers', function(){
+    $(document).on('focus', '.editablecustomers', function () {
         currentValue = $(this).text();
     });
-    $(document).on('blur', '.editablecustomers', function(){
+    $(document).on('blur', '.editablecustomers', function () {
         var el = $(this);
         var id = $(this).data("pk");
         var type = $(this).data("type");
         var newValue = $(this).text();
-        edit_data(id,type, newValue,'customers',el);
+        edit_data(id, type, newValue, 'customers', el);
     });
 
     //baseline table 
-    $(document).on('focus', '.editablebaselines', function(){
+    $(document).on('focus', '.editablebaselines', function () {
         currentValue = $(this).text();
     });
-    $(document).on('blur', '.editablebaselines', function(){
+    $(document).on('blur', '.editablebaselines', function () {
         var el = $(this);
         var id = $(this).data("pk");
         var type = $(this).data("type");
         var newValue = $(this).text();
-        edit_data(id,type, newValue,'baselines',el);
+        edit_data(id, type, newValue, 'baselines', el);
     });
 
 });
@@ -167,39 +187,43 @@ $(document).ready(function(){
 //============================================================================================================================
 //add or update project
 
-ipc.on('show-edit-project', function(event , project_id){
-    connection.getConnection(function (err, conn) { //make connection to DB
-        if (err) { //error handling
-            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-            return;
+ipc.on('show-edit-project', function (event, project_id) {
+    
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting for selecting project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('project_id', sql.Int, project_id)
+                .query('SELECT * FROM projects WHERE id = @project_id')
+                .then(function (data) {
+                    document.getElementById('project_id').value = data[0].id;
+                    document.getElementById('project_name').value = data[0].project_name;
+                    $(document).prop('title', 'Edit Project: '+document.getElementById('project_name').value);
+                    document.getElementById('cpf-doc-id').value = data[0].cpf_doc_id;
+                    if (data[0].project_type == 0) {
+                        document.getElementById('syngo').checked = true;
+                    } else {
+                        document.getElementById('mr').checked = true;
+                    }
+                    if (data[0].db_type == 0) {
+                        document.getElementById('charm').checked = true;
+                    } else {
+                        document.getElementById('TFS').checked = true;
+                    }
+                    document.getElementById('type').value = 'update';
+                    refreshCustomer(data[0].id);
+                    refreshBaseline(data[0].id);
+                }).catch(function (error) {
+                    showNotification('Error on selecting project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
         }
-        conn.query('SELECT * FROM projects WHERE id = ?',[project_id],function (error, data) {
-            if (error) {
-                showNotification('Error :' + error, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-                document.getElementById('project_id').value = data[0].id;
-                document.getElementById('project_name').value = data[0].project_name;
-                document.getElementById('cpf-doc-id').value = data[0].cpf_doc_id;
-                if(data[0].project_type == 0){
-                    document.getElementById('syngo').checked = true;
-                } else {
-                    document.getElementById('mr').checked = true;
-                }
-                if(data[0].db_type == 0){
-                    document.getElementById('charm').checked = true;
-                } else {
-                    document.getElementById('TFS').checked = true;
-                }
-                document.getElementById('type').value = 'update';
-                refreshCustomer(data[0].id);
-                refreshBaseline(data[0].id);
-            }
-        });
-        conn.release();
     });
 });
 
-ipc.on('show-new-project', function(event){
+ipc.on('show-new-project', function (event) {
+    $(document).prop('title', 'New Project');
     document.getElementById('project_id').value = '';
     document.getElementById('project_name').value = '';
     document.getElementById('cpf-doc-id').value = '';
@@ -209,188 +233,205 @@ ipc.on('show-new-project', function(event){
     $('#baselineTable-body').empty();
 });
 
-$('#projectSubmit').on('click',function(e){
+$('#projectSubmit').on('click', function (e) {
+
     e.preventDefault();
     var project_id = document.getElementById('project_id').value;
     var project_name = document.getElementById('project_name').value;
     var cpf_doc_id = document.getElementById('cpf-doc-id').value;
     var project_type = 0;
-    if($('#syngo').is(':checked')) {
-        project_type = 0;
+    if (!project_name || !project_name) {
+        showNotification('You Have to enter all the information!', 'danger', 'glyphicon glyphicon-tasks');
     } else {
-        project_type = 1;
-    }
-    var db_type = 0;
-    if($('#charm').is(':checked')) {
-        db_type = 0;
-    } else {
-        db_type = 1;
-    }
-    if (document.getElementById('type').value === 'update') {
-        connection.getConnection(function (err, conn) {
-            if (err) {
-                showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-                return;
-            }
-            conn.query('UPDATE projects SET ? Where ?',
-            [{
-                    project_name: project_name,
-                    cpf_doc_id: cpf_doc_id,
-                    project_type: project_type,
-                    db_type: db_type
-                }, {id: project_id}],function (error) {
-                    if (error) {
-                        showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
-                    } else {
-                        showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
-                    }
-                }
-            );
-            conn.release();
-        });
-    } else {
-        connection.getConnection(function (err, conn) {
-            if (err) {
-                showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-                return;
-            }
-            conn.query('INSERT INTO projects SET ?',
-            [{
-                project_name: project_name,
-                cpf_doc_id: cpf_doc_id,
-                project_type: project_type,
-                db_type: db_type}],function (error) {
-                if (error) {
-                    showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
+        if ($('#syngo').is(':checked')) {
+            project_type = 0;
+        } else {
+            project_type = 1;
+        }
+        var db_type = 0;
+        if ($('#charm').is(':checked')) {
+            db_type = 0;
+        } else {
+            db_type = 1;
+        }
+        if (document.getElementById('type').value === 'update') {
+
+            var conn = new sql.Connection(config, function (err) {
+                if (err) {
+                    showNotification('error connecting on updating project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
-                    showNotification('Project Created', 'success', 'glyphicon glyphicon-tasks');
+                    var request = new sql.Request(conn);
+                    request
+                        .input('project_name', project_name)
+                        .input('cpf_doc_id', cpf_doc_id)
+                        .input('project_type', project_type)
+                        .input('db_type', db_type)
+                        .input('id', sql.Int, project_id)
+                        .query('UPDATE projects SET [project_name] = @project_name,[project_type] = @project_type,[db_type] = @db_type,' +
+                            '[cpf_doc_id] = @cpf_doc_id Where id = @id ')
+                        .then(function (data) {
+                            showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
+                        }).catch(function (error) {
+                            showNotification('Error on updating project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                        });
                 }
             });
-            conn.release();
-        });
+        } else {
+
+            var conn2 = new sql.Connection(config, function (err) {
+                if (err) {
+                    showNotification('error connecting on insert project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
+                    var request = new sql.Request(conn2);
+                    request
+                        .input('project_name', project_name)
+                        .input('cpf_doc_id', cpf_doc_id)
+                        .input('project_type', project_type)
+                        .input('db_type', db_type)
+                        .query('INSERT INTO projects ([project_name],[project_type],[db_type],[cpf_doc_id]) VALUES (@project_name,@project_type,@db_type,@cpf_doc_id)')
+                        .then(function () {
+                            showNotification('Project Created', 'success', 'glyphicon glyphicon-tasks');
+                        }).catch(function (error) {
+                            showNotification('Error on insert project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                        });
+                }
+            });
+        }
     }
+
 });
 
 //============================================================================================================================
 //add and remove customers
 
-$('#add-customer').on('click',function(e){
+$('#add-customer').on('click', function (e) {
     e.preventDefault();
     var customerName = document.getElementById('customer-name').value;
     var system = document.getElementById('system').value;
     var sn = document.getElementById('sn').value;
-    connection.getConnection(function (err, conn) {
-            if (err) {
-                showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-                return;
-            }
-            conn.query('INSERT INTO customers SET ?',
-            [{
-                name: customerName,
-                system: system,
-                sn: sn}],function (error,data) {
-                if (error) {
-                    showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
-                }
-                conn.query('INSERT INTO projects_customers SET project_id = ? , customer_id = ?',
-                [document.getElementById('project_id').value,data.insertId],
-                function (error) {
-                if (error) {
-                    showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
-                } else {
-                    showNotification('Customer '+customerName+' Added', 'success', 'glyphicon glyphicon-tasks');
-                    refreshCustomer(document.getElementById('project_id').value);
-                }
-                
-            });
-            });
-            conn.release();
-        });
+
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting for adding customer: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+
+            var request = new sql.Request(conn);
+            request
+                .input('name', customerName)
+                .input('system', system)
+                .input('sn', sn)
+                .query('INSERT INTO [customers] ([name], [system], [sn] ) VALUES (@name,@system,@sn); SELECT SCOPE_IDENTITY() AS id;')
+                .then(function (data) {
+                    var conn2 = new sql.Connection(config, function (err) {
+                        if (err) {
+                            showNotification('error connecting for adding customer to project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                        } else {
+                            var request = new sql.Request(conn2);
+                            request
+                                .input('project_id', document.getElementById('project_id').value)
+                                .input('customer_id', data[0].id)
+                                .query('INSERT INTO projects_customers (project_id,customer_id) VALUES (@project_id ,@customer_id)')
+                                .then(function () {
+                                    showNotification('Customer ' + customerName + ' Added', 'success', 'glyphicon glyphicon-tasks');
+                                    refreshCustomer(document.getElementById('project_id').value);
+                                }).catch(function (error) {
+                                    showNotification('Error adding customer to project :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+
+                                });
+                        }
+                    });
+                }).catch(function (error) {
+                    showNotification('Error adding customer :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
+    });
 });
 
-$('#customerTable-body').delegate('.customer-delete','click',function(e){
+$('#customerTable-body').delegate('.customer-delete', 'click', function (e) {
     e.preventDefault();
     var id = this.dataset.pk;
-    console.log(id);
-    connection.getConnection(function(err, conn) {
+    var conn = new sql.Connection(config, function (err) {
         if (err) {
-            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
-            return;
-        }
-        conn.query('DELETE FROM customers WHERE ?', [{id: id}],
-            function (error) {
-                if(error){
-                    showNotification(error,'danger','glyphicon glyphicon-tasks');
-                }
-                else {
-                    showNotification('customer Deleted from the database','success','glyphicon glyphicon-tasks');
+            showNotification('error connecting for deleting customer: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('id', sql.Int, id)
+                .query('DELETE FROM customers WHERE id = @id')
+                .then(function (data) {
+                    showNotification('customer Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
                     refreshCustomer(document.getElementById('project_id').value);
                     document.getElementById('customer-name').value = '';
                     document.getElementById('system').value = '';
                     document.getElementById('sn').value = '';
-                }
-            }
-        );
-        conn.release();
+                }).catch(function (error) {
+                    showNotification('Error on deleting customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
     });
 });
 
 //============================================================================================================================
 //add and remove baseline
 
-$('#add-baseline').on('click',function(e){
+$('#add-baseline').on('click', function (e) {
     e.preventDefault();
     var baseline = document.getElementById('baseline').value;
     var cd = document.getElementById('cd').value;
-    connection.getConnection(function (err, conn) {
+    var conn = new sql.Connection(config, function (err) {
         if (err) {
-            showNotification('error connecting: ' + err.stack, 'danger', 'glyphicon glyphicon-tasks');
-            return;
+            showNotification('error connecting for adding baseline: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('baseline', baseline)
+                .input('cd', cd)
+                .query('INSERT INTO [baselines] ([name] , [cd]) VALUES (@baseline, @cd); SELECT SCOPE_IDENTITY() AS id;')
+                .then(function (data) {
+                    var conn2 = new sql.Connection(config, function (err) {
+                        if (err) {
+                            showNotification('error connecting for adding baseline to project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                        } else {
+                            var request = new sql.Request(conn2);
+                            request
+                                .input('project_id', document.getElementById('project_id').value)
+                                .input('baseline_id', data[0].id)
+                                .query('INSERT INTO projects_baselines (project_id,baseline_id) VALUES (@project_id ,  @baseline_id)')
+                                .then(function () {
+                                    showNotification('Baseline Added', 'success', 'glyphicon glyphicon-tasks');
+                                    refreshBaseline(document.getElementById('project_id').value);
+                                }).catch(function (error) {
+                                    showNotification('Error adding baseline to project :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
+                        }
+                    });
+                }).catch(function (error) {
+                    showNotification('Error adding baseline :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
         }
-        conn.query('INSERT INTO baselines SET ?',
-        [{
-            name: baseline,
-            cd: cd}],function (error,data) {
-            if (error) {
-                showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
-            }
-            conn.query('INSERT INTO projects_baselines SET project_id = ? , baseline_id = ?',
-                [document.getElementById('project_id').value, data.insertId],
-                function (error) {
-                if (error) {
-                    showNotification(error, 'danger', 'glyphicon glyphicon-tasks');
-                } else {
-                    showNotification('Baseline Added', 'success', 'glyphicon glyphicon-tasks');
-                    refreshBaseline(document.getElementById('project_id').value);
-                }
-        });
-        conn.release();
-     });
     });
 });
 
-$('#baselineTable-body').delegate('.baseline-delete','click',function(e){
+$('#baselineTable-body').delegate('.baseline-delete', 'click', function (e) {
     e.preventDefault();
     var id = this.dataset.pk;
-    console.log(id);
-    connection.getConnection(function(err, conn) {
+
+    var conn = new sql.Connection(config, function (err) {
         if (err) {
-            showNotification('error connecting: ' + err.stack,'danger','glyphicon glyphicon-tasks');
-            return;
-        }
-        conn.query('DELETE FROM Baselines WHERE ?', [{id: id}],
-            function (error) {
-                if(error){
-                    showNotification(error,'danger','glyphicon glyphicon-tasks');
-                }
-                else {
-                    showNotification('Baseline Deleted from the database','success','glyphicon glyphicon-tasks');
+            showNotification('error connecting for deleting Baselines: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('id', sql.Int, id)
+                .query('DELETE FROM baselines WHERE id = @id')
+                .then(function (data) {
+                    showNotification('Baseline Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
                     refreshBaseline(document.getElementById('project_id').value);
                     document.getElementById('baseline').value = '';
                     document.getElementById('cd').value = '';
-                }
-            }
-        );
-        conn.release();
+                }).catch(function (error) {
+                    showNotification('Error on deleting Baselines:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
     });
 });

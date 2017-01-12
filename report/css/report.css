@@ -60,3 +60,8 @@ body {
 #word{
     margin: 20px 0 50px 10px;
 }
+
+.file-icon {
+    display: inline-block;
+    margin: auto 5px;
+}

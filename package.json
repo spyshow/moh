@@ -2,24 +2,36 @@
   "name": "cpfid",
   "productName": "CPF-ID",
   "version": "1.0.0",
-  "description": "sdsa",
+  "description": "cpf id",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "build": "electron-packager . --overwrite --asar=true"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "devtron": "^1.4.0",
+    "electron-packager": "^8.5.0",
+    "electron-winstaller": "^2.5.1",
     "jshint": "^2.9.4"
   },
   "dependencies": {
-    "docxtemplater": "^2.1.5",
-    "electron": "1.4.0",
-    "mysql": "^2.11.1",
-    "officegen": "^0.4.0",
+    "async": "^2.1.4",
+    "base64-img": "^1.0.3",
+    "blob-to-buffer": "^1.2.6",
+    "buildmail": "^4.0.0",
+    "chart.js": "^2.4.0",
+    "electron": "1.4.1",
+    "excel4node": "^1.2.1",
+    "file-saver": "^1.3.3",
+    "html-docx-js": "^0.3.1",
+    "html-pdf": "^2.1.0",
+    "html2xlsx": "^0.2.0",
+    "jszip": "^2.6.1",
+    "mailparser": "^0.6.1",
+    "mssql": "^3.3.0",
     "path": "^0.12.7",
-    "pdfkit": "^0.8.0",
-    "promise-mysql": "^2.0.0"
+    "pdfkit": "^0.8.0"
   }
 }

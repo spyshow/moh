@@ -1,5 +1,5 @@
 <!-- ToDo -->
-<!-- implement word and pdf icons in the buttons -->
+
 
 
 <!DOCTYPE html>
@@ -15,6 +15,7 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/bootstrap-select.min.css" rel="stylesheet">
     <link href="../css/animate.css" rel="stylesheet">
+    <link href="../css/fileicon.css" rel="stylesheet">
     <link href="css/report.css" rel="stylesheet">
 
 </head>
@@ -25,9 +26,9 @@
         <div class="row">
             <div class="form-group">
                 <label for="projectID">Project</label>
-                <input type="text" class="form-control" id="projectID" placeholder="Project Number" value="1" disabled>
-                <label for="realvsn" class="realvsn">Real. Vsn</label>
-                <input type="text" class="form-control" id="realvsn" placeholder="Real Vsn" disabled>
+                <input type="text" class="form-control" id="projectID" data-id="" placeholder="Project Number" disabled>
+                <!--<label for="realvsn" class="realvsn">Real. Vsn</label>-->
+                <input type="hidden" class="form-control" id="realvsn" placeholder="Real Vsn" disabled>
             </div>
             <div class="form-group">
                 <input type="radio" name="report-type" class="report-type" id="all-issues" value="all-issues" checked>
@@ -68,8 +69,14 @@
                 <label for="first-page">First Page Empty</label>
             </div>
             <div class="form-group">
-                <button class="btn btn-default" id="pdf">Create PDF file</button>
-                <button class="btn btn-default" id="word">Create word file</button>
+                <button class="btn btn-default" id="pdf">
+                    <div class="file-icon file-icon-sm" data-type="pdf"></div>
+                    Create PDF file
+                </button>
+                <button class="btn btn-default" id="word">
+                    <div class="file-icon file-icon-sm" data-type="doc"></div>
+                    Create word file
+                </button>
             </div>
 
         </div>
@@ -81,7 +88,8 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/bootstrap-select.min.js"></script>
 <script src="../js/bootstrap-notify.min.js"></script>
-<script src="js/report2.js"></script>
+<script src="../js/html-docx.js"></script>
+<script src="js/report5.js"></script>
 <script>if (window.module) module = window.module;</script>
 </body>
 </html>

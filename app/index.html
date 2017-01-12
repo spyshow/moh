@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>CPF-ID</title>
-
     <!-- Bootstrap -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/bootstrap-select.min.css" rel="stylesheet">
     <link href="../css/animate.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
-
 </head>
+
 <body>
     <div class="container">
-
         <!--project select modal-->
         <div class="modal fade" id="project_select" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -37,57 +36,52 @@
                     </div>
                     <div class="modal-body">
                         <h3>Create a new Project</h3>
-                        <button type="button" class="btn btn-primary project_new" >New Project</button>
+                        <button type="button" class="btn btn-primary project_new">New Project</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
         <!-- head -->
         <div class="row">
-
-
-        <form class="form-inline page-head">
+            <form class="form-inline page-head">
                 <div class="form-group">
                     <label for="projectID">Project</label>
-                    <input type="text" class="form-control" id="projectID" placeholder="Project Number">
+                    <input type="text" class="form-control" id="projectID" placeholder="Project Number" disabled>
                     <button type="submit" class="btn btn-default" id="project_edit">Edit</button>
-                    <button type="submit" class="btn btn-default project_new" >New</button>
+                    <button type="submit" class="btn btn-default project_new">New</button>
                     <p class="bg-info">All Issues: <span id="cpf-all"></span></p>
                     <p class="bg-info">Open Issues: <span id="cpf-open"></span></p>
                     <p class="bg-info">CPF-DOC-ID: <span id="cpf-doc-id"></span></p>
                 </div>
             </form>
         </div>
-
         <!-- body -->
         <div class="row">
             <!-- issue -->
             <div class="col-md-8">
                 <form class="form-inline" name="issue">
-                <div class="row">
-                    <!-- left -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="DBID">DB ID</label>
-                            <input type="text" class="form-control" id="DBID" name="DBID" placeholder="Database Num" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <div class="input-group date" >
-                                <input type="text" class="form-control" id="date" disabled>
+                    <div class="row">
+                        <!-- left -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="DBID">DB ID</label>
+                                <input type="text" class="form-control" id="DBID" name="DBID" placeholder="Database Num" disabled>
                             </div>
-                        </div>
-                        <br />
-                        <div class="form-group">
-                            <label for="work">Work</label>
-                            <input type="text" class="form-control" id="work" name="work" placeholder="employee">
-                        </div>
-                        <br />
-                        <div class="form-group">
-                            <label for="area" class="area">Area</label>
-                            <select name="area" id="area" class="selectpicker" data-width="70%">
+                            <div class="form-group">
+                                <label for="date">Date</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control" id="date" disabled>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label for="work">Work</label>
+                                <input type="text" class="form-control" id="work" name="work" placeholder="employee">
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label for="area" class="area">Area</label>
+                                <select name="area" id="area" class="selectpicker" data-width="70%">
                                 <option value="1">Application</option>
                                 <option value="2">Software</option>
                                 <option value="3">Hardware</option>
@@ -95,155 +89,151 @@
                                 <option value="5">Wish</option>
                                 <option value="6">Training</option>
                             </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="key" class="key">Key</label>
-                            <input type="text" name="key" class="form-control" id="key" placeholder="Key">
-                        </div>
-                        <div class="form-group">
-                            <label for="baseline">Baseline</label>
-                            <input type="text" data-id="" class="form-control" id="baseline" placeholder="Baseline">
-                        </div>
-                        <div id="baseline-div">
-                            <div class="form-group text-center">
-                                <button class="btn btn-default hidden" id="baseline-submit">Submit</button>
-                                <button class="btn btn-default hidden" id="baseline-cancel">Cancel</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="key" class="key">Key</label>
+                                <input type="text" name="key" class="form-control" id="key" placeholder="Key">
+                            </div>
+                            <div class="form-group">
+                                <label for="baseline">Baseline</label>
+                                <input type="text" data-id="" class="form-control" id="baseline" placeholder="Baseline">
+                            </div>
+                            <div id="baseline-div">
+                                <div class="form-group text-center">
+                                    <button class="btn btn-default hidden" id="baseline-submit">Submit</button>
+                                    <button class="btn btn-default hidden" id="baseline-cancel">Cancel</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- middle -->
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="defect">Defect</label>
-                            <input type="text" name="defect" class="form-control" id="defect" placeholder="Defect">
-                        </div>
-                        <div class="form-group">
-                            <label for="charm">CHARM</label>
-                            <input type="text" name="charm" class="form-control" id="charm" placeholder="CHARM">
-                        </div>
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <input type="text" class="form-control" id="status" placeholder="Status">
-                            <input type="checkbox" name="no_further_action" id="no_further_action" value="no_further_action"> <label for="no_further_action">No further action</label><br>
-                        </div>
-                        <div class="form-group">
-                            <label for="priority" class="priority">Priority</label>
-                            <select name="priority" id="priority" class="selectpicker" data-width="56%">
+                        <!-- middle -->
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="defect">Defect</label>
+                                <input type="text" name="defect" class="form-control" id="defect" placeholder="Defect">
+                            </div>
+                            <div class="form-group">
+                                <label for="charm">CHARM</label>
+                                <input type="text" name="charm" class="form-control" id="charm" placeholder="CHARM">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <input type="text" class="form-control" id="status" placeholder="Status">
+                                <input type="checkbox" name="no_further_action" id="no_further_action" value="no_further_action">                                <label for="no_further_action">No further action</label><br>
+                            </div>
+                            <div class="form-group">
+                                <label for="priority" class="priority">Priority</label>
+                                <select name="priority" id="priority" class="selectpicker" data-width="56%">
                                 <option value="1">High</option>
                                 <option value="2">Medium</option>
                                 <option value="3">Low</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="reproducible" class="reproducible">Reproducible</label>
-                            <select name="reproducible" id="reproducible" class="selectpicker" data-width="56%">
+                            </div>
+                            <div class="form-group">
+                                <label for="reproducible" class="reproducible">Reproducible</label>
+                                <select name="reproducible" id="reproducible" class="selectpicker" data-width="56%">
                                 <option value="1">Yes</option>
                                 <option value="2">No</option>
                                 <option value="3">Sporadic</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="cd">Baseline #</label>
-                            <input type="text" class="form-control" id="cd" placeholder="Baseline #">
-                        </div>
-                        <div class="form-group">
-                            <label for="messenger" class="messenger">Messenger</label>
-                            <select name="messenger" id="messenger" class="selectpicker" data-width="56%">
+                            </div>
+                            <div class="form-group">
+                                <label for="cd">Baseline #</label>
+                                <input type="text" class="form-control" id="cd" placeholder="Baseline #">
+                            </div>
+                            <div class="form-group">
+                                <label for="messenger" class="messenger">Messenger</label>
+                                <select name="messenger" id="messenger" class="selectpicker" data-width="56%">
                                 <option value="1">Customer</option>
                                 <option value="2">Application</option>
                                 <option value="3">monitoring</option>
                                 <option value="4">installation</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <!-- right -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <span id="customer">Costumer</span>
-                        </div>
-                        <fieldset>
-                            <ul class="list-group customer_list">
-                            </ul>
-                        </fieldset>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="summary">Summary</label>
-                            <input type="text" class="form-control" id="summary" placeholder="issue summary">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="issue description [English]"></textarea>
-                            <textarea class="form-control" rows="3" name="description_de" id="description_de" placeholder="Problembeschreibung [Dutch]"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="action">Action</label>
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist" id="action">
-                                <li role="presentation" class="active"><a href="#action-current" aria-controls="action-current" role="tab" data-toggle="tab">Current</a></li>
-                                <li role="presentation"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New</a></li>
-                                <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">History</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane fade in active" id="action-current">No Action Yet!</div>
-                                <div role="tabpanel" class="tab-pane fade" id="new">
-                                    <form class="form-inline" name="action">
-                                        <div class="form-group">
-                                            <textarea class="form-control" rows="3" name="new-action" id="new-action" placeholder="New Action"></textarea>
-                                            <a href="#" class="btn btn-primary" id="new-action-btn">Submit</a>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div role="tabpanel" class="tab-pane fade" id="history">
-                                    <ul class="list-group" id="action-history"></ul>
-                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="solution">Solution</label>
-                            <input type="text" name="solution" class="form-control" id="solution" placeholder="Issue solution[English]">
-                            <input type="text" name="solution_de" class="form-control" id="solution_de" placeholder="Problem Lösung[Dutch]">
+                        <!-- right -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <span id="customer">Customer</span>
+                            </div>
+                            <fieldset>
+                                <ul class="list-group customer_list">
+                                </ul>
+                            </fieldset>
                         </div>
-                        <div class="form-group">
-                            <label for="c2c">Communication<br> to  customer</label>
-                            <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="file-type" class="file-type">Type</label>
-                            <select name="messenger" id="file-type" class="selectpicker" data-width="15%">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="summary">Summary</label>
+                                <input type="text" class="form-control" id="summary" placeholder="issue summary">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" rows="3" name="description" id="description" placeholder="issue description [English]"></textarea>
+                                <textarea class="form-control" rows="3" name="description_de" id="description_de" placeholder="Problembeschreibung [Dutch]"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="action">Action</label>
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist" id="action">
+                                    <li role="presentation" class="active"><a href="#action-current" aria-controls="action-current" role="tab" data-toggle="tab">Current</a></li>
+                                    <li role="presentation"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New</a></li>
+                                    <li role="presentation"><a href="#history" aria-controls="history" role="tab" data-toggle="tab">History</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="action-current">No Action Yet!</div>
+                                    <div role="tabpanel" class="tab-pane fade" id="new">
+                                        <form class="form-inline" name="action">
+                                            <div class="form-group">
+                                                <textarea class="form-control" rows="3" name="new-action" id="new-action" placeholder="New Action"></textarea>
+                                                <a href="#" class="btn btn-primary" id="new-action-btn">Submit</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="history">
+                                        <ul class="list-group" id="action-history"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="solution">Solution</label>
+                                <input type="text" name="solution" class="form-control" id="solution" placeholder="Issue solution[English]">
+                                <input type="text" name="solution_de" class="form-control" id="solution_de" placeholder="Problem Lösung[Dutch]">
+                            </div>
+                            <div class="form-group">
+                                <label for="c2c">Communication<br> to  customer</label>
+                                <textarea class="form-control" name="c2c" rows="3" id="c2c" placeholder="issue description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="file-type" class="file-type">Type</label>
+                                <select name="messenger" id="file-type" class="selectpicker" data-width="15%">
                                 <option value="Savelog">Savelog</option>
                                 <option value="Patient data">Patient data</option>
                                 <option value="Backup">Backup</option>
                                 <option value="Raw data">Raw data</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <label for="file-path">Path</label>
-                            <input type="text" class="form-control" id="file-path" placeholder="File path">
-                            <button class="btn btn-default add-file">Add</button>
-                            <table id="files-table" class="files-table table table-bordered table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th id="type">Type</th>
-                                    <th id="path">Path</th>
-                                    <th id="delete"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="files-table-body">
-                                </tbody>
-                            </table>
+                                <label for="file-path">Path</label>
+                                <input type="text" class="form-control" id="file-path" placeholder="File path">
+                                <button class="btn btn-default add-file">Add</button>
+                                <table id="files-table" class="files-table table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th id="type">Type</th>
+                                            <th id="path">Path</th>
+                                            <th id="delete"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="files-table-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" id="form_type" name="form_type">
+                                <input type="hidden" id="issueID" name="issueID">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input type="hidden" id="form_type" name="form_type">
-                            <input type="hidden" id="issueID" name="issueID">
-                        </div>
-
                     </div>
-                </div>
                     <a class="btn btn-default" id="submit">Submit</a>
                     <a class="btn btn-default" id="cancel">Cancel</a>
                 </form>
@@ -299,10 +289,10 @@
                             <a class="btn btn-default search-reset-btn">Reset</a>
                             <div class="form-group text-center">
                                 <div class="btn-group-vertical" id="s-buttons" role="group">
-                                   <button type="button" id="s-success" class="btn btn-success" data-toggle="tooltip"  title="All issues with no further action checked"></button>
-                                   <button type="button" id="s-danger" class="btn btn-danger" data-toggle="tooltip"  title="All issues with no actions"></button>
-                                   <button type="button" id="s-info" class="btn btn-info" data-toggle="tooltip"  title="All issues with Charm or Defect number"></button>
-                                   <button type="button" id="s-warning" class="btn btn-warning" data-toggle="tooltip"  title="All issues that not compiled the other conditions"></button>
+                                    <button type="button" id="s-success" class="btn btn-success" data-toggle="tooltip" title="All issues with no further action checked"></button>
+                                    <button type="button" id="s-danger" class="btn btn-danger" data-toggle="tooltip" title="All issues with no actions"></button>
+                                    <button type="button" id="s-info" class="btn btn-info" data-toggle="tooltip" title="All issues with Charm or Defect number"></button>
+                                    <button type="button" id="s-warning" class="btn btn-warning" data-toggle="tooltip" title="All issues that not compiled the other conditions"></button>
                                 </div>
                             </div>
                         </div>
@@ -312,10 +302,10 @@
                     <div class="col-md-12">
                         <ul class="list-group s_list">
                             <div class="search-ph">
-                               <span id="search-ph-msg"> Search result will be shown here  </span><span class="glyphicon glyphicon-search animated infinite flash" aria-hidden="true"></span>
+                                <span id="search-ph-msg"> Search result will be shown here  </span><span class="glyphicon glyphicon-search animated infinite flash"
+                                    aria-hidden="true"></span>
                             </div>
                             <div class="search-div">
-
                             </div>
                         </ul>
                     </div>
@@ -324,7 +314,6 @@
         </div>
         <div class="row pagination_btn ">
             <div class="col-md-4">
-
                 <a class="btn btn-default" id="new_issue">New</a>
                 <a class="btn btn-default" id="delete_btn">Delete</a>
                 <div class="modal fade" id="confirm" tabindex="-1" role="dialog">
@@ -340,7 +329,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="col-md-4 nav-btn text-center">
                 <a class="btn btn-default" id="first_issue"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
@@ -351,15 +339,22 @@
             <div class="col-md-4"></div>
         </div>
     </div>
-
-<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="../js/jquery-3.1.1.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/bootstrap-select.min.js"></script>
-<script src="../js/bootstrap-notify.min.js"></script>
-<script src="js/index.js"></script>
-    <script>if (window.module) module = window.module;</script>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-3.1.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-select.min.js"></script>
+    <script src="../js/bootstrap-notify.min.js"></script>
+    <script src="js/index1.js"></script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
 </body>
+
 </html>
