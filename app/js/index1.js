@@ -286,7 +286,7 @@ $('#baseline-submit').on("mousedown", function (e) {
   if(document.getElementById('baseline').dataset.id){pre_id = document.getElementById('baseline').dataset.id;} else {pre_id = null;}
   var name = document.getElementById('baseline').value;
   var cd = document.getElementById('cd').value;
-  var issue_id = document.getElementById('DBID').value;
+  var issue_id = document.getElementById('issueID').value;
   setBaseline(pre_id, name, cd, project_ID, issue_id);
   getIssueBaseline(issue_id, project_ID);
   $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
@@ -297,7 +297,7 @@ $('#baseline-cancel').on("mousedown", function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
-  var issue_id = document.getElementById('DBID').value;
+  var issue_id = document.getElementById('issueID').value;
   getIssueBaseline(issue_id, project_ID);
   $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
   $('#baseline , #cd').blur();
@@ -313,7 +313,7 @@ $('#baseline , #cd').blur(function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
-  var issue_id = document.getElementById('DBID').value;
+  var issue_id = document.getElementById('issueID').value;
   getIssueBaseline(issue_id, project_ID);
   $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
 });
@@ -405,7 +405,7 @@ $('#project_submit').click(function () {
       var request = new sql.Request(connection1);
       request
         .input('project_id', sql.Int, project_ID)
-        .query('SELECT TOP 1 [issues].[id],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
+        .query('SELECT TOP 1 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
           '[issues].[defect],[issues].[charm],[issues].[status],[issues].[no_further_action],' +
           '[issues].[cd],[issues].[reproducible],[issues].[priority],[issues].[messenger],[issues].[summary],' +
           '[issues].[description],[issues].[description_de],[issues].[solution],[issues].[solution_de],[issues].[c2c],[projects].[cpf_doc_id]' +
@@ -419,10 +419,9 @@ $('#project_submit').click(function () {
             issueID = data[0].id;
 
             document.getElementById('cpf-doc-id').textContent = data[0].cpf_doc_id;
-            document.getElementById('cpf-all').textContent = data[0].issues_num;
             document.getElementById('issueID').value = data[0].id;
             document.getElementById('form_type').value = 'update';
-            document.getElementById('DBID').value = data[0].id;
+            document.getElementById('dbid').value = data[0].dbid;
             document.getElementById('vsn').value = data[0].vsn;
             document.getElementById('work').value = data[0].work;
             document.getElementById('date').value = data[0].date;
@@ -442,12 +441,13 @@ $('#project_submit').click(function () {
             document.getElementById('solution').value = data[0].solution;
             document.getElementById('solution_de').value = data[0].solution_de;
             document.getElementById('c2c').value = data[0].c2c;
+            if($('.customer_list li').length !== 0){
+              checkCustomers(issueID);
+            }
           }
           // customer list
         }).then(function () {
-          if($('.customer_list li').length !== 0){
-            checkCustomers(issueID);
-          }
+          
           // action current + history
           updateAction(issueID);
           refreshFiles(issueID);
@@ -455,6 +455,23 @@ $('#project_submit').click(function () {
         }).catch(function (error) {
           showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
+    }
+  });
+  //for cpf all
+  var conn2 = new sql.Connection(config, function (error) {
+    if (error) {
+        showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn2);
+      request
+      .input('project_id', sql.Int, project_ID)
+      .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
+        ' WHERE  project_id = @project_id')
+      .then(function (data) {
+        $('#cpf-all').text(data[0].issues_all);
+      }).catch(function (error) {
+        showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      });
     }
   });
   //for cpf open
@@ -475,24 +492,7 @@ $('#project_submit').click(function () {
       });
     }
   });
-  //for cpf all
-  var conn2 = new sql.Connection(config, function (error) {
-    if (error) {
-        showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    } else {
-      var request = new sql.Request(conn2);
-      request
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
-        ' WHERE  project_id = @project_id')
-      .then(function (data) {
-        console.log(data[0].issues_all);
-        $('#cpf-all').text(data[0].issues_all);
-      }).catch(function (error) {
-        showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-    }
-  });
+  
     
 
   $('#cancel').addClass('disabled');
@@ -503,11 +503,12 @@ $('#project_submit').click(function () {
 //======================================================================================================================
 //submit or update issue button [ok]
 
-$('#submit').click(function (e) {
+$('#submit').on('click',function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
   var issueID = document.getElementById('issueID').value;
+  var dbid = document.getElementById('dbid').value;
   var work = (document.getElementById('work').value ? document.getElementById('work').value : '');
   var date = document.getElementById('date').value;
   var area = $('#area').val();
@@ -535,9 +536,9 @@ $('#submit').click(function (e) {
     sql.connect(config).then(function () {
       new sql.Request()
         .input('work', sql.NVarChar(40), work)
-        .input('date', sql.NVarChar(10), date)
         .input('area', sql.Int, area)
         .input('key', sql.Int, key)
+        .input('dbid', sql.Int, dbid)
         .input('vsn',  vsn)
         .input('defect', sql.Int, defect)
         .input('charm', sql.Int, charm)
@@ -553,9 +554,9 @@ $('#submit').click(function (e) {
         .input('solution_de', sql.NVarChar, solution_de)
         .input('c2c', sql.NVarChar, c2c)
         .input('id', sql.Int, issueID)
-        .query('UPDATE issues SET work = @work , date = @date, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
+        .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
           'status = @status,no_further_action = @no_further_action,reproducible = @reproducible,priority = @priority,' +
-          'messenger = @messenger,summary = @summary , description = @description, description_de = @description_de,' +
+          'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
           'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
         .then(function (data) {
           showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
@@ -588,13 +589,19 @@ $('#new_issue').click(function (e) {
       showNotification('error connecting for inserting issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     } else {
       var request = new sql.Request(conn4);
+      request.multiple = true;
       request
         .input('date', sql.NVarChar(10), getDate())
         .input('project_id', sql.Int, project_ID)
-        .query('INSERT INTO [issues] ([date],[project_id]) VALUES (@date , @project_id);SELECT SCOPE_IDENTITY() AS id;')
+        .query('SELECT TOP 1 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
+               ' INSERT INTO [issues] ([date],[project_id]) VALUES (@date , @project_id);SELECT SCOPE_IDENTITY() AS id;')
         .then(function (data) {
-          document.getElementById('DBID').value = data[0].id;
-          document.getElementById('issueID').value = data[0].id;
+          if(data[0][0]){
+            document.getElementById('dbid').value = data[0][0].dbid+1;
+          } else {
+            document.getElementById('dbid').value = 1;
+          } 
+          document.getElementById('issueID').value = data[1][0].id;
         }).catch(function (error) {
           showNotification('Error on inseting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
@@ -836,7 +843,7 @@ $('#first_issue').click(function () {
         issueID = data[0].id;
         document.getElementById('issueID').value = data[0].id;
         document.getElementById('form_type').value = 'update';
-        document.getElementById('DBID').value = data[0].id;
+        document.getElementById('dbid').value = data[0].dbid;
         document.getElementById('work').value = data[0].work;
         document.getElementById('vsn').value = data[0].vsn;
         document.getElementById('date').value = data[0].date;
@@ -887,7 +894,7 @@ $('#last_issue').click(function () {
         issueID = data[0].id;
         document.getElementById('issueID').value = data[0].id;
         document.getElementById('form_type').value = 'update';
-        document.getElementById('DBID').value = data[0].id;
+        document.getElementById('dbid').value = data[0].dbid;
         document.getElementById('work').value = data[0].work;
         document.getElementById('vsn').value = data[0].vsn;
         document.getElementById('date').value = data[0].date;
@@ -941,11 +948,10 @@ $('#next_issue').click(function () {
         .input('project_id', sql.Int, project_ID)
         .query('SELECT TOP 1 * FROM [issues] WHERE [id] = (SELECT min([id]) FROM [issues] WHERE [id] > @issue_id AND project_id = @project_id )')
         .then(function (data) {
-          console.dir(data);
           issueID = data[0].id;
           document.getElementById('issueID').value = data[0].id;
           document.getElementById('form_type').value = 'update';
-          document.getElementById('DBID').value = data[0].id;
+          document.getElementById('dbid').value = data[0].dbid;
           document.getElementById('work').value = data[0].work;
           document.getElementById('vsn').value = data[0].vsn;
           document.getElementById('date').value = data[0].date;
@@ -1007,7 +1013,6 @@ $('#previous_issue').click(function () {
     if (err) {
       showNotification('error connecting for next issue : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     } else {
-      console.log(issueID, project_ID);
       var request = new sql.Request(connect1);
       request.input('issue_id', sql.Int, issueID)
         .input('project_id', sql.Int, project_ID)
@@ -1016,7 +1021,7 @@ $('#previous_issue').click(function () {
           issueID = data[0].id;
           document.getElementById('issueID').value = data[0].id;
           document.getElementById('form_type').value = 'update';
-          document.getElementById('DBID').value = data[0].id;
+          document.getElementById('dbid').value = data[0].dbid;
           document.getElementById('work').value = data[0].work;
           document.getElementById('vsn').value = data[0].vsn;
           document.getElementById('date').value = data[0].date;
@@ -1043,7 +1048,6 @@ $('#previous_issue').click(function () {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
         }).catch(function (error) {
-          console.log(error);
           showNotification('can\'t move to the next issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
       // check if issue is the last issue
@@ -1092,7 +1096,7 @@ $('.search-btn').click(function (e) {
     var req = new sql.Request();
     //making the sql statment
 
-    var final_sql = 'SELECT [issues].[id],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues]';
+    var final_sql = 'SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues]';
     if (customer) {
       final_sql += ' JOIN [issues_customers] ON [issues].[id]= [issues_customers].[issue_id] JOIN [customers] on [customers].[id] = [issues_customers].[customer_id] WHERE [customers].[name] LIKE @customer AND ';
       req.input('customer', sql.VarChar(50), '%' + customer + '%');
@@ -1100,7 +1104,7 @@ $('.search-btn').click(function (e) {
       final_sql += ' WHERE ';
     }
     if (dbid) {
-      final_sql += ' [issues].[id] = @dbid AND ';
+      final_sql += ' [issues].[dbid] = @dbid AND ';
       req.input('dbid', sql.Int, dbid);
     }
     if (defect) {
@@ -1151,7 +1155,7 @@ $('.search-btn').click(function (e) {
             $('.search-ph').removeClass('show').addClass('hidden');
             for (let i = 0; i < data.length; i++) {
               $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
             }
 
             $('.search-result').each(function (index, value) {
@@ -1213,7 +1217,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
         var issueID = data[0].id;
         document.getElementById('issueID').value = data[0].id;
         document.getElementById('form_type').value = 'update';
-        document.getElementById('DBID').value = data[0].id;
+        document.getElementById('dbid').value = data[0].dbid;
         document.getElementById('work').value = data[0].work;
         document.getElementById('date').value = data[0].date;
         $('#area').val(data[0].area).selectpicker('refresh');
@@ -1436,13 +1440,14 @@ $('#new-action-btn').on('click', function (e) {
       .query('INSERT INTO actions (issue_id,description,date) VALUES (@issue_id ,@desc,@date)')
       .then(function (data) {
         showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
+        updateAction(issueID);
       }).catch(function (error) {
         showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       });
 
     $('#new-action').val(' ');
 
-    updateAction(issueID);
+    
 
   }).catch(function (error) {
     showNotification('error connecting for creating new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
