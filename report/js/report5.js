@@ -200,6 +200,7 @@ function allIssues(project_id) {
                                     'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                     'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                 .then(function (data2) {
+                                    console.log(data2);
                                     var arr1 = '';
                                     arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                         '<tbody>' +
@@ -223,9 +224,12 @@ function allIssues(project_id) {
 
                                     arr1 += '</td></tr>' +
                                         '<tr>' +
-                                        '<td class="bold">Baseline:</td>' +
-                                        '<td>' + data2[2][0].name + '</td>' +
-                                        '</tr>';
+                                        '<td class="bold">Baseline:</td>' ;
+                                    if(data2[2][0]){
+                                        arr1 += '<td>' + data2[2][0].name + '</td></tr>' ;
+                                    } else {
+                                        arr1 += '<td> No Baseline </td></tr>' ;
+                                    }
                                     if (data1.charm && data1.defect) {
                                         arr1 += '<tr>' +
                                             '<td class="bold">Charm/Defect:   </td>' +
@@ -374,10 +378,13 @@ function allIssuesCustomer(project_id, customer_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td>' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td>' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td> No Baseline </td></tr>' ;
+                                        }
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
                                                 '<td class="bold">Charm/Defect:   </td>' +
@@ -523,10 +530,13 @@ function allIssuesBaseline(project_id, baseline_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td>' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td>' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td> No Baseline </td></tr>' ;
+                                        }
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
                                                 '<td class="bold">Charm/Defect:   </td>' +
@@ -674,10 +684,13 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td>' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td>' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td> No Baseline </td></tr>' ;
+                                        }
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
                                                 '<td class="bold">Charm/Defect:   </td>' +
@@ -854,12 +867,14 @@ function allIssuespdf(project_id) {
                                                 arr1 += data2[1][s].name + ', ';
                                             }
                                         }
-
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td  class="td">' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td  class="td">' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td  class="td"> No Baseline </td></tr>' ;
+                                        }
 
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
@@ -1037,10 +1052,13 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td  class="td">' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td  class="td">' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td  class="td"> No Baseline </td></tr>' ;
+                                        }
 
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
@@ -1214,10 +1232,13 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td  class="td">' + data2[2][0].name + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td  class="td">' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td  class="td"> No Baseline </td></tr>' ;
+                                        }
 
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +
@@ -1392,10 +1413,13 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                         }
 
                                         arr1 += '</td></tr>' +
-                                            '<tr>' +
-                                            '<td class="bold">Baseline:</td>' +
-                                            '<td  class="td">' + document.getElementById('baselines').options[document.getElementById('baselines').selectedIndex].text + '</td>' +
-                                            '</tr>';
+                                                '<tr>' +
+                                                '<td class="bold">Baseline:</td>' ;
+                                        if(data2[2][0]){
+                                            arr1 += '<td  class="td">' + data2[2][0].name + '</td></tr>' ;
+                                        } else {
+                                            arr1 += '<td  class="td"> No Baseline </td></tr>' ;
+                                        }
 
                                         if (data1.charm && data1.defect) {
                                             arr1 += '<tr>' +

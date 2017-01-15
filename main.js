@@ -140,6 +140,7 @@ app.on('ready', function () {
     maximizable: false,
     show: false
   });
+  report.openDevTools();
   report.setMenu(null);
   report.loadURL(reportPath);
   report.on('close', function (event) {
