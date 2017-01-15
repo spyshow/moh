@@ -156,7 +156,6 @@ $('#word').on('click', function (e) {
 function allIssues(project_id) {
     //======================================================================================================================
     //prepare docx file
-
     var conn1 = new sql.Connection(config, function (error) {
         if (error) {
             showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');

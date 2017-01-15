@@ -196,16 +196,7 @@ function getNewBaseline(project_id) {
             cd = data[0].cd;
             id = data[0].id;
           }
-          /*if(data[0].name === null){
-              name = ' ';
-          } else {
-              name = data[0].name;
-          }
-          if(data[0].cd === null){
-              cd = ' ';
-          } else {
-              cd = data[0].cd;
-          }*/
+          
           document.getElementById('baseline').value = name;
           document.getElementById('cd').value = cd;
           document.getElementById('baseline').dataset.id = id;
@@ -323,7 +314,9 @@ $('#baseline , #cd').blur(function (e) {
 //when page ready [ok]
 
 $(document).ready(function () {
-
+  var html = '<option> Loading... </option>';
+  $('#project_name').html(html).selectpicker('refresh');
+  $('#project_submit').addClass('disabled');
   // select all project names for the first screen
   $('#project_select').modal({
     show: true,
@@ -339,7 +332,7 @@ $(document).ready(function () {
         data.forEach(function (data) {
           project_list += '<option value="' + data.id + '">' + data.project_name + '</option>'; //make an option for every project
         });
-
+        $('#project_submit').removeClass('disabled');
         $('#project_name').html(project_list).selectpicker('refresh'); // put them in the select div and refresh the select to show the new values
 
       }).catch(function (error) {
@@ -442,12 +435,12 @@ $('#project_submit').click(function () {
             document.getElementById('solution_de').value = data[0].solution_de;
             document.getElementById('c2c').value = data[0].c2c;
             if($('.customer_list li').length !== 0){
-              checkCustomers(issueID);
+              
             }
           }
           // customer list
         }).then(function () {
-          
+          checkCustomers(issueID);
           // action current + history
           updateAction(issueID);
           refreshFiles(issueID);
@@ -535,25 +528,25 @@ $('#submit').on('click',function (e) {
 
     sql.connect(config).then(function () {
       new sql.Request()
-        .input('work', sql.NVarChar(40), work)
-        .input('area', sql.Int, area)
-        .input('key', sql.Int, key)
-        .input('dbid', sql.Int, dbid)
+        .input('work',  work)
+        .input('area',  area)
+        .input('key',  key)
+        .input('dbid',  dbid)
         .input('vsn',  vsn)
-        .input('defect', sql.Int, defect)
-        .input('charm', sql.Int, charm)
-        .input('status', sql.Decimal(4, 0), status)
-        .input('no_further_action', sql.SmallInt, no_further_action)
-        .input('reproducible', sql.Int, reproducible)
-        .input('priority', sql.Int, priority)
-        .input('messenger', sql.Int, messenger)
-        .input('summary', sql.NVarChar, summary)
-        .input('description', sql.NVarChar, description)
-        .input('description_de', sql.NVarChar, description_de)
-        .input('solution', sql.NVarChar, solution)
-        .input('solution_de', sql.NVarChar, solution_de)
-        .input('c2c', sql.NVarChar, c2c)
-        .input('id', sql.Int, issueID)
+        .input('defect',  defect)
+        .input('charm',  charm)
+        .input('status',  status)
+        .input('no_further_action', no_further_action)
+        .input('reproducible',  reproducible)
+        .input('priority',  priority)
+        .input('messenger', messenger)
+        .input('summary',  summary)
+        .input('description', description)
+        .input('description_de', description_de)
+        .input('solution', solution)
+        .input('solution_de', solution_de)
+        .input('c2c',  c2c)
+        .input('id', issueID)
         .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
           'status = @status,no_further_action = @no_further_action,reproducible = @reproducible,priority = @priority,' +
           'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +

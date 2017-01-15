@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evaluations/js/evaluations.js" afterPath="$PROJECT_DIR$/evaluations/js/evaluations.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/js/report5.js" afterPath="$PROJECT_DIR$/report/js/report5.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,10 +27,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.64411026">
+            <state vertical-scroll-proportion="0.0">
               <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
               <folding>
                 <element signature="n#!!block;n#sendMail#0" expanded="false" />
@@ -39,6 +41,16 @@
                 <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
                 <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.085213035">
+              <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -505,7 +517,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484258222134</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="dbid start from 1 for each project">
+      <created>1484496657788</created>
+      <option name="number" value="00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1484496657788</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TodoView">
@@ -597,7 +615,8 @@
     <MESSAGE value="project page finished (beta)" />
     <MESSAGE value="charm add" />
     <MESSAGE value="adjust baseline submit div" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjust baseline submit div" />
+    <MESSAGE value="dbid start from 1 for each project" />
+    <option name="LAST_COMMIT_MESSAGE" value="dbid start from 1 for each project" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -606,6 +625,30 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!block;n#sendMail#0" expanded="false" />
+            <marker date="1484257969588" expanded="true" signature="6268:6301" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13438:13454" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13572:13592" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13785:13805" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
+            <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -880,7 +923,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.64411026">
+        <state vertical-scroll-proportion="0.0">
           <caret line="542" column="29" selection-start-line="542" selection-start-column="29" selection-end-line="542" selection-end-column="29" />
           <folding>
             <element signature="n#!!block;n#sendMail#0" expanded="false" />
@@ -891,6 +934,14 @@
             <marker date="1484257969588" expanded="true" signature="13993:14013" placeholder="..." />
             <marker date="1484257969588" expanded="true" signature="14575:14595" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.085213035">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>

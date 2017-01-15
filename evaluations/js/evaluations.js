@@ -57,6 +57,7 @@ ipc.on('show-evaluation', function (event, project_id) {
                 .then(function (data) {
                     document.getElementById('projectID').value = data[0].project_name;
                     document.getElementById('projectID').dataset.id = data[0].id;
+                    $('#date').click();
                 }).catch(function (error) {
                     showNotification('Error on selecting project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
@@ -152,13 +153,6 @@ var config = {
     }
 };
 
-
-//when page ready 
-$(document).ready(function () {
-    
-
-});
-
 //======================================================================================================================
 //Charts
 
@@ -199,6 +193,9 @@ $('#date').on('click', function (e) {
         },
         options: {
             // Edit: correction typo: from 'animated' to 'animation'
+            layout: {
+                padding: 10
+            },
             scales: {
                 xAxes: [{
                     scaleLabel: {
@@ -227,13 +224,6 @@ $('#date').on('click', function (e) {
         if (error) {
             showNotification('error connecting for chart by date:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         } else {
-
-
-            /*if(document.getElementById('doc-id').checked === true ){
-                docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: '+document.getElementById('doc-id-name').value+'</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
-            }*/
-
-
             var request = new sql.Request(conn1);
 
             request
@@ -265,8 +255,6 @@ $('#date').on('click', function (e) {
                 }).then(function () {
                     setTimeout(function () {
                         var myLineChart = new Chart(ctx, chartData);
-
-                        /**/
                     }, 250);
 
                 });
@@ -599,7 +587,6 @@ $('#key-and-customers').on('click', function (e) {
 });
 
 //prepare word file
-
 $('#word-chart').on('click', function (e) {
     e.preventDefault();
     var project_id = document.getElementById('projectID').dataset.id;
@@ -619,6 +606,7 @@ $('#word-chart').on('click', function (e) {
         '</style>' +
         '</head>' +
         '<body>';
+    docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
     if (document.getElementById('chart-doc-id').checked === true) {
         docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('chart-doc-id-name').value + '</p><br><br><br><br><br>';
     }
@@ -643,7 +631,6 @@ $('#word-chart').on('click', function (e) {
 });
 
 //prepare PDF file
-
 $('#pdf-chart').on('click', function (e) {
     e.preventDefault();
     var project_id = document.getElementById('projectID').dataset.id;
@@ -662,6 +649,7 @@ $('#pdf-chart').on('click', function (e) {
         '</style>' +
         '</head>' +
         '<body>';
+    docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
     if (document.getElementById('chart-doc-id').checked === true) {
         docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('chart-doc-id-name').value + '</p><br><br><br><br>';
     }
@@ -698,7 +686,6 @@ $('#pdf-chart').on('click', function (e) {
 });
 
 //prepare XLSX file
-
 function canvasToImage(backgroundColor) {
     //cache height and width        
     var w = document.getElementById('myChart').width;
@@ -753,8 +740,9 @@ $('#excel-chart').on('click', function (e) {
             size: 24
         }
     });
+    ws.cell(2, 2).string('Doc ID: ' + document.getElementById('projectID').value).style(style);
     if (document.getElementById('chart-doc-id').checked === true) {
-        ws.cell(1, 2).string('Doc ID: ' + document.getElementById('chart-doc-id-name').value).style(style);
+        ws.cell(6, 2).string('Doc ID: ' + document.getElementById('chart-doc-id-name').value).style(style);
     }
 
 
@@ -775,7 +763,7 @@ $('#excel-chart').on('click', function (e) {
             from: {
                 col: 1,
                 colOff: '0.5in',
-                row: 4,
+                row: 9,
                 rowOff: 0
             }
         }
@@ -924,6 +912,7 @@ function distWord(project_id) {
                 '</style>' +
                 '</head>' +
                 '<body>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('table-doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -1053,6 +1042,7 @@ function distPdf(project_id) {
                 '</style>' +
                 '</head>' +
                 '<body>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('table-doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1193,6 +1183,7 @@ function distExcel(project_id) {
                 '</head>' +
                 '<body>' +
                 '<table>';
+            docx += '<tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td><td class="doc-id">Doc ID: ' + document.getElementById('projectID').value + '</td></tr><tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td></tr>';            
             if (document.getElementById('table-doc-id').checked === true) {
                 docx += '<tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td><td class="doc-id">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</td></tr><tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td></tr>';
             }
@@ -1402,6 +1393,7 @@ function fragWord(project_id) {
                                 '</style>' +
                                 '</head>' +
                                 '<body>';
+                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
                             if (document.getElementById('table-doc-id').checked === true) {
                                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
                             }
@@ -1540,6 +1532,7 @@ function fragPdf(project_id) {
                                 '</style>' +
                                 '</head>' +
                                 '<body>';
+                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
                             if (document.getElementById('table-doc-id').checked === true) {
                                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
                             }
@@ -1703,6 +1696,7 @@ function fragExcel(project_id) {
                                 '<body>' +
                                 '<body>' +
                                 '<table id="table">';
+                            docx += '<tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td><td class="doc-id">Doc ID: ' + document.getElementById('projectID').value + '</td></tr><tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td></tr>';
                             if (document.getElementById('table-doc-id').checked === true) {
                                 docx += '<tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td><td class="doc-id">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</td></tr><tr><td class="doc-id"></td></tr><tr><td class="doc-id"></td></tr>';
                             }
