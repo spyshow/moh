@@ -511,6 +511,7 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
                     '</head>' +
                     '<body>'+
                     '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
+              console.dir(data);
             async.eachOfSeries(data, function (data1, i, callback) {
               var conn2 = new sql.Connection(config, function (err) {
                 if (err) {

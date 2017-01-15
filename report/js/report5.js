@@ -185,7 +185,7 @@ function allIssues(project_id) {
 
             request
             .input('project_id', sql.Int, project_id)
-            .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] WHERE [project_id] = @project_id ORDER BY [id] ')
+            .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] WHERE [project_id] = @project_id ORDER BY [id] ')
             .then(function (data) {
                 async.eachOfSeries(data, function (data1, i, callback) {
                     var conn2 = new sql.Connection(config, function (err) {
@@ -206,7 +206,7 @@ function allIssues(project_id) {
                                         '<tbody>' +
                                         '<tr>' +
                                         '<td class="bold">DB ID:</td>' +
-                                        '<td>' + data1.id + '</td>' +
+                                        '<td>' + data1.dbid + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td class="bold">Date:</td>' +
@@ -248,7 +248,7 @@ function allIssues(project_id) {
                                             '<td>No Number</td>';
                                     }
                                     arr1 += '<td class="bold">Stauts:</td>' +
-                                        '<td>' + data1.status + '</td>' +
+                                        '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                         '</tr>' +
                                         '</tbody>' +
                                         '</table>' +
@@ -256,11 +256,11 @@ function allIssues(project_id) {
                                         '<tbody>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                        '<td>' + data1.summary + '</td>' +
+                                        '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                        '<td>' + data1.description + '</td>' +
+                                        '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -339,7 +339,7 @@ function allIssuesCustomer(project_id, customer_id) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('customer_id', sql.Int, customer_id)
-                .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' +
                     'WHERE [customer_id] = @customer_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
                 .then(function (data) {
@@ -361,7 +361,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td>' + data1.id + '</td>' +
+                                            '<td>' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -403,7 +403,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + data1.status + '</td>' +
+                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -411,11 +411,11 @@ function allIssuesCustomer(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -491,7 +491,7 @@ function allIssuesBaseline(project_id, baseline_id) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('baseline_id', sql.Int, baseline_id)
-                .query('SELECT [id],[date],[charm],[defect],[status],[summary],[description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date],[charm],[defect],[status],[summary],[description] from [issues] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' +
                     'WHERE [baseline_id] = @baseline_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
                 .then(function (data) {
@@ -513,7 +513,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td>' + data1.id + '</td>' +
+                                            '<td>' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -555,7 +555,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + data1.status + '</td>' +
+                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -563,11 +563,11 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -644,7 +644,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                 .input('project_id', sql.Int, project_id)
                 .input('customer_id', sql.Int, customer_id)
                 .input('baseline_id', sql.Int, baseline_id)
-                .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' +
                     'WHERE ic.[customer_id] = @customer_id AND ib.[baseline_id] = @baseline_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
@@ -667,7 +667,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td>' + data1.id + '</td>' +
+                                            '<td>' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -709,7 +709,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + data1.status + '</td>' +
+                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -717,11 +717,11 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' +(data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -831,7 +831,7 @@ function allIssuespdf(project_id) {
 
             request
                 .input('project_id', sql.Int, project_id)
-                .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] WHERE [project_id] = @project_id ORDER BY [id] ')
+                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] WHERE [project_id] = @project_id ORDER BY [id] ')
                 .then(function (data) {
 
                     async.eachOfSeries(data, function (data1, i, callback) {
@@ -852,7 +852,7 @@ function allIssuespdf(project_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td class="td">' + data1.id + '</td>' +
+                                            '<td class="td">' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -894,7 +894,7 @@ function allIssuespdf(project_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + data1.status + '</td>' +
+                                            '<td class="bold">Stauts: ' +  (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -902,11 +902,11 @@ function allIssuespdf(project_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' +(data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1011,7 +1011,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('customer_id', sql.Int, customer_id)
-                .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' +
                     'WHERE [customer_id] = @customer_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
                 .then(function (data) {
@@ -1035,7 +1035,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td class="td">' + data1.id + '</td>' +
+                                            '<td class="td">' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -1078,7 +1078,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + data1.status + '</td>' +
+                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1086,11 +1086,11 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added'+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1192,7 +1192,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('baseline_id', sql.Int, baseline_id)
-                .query('SELECT [id],[date],[charm],[defect],[status],[summary],[description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date],[charm],[defect],[status],[summary],[description] from [issues] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' +
                     'WHERE [baseline_id] = @baseline_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
                 .then(function (data) {
@@ -1215,7 +1215,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td class="td">' + data1.id + '</td>' +
+                                            '<td class="td">' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -1258,7 +1258,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + data1.status + '</td>' +
+                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1266,11 +1266,11 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1373,7 +1373,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                 .input('project_id', sql.Int, project_id)
                 .input('customer_id', sql.Int, customer_id)
                 .input('baseline_id', sql.Int, baseline_id)
-                .query('SELECT [id],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
+                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' +
                     'WHERE ic.[customer_id] = @customer_id AND ib.[baseline_id] = @baseline_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
@@ -1390,13 +1390,12 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;')
                                     .then(function (data2) {
-                                        console.log(data1.id);
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold">DB ID:</td>' +
-                                            '<td class="td">' + data1.id + '</td>' +
+                                            '<td class="td">' + data1.dbid + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
@@ -1439,7 +1438,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + data1.status + '</td>' +
+                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1447,11 +1446,11 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + data1.summary + '</td>' +
+                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + data1.description + '</td>' +
+                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
