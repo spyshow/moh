@@ -374,7 +374,7 @@ $('#key').on('click', function (e) {
 
 $('#key-and-label').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
-    var baseline = document.getElementById('baselines').value;
+    var baseline = $('#baselines').find("option:selected").val();
     $('.canvas').html('<canvas id="myChart" width="548" height="274" style="display: block; width: 548px; height: 274px;"></canvas>');
     var ctx = document.getElementById("myChart").getContext("2d");
     //var myChart = new Chart(ctx);
@@ -481,7 +481,7 @@ $('#key-and-label').on('click', function (e) {
 
 $('#key-and-customers').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
-    var customer = document.getElementById('customers').value;
+    var customer = $('#customers').find("option:selected").val();
     $('.canvas').html('<canvas id="myChart" width="548" height="274" style="display: block; width: 548px; height: 274px;"></canvas>');
     var ctx = document.getElementById("myChart").getContext("2d");
     //var myChart = new Chart(ctx);

@@ -3,7 +3,7 @@
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
-const {webContents} = require('electron');
+const {webContents , dialog} = require('electron');
 const ipc = electron.ipcMain;
 const path = require('path');
 const {shell} = require('electron');
@@ -22,6 +22,22 @@ var config = {
   server: 'ENG3',
   port: 1433,
   database: 'test',
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
+  },
+  options: {
+    instanceName: 'SQLEXPRESS'
+  }
+};
+
+var charm = {
+  user: 'test',
+  password: '123456',
+  server: 'ENG3',
+  port: 1433,
+  database: 'CharmNT_MR_User',
   pool: {
     max: 10,
     min: 0,
@@ -222,12 +238,17 @@ function sendMail(issue_id,project_title) {
                   'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id; '+
                   'SELECT type,path FROM files WHERE issue_id = @issue_id;')
               .then(function (data2) {
+                  var status = (data2[0][0]) ? data2[0][0].status : 'No Status';
+                  var baseline = (data2[3][0]) ? data2[3][0].name : 'No Baseline';
+                  var summary = (data2[0][0]) ? data2[0][0].summary : 'No Summary';
+                  var description = (data2[0][0]) ? data2[0][0].description : 'No Description';
+                  var work = (data2[0][0]) ? data2[0][0].work : 'No Work';
                   var arr = '';
                   arr += '<table style="table-layout: fixed; width: 100%;">' +
                       '<tbody>' +
                       '<tr>' +
                       '<td class="bold">DB ID:</td>' +
-                      '<td class="td">' + data2[0][0].id + '</td>' +
+                      '<td class="td">' + data2[0][0].dbid + '</td>' +
                       '</tr>' +
                       '<tr>' +
                       '<td class="bold">Date:</td>' +
@@ -235,7 +256,7 @@ function sendMail(issue_id,project_title) {
                       '</tr>' +
                       '<tr>' +
                       '<td class="bold">Work:</td>' +
-                      '<td class="td">' + data2[0][0].work + '</td>' +
+                      '<td class="td">' + work +'</td>' +
                       '</tr>' +
                       '<tr>' ;
                   switch(data2[0][0].area){
@@ -356,11 +377,11 @@ function sendMail(issue_id,project_title) {
                           arr += data2[2][s].name + ', ';
                       }
                   }
-
+                  
                   arr += '</td></tr>' +
                       '<tr>' +
                       '<td class="bold">Baseline:</td>' +
-                      '<td  class="td">' + data2[3][0].name + '</td>' +
+                      '<td  class="td">' + baseline + '</td>' +
                       '</tr>';
 
                   if (data2[0][0].charm && data2[0][0].defect) {
@@ -381,7 +402,7 @@ function sendMail(issue_id,project_title) {
                           '<td  class="td">No Number</td>';
                   }
                   arr += '<td></td>' +
-                      '<td class="bold">Stauts: ' + data2[0][0].status + '</td>' +
+                      '<td class="bold">Stauts: ' + status + '</td>' +
                       '</tr>' +
                       '</tbody>' +
                       '</table>' +
@@ -389,11 +410,11 @@ function sendMail(issue_id,project_title) {
                       '<tbody>' +
                       '<tr>' +
                       '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                      '<td>' + data2[0][0].summary + '</td>' +
+                      '<td>' + summary+ '</td>' +
                       '</tr>' +
                       '<tr>' +
                       '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                      '<td>' + data2[0][0].description + '</td>' +
+                      '<td>' + description + '</td>' +
                       '</tr>' +
                       '<tr>' +
                       '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -470,7 +491,7 @@ function sendMail(issue_id,project_title) {
                         shell.openItem(app.getPath('userData')+'\\temp\\1.eml');
                         setTimeout(function(){
                           shell.moveItemToTrash(app.getPath('userData')+'\\temp\\1.eml');
-                        },200);
+                        },2000);
                       });                                
                   });
               }).catch(function (error) {
@@ -484,82 +505,79 @@ function sendMail(issue_id,project_title) {
 // import Charm
 
 ipc.on('importCharm', function (event,project_ID,project_title) {
-  async.waterfall([
-    function(callback) {
+  
       var connection1 = new sql.Connection(config, function (err) {
       if (err) {
         showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       } else {
+        let docx = '<!DOCTYPE html>' +
+                  '<html>' +
+                  '<head>' +
+                  '<style>' +
+                  'body {' +
+                  'padding: 0 20px;' +
+                  '}' +
+                  '.bold {' +
+                  'text-align: left;' +
+                  'font-weight: bold;' +
+                  'width: 20%;' +
+                  '}' +
+                  '</style>' +
+                  '</head>' +
+                  '<body>'+
+                  '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
         var request = new sql.Request(connection1);
         request
           .input('project_id', sql.Int, project_ID)
-          .query('SELECT [issues].[id],[issues].[work],[issues].[status],[issues].[vsn]'+
+          .query('SELECT [issues].[id],[issues].[charm],[issues].[work],[issues].[status],[issues].[vsn]'+
             ' FROM [issues] ' +
-            ' WHERE [issues].[project_id] = @project_id ORDER BY [issues].[id] DESC')
+            ' WHERE [issues].[project_id] = @project_id AND [issues].[charm] IS NOT NULL  ORDER BY [issues].[id] DESC')
           .then(function (data) {
-
-            var docx = '<!DOCTYPE html>' +
-                    '<html>' +
-                    '<head>' +
-                    '<style>' +
-                    '.bold {' +
-                    'text-align: left;' +
-                    'font-weight: bold;' +
-                    'width: 20%;' +
-                    '}' +
-                    '</style>' +
-                    '</head>' +
-                    '<body>'+
-                    '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
-              console.dir(data);
-            async.eachOfSeries(data, function (data1, i, callback) {
-              var conn2 = new sql.Connection(config, function (err) {
+            async.timesSeries(data.length, function (n, callback) {
+                var conn2 = new sql.Connection(charm, function (err) {
                 if (err) {
                     showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                   var request = new sql.Request(conn2);
                   request
-                  .input('id', sql.Int, data1.id)
+                   .input('id','MR_00'+data[n].charm)
                   .query('SELECT state_num as status,remain_name as work,real_version as vsn FROM Defect where id=@id')
                   .then(function (data2) {
-                    if(data1.work !== data2.work){ docx += '<p>in Charm number '+data1.id+' the work changed from '+data1.work+' to '+data2.work+'</p>';}
-                    if(data1.status  !== data2.status ){ docx += '<p>in Charm number '+data1.id+' the status  changed from '+data1.status +' to '+data2.status+'</p>' ;}
-                    if(data1.vsn !== data2.vsn){ docx += '<p>in Charm number '+data1.id+' the vsn changed from '+data1.vsn+' to '+data2.vsn+'</p>';}
+                    if(data[n].work != data2[0].work){ docx += '<p>in Charm number MR_00'+data[n].charm+' the work changed from "'+data[n].work+'" to "'+data2[0].work+'"</p>';}
+                    if(data[n].status  != data2[0].status ){ docx += '<p>in Charm number  MR_00'+data[n].charm+' the status  changed from "'+data[n].status +'" to "'+data2[0].status+'"</p>' ;}
+                    if(data[n].vsn != data2[0].vsn){ docx += '<p>in Charm number  MR_00'+data[n].charm+' the vsn changed from "'+data[n].vsn+'" to "'+data2[0].vsn+'"</p>';}
+                    console.log(docx);
                   }).catch(function (error) {
                     showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
                   });
                   callback();
                 }
               });
+            }, function () {
+               setTimeout(function () {
+                var conf = {
+                        "format": "A4",
+                        "header": {
+                            "height": "20mm"
+                        }
+                    };
+                dialog.showSaveDialog({
+                    filters: [{
+                        name: 'PDFs',
+                        extensions: ['pdf']
+                    }],
+                    title: 'Save the Import Charm as PDF',
+                    defaultPath: path.join(app.getPath('desktop'), 'Import Charm.pdf')
+                }, function (filename) {
+                    pdf.create(docx, conf).toFile(filename, function (err, res) {
+                    });
+                });
+              }, 100);
             });
-            callback(null, docx);
-          }).catch(function (error) {
-            showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
           });
-           
-        } 
-      });
-  }],function (err, docx) {
-    setTimeout(function () {
-      var conf = {
-              "format": "A4",
-              "header": {
-                  "height": "20mm"
-              }
-          };
-      dialog.showSaveDialog({
-          filters: [{
-              name: 'PDFs',
-              extensions: ['pdf']
-          }],
-          title: 'Save the Import Charm as PDF',
-          defaultPath: path.join(app.getPath('desktop'), 'Import Charm.pdf')
-       }, function (filename) {
-          pdf.create(docx, conf).toFile(filename, function (err, res) {
-          });
-      });
-    }, 100);
-  });
+      }
+    });
+  
 });
 
 //============================================================================================================================

@@ -504,7 +504,7 @@ $('#submit').on('click',function (e) {
   var dbid = document.getElementById('dbid').value;
   var work = (document.getElementById('work').value ? document.getElementById('work').value : '');
   var date = document.getElementById('date').value;
-  var area = $('#area').val();
+  var area = $('#area').find("option:selected").val();
   var key = (document.getElementById('key').value ? document.getElementById('key').value : null);
   var defect = (document.getElementById('defect').value ? document.getElementById('defect').value : null);
   var charm = (document.getElementById('charm').value ? document.getElementById('charm').value : null);
@@ -514,9 +514,9 @@ $('#submit').on('click',function (e) {
   } else {
     no_further_action = 1;
   }
-  var reproducible = $('#reproducible').val();
-  var priority = $('#priority').val();
-  var messenger = $('#messenger').val();
+  var reproducible = $('#reproducible').find("option:selected").val();
+  var priority = $('#priority').find("option:selected").val();
+  var messenger = $('#messenger').find("option:selected").val();
   var summary = (document.getElementById('summary').value ? document.getElementById('summary').value : '');
   var description = (document.getElementById('description').value ? document.getElementById('description').value : '');
   var description_de = (document.getElementById('description_de').value ? document.getElementById('description_de').value : '');
@@ -1098,15 +1098,15 @@ $('.search-btn').click(function (e) {
     }
     if (dbid) {
       final_sql += ' [issues].[dbid] = @dbid AND ';
-      req.input('dbid', sql.Int, dbid);
+      req.input('dbid', dbid);
     }
     if (defect) {
-      final_sql += ' [issues].[defect] LIKE @defect AND ';
-      req.input('defect', '%' + defect + '%');
+      final_sql += ' [issues].[defect] = @defect AND ';
+      req.input('defect', defect );
     }
     if (charm) {
-      final_sql += ' [issues].[charm] LIKE @charm AND ';
-      req.input('charm', '%' + charm + '%');
+      final_sql += ' [issues].[charm] = @charm AND ';
+      req.input('charm', charm);
     }
 
     if (desc) {
@@ -1138,17 +1138,21 @@ $('.search-btn').click(function (e) {
       $('.search-ph').removeClass('hidden').addClass('show');
 
     } else {
-
+      
       req.query(final_sql)
         .then(function (data) {
+          
           if (data.length == 0) {
             $('.search-ph').removeClass('hidden').addClass('show');
             $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
           } else {
             $('.search-ph').removeClass('show').addClass('hidden');
             for (let i = 0; i < data.length; i++) {
+              var charm = (data[i].charm) ? data[i].charm : '';
+              var defect =   (data[i].defect) ? data[i].defect : '';
+              var summary = (data[i].summary) ? data[i].summary : '';
               $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+                ' data-charm="' + charm + '" data-defect="' + defect + '" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + summary + '</p></li></a>');
             }
 
             $('.search-result').each(function (index, value) {
@@ -1297,7 +1301,7 @@ $('#s-success').on('click', function (e) {
   sql.connect(config).then(function () {
     new sql.Request()
       .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues] WHERE [issues].[no_further_action] = 1 AND [issues].[project_id] = @project_id')
+      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues] WHERE [issues].[no_further_action] = 1 AND [issues].[project_id] = @project_id')
       .then(function (data) {
         if (data.length == 0) {
           $('.search-ph').removeClass('hidden').addClass('show');
@@ -1306,7 +1310,7 @@ $('#s-success').on('click', function (e) {
           $('.search-ph').removeClass('show').addClass('hidden');
           for (let i = 0; i < data.length; i++) {
             $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-success animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-success animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
           }
         }
       }).catch(function (error) {
@@ -1327,7 +1331,7 @@ $('#s-danger').on('click', function (e) {
   sql.connect(config).then(function () {
     new sql.Request()
       .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[no_further_action],[issues].[charm] ,[issues].[defect],[issues].[summary] FROM [issues] LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id] WHERE [actions].[issue_id] IS NULL AND [issues].[project_id] = @project_id')
+      .query('SELECT [issues].[id],[issues].[dbid],[issues].[no_further_action],[issues].[charm] ,[issues].[defect],[issues].[summary] FROM [issues] LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id] WHERE [actions].[issue_id] IS NULL AND [issues].[project_id] = @project_id')
       .then(function (data) {
         if (data.length == 0) {
           $('.search-ph').removeClass('hidden').addClass('show');
@@ -1338,7 +1342,7 @@ $('#s-danger').on('click', function (e) {
             $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
               ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id +
               '"><li class="list-group-item list-group-item-danger animated fadeInDown"><h4 class="list-group-item-heading">' +
-              data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+              data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
           }
         }
       }).catch(function (error) {
@@ -1358,11 +1362,11 @@ $('#s-info').on('click', function (e) {
   sql.connect(config).then(function () {
     new sql.Request()
       .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
+      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
         'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
         ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
         'AND ([issues].[charm] IS NOT NULL OR [issues].[defect] IS NOT NULL ) AND [issues].[project_id] = @project_id ' +
-        'GROUP BY [issues].[summary],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
+        'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
       .then(function (data) {
         if (data.length == 0) {
           $('.search-ph').removeClass('hidden').addClass('show');
@@ -1371,7 +1375,7 @@ $('#s-info').on('click', function (e) {
           $('.search-ph').removeClass('show').addClass('hidden');
           for (let i = 0; i < data.length; i++) {
             $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-info animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-info animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
           }
         }
       }).catch(function (error) {
@@ -1391,11 +1395,11 @@ $('#s-warning').on('click', function (e) {
   sql.connect(config).then(function () {
     new sql.Request()
       .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[summary],[issues].[charm],[issues].[defect],[issues].[no_further_action] FROM [issues] ' +
+      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm],[issues].[defect],[issues].[no_further_action] FROM [issues] ' +
         'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
         ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
         'AND ([issues].[charm] IS NULL AND [issues].[defect] IS NULL ) AND [issues].[project_id] = @project_id ' +
-        'GROUP BY [issues].[summary],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
+        'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
       .then(function (data) {
         if (data.length == 0) {
           $('.search-ph').removeClass('hidden').addClass('show');
@@ -1404,7 +1408,7 @@ $('#s-warning').on('click', function (e) {
           $('.search-ph').removeClass('show').addClass('hidden');
           for (let i = 0; i < data.length; i++) {
             $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-warning animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].id + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-warning animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
           }
         }
       }).catch(function (error) {

@@ -200,7 +200,9 @@ function allIssues(project_id) {
                                     'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                     'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                 .then(function (data2) {
-                                    console.log(data2);
+                                    var status = (data1.status) ? data1.status : 'No Status';
+                                    var summary = (data1) ? data1.summary : 'No Summary';
+                                    var description = (data1) ? data1.description : 'No Description';
                                     var arr1 = '';
                                     arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                         '<tbody>' +
@@ -248,7 +250,7 @@ function allIssues(project_id) {
                                             '<td>No Number</td>';
                                     }
                                     arr1 += '<td class="bold">Stauts:</td>' +
-                                        '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                        '<td>' + status + '</td>' +
                                         '</tr>' +
                                         '</tbody>' +
                                         '</table>' +
@@ -256,11 +258,11 @@ function allIssues(project_id) {
                                         '<tbody>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                        '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
+                                        '<td>' + summary + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                        '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                        '<td>' + description + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -283,9 +285,9 @@ function allIssues(project_id) {
 
                                     docx += arr1;
 
-                                }).catch(function (error) {
+                    });/*.catch(function (error) {
                                     showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                });
+                                });*/
                             callback();
                         }
                     });
@@ -356,6 +358,9 @@ function allIssuesCustomer(project_id, customer_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -403,7 +408,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -411,11 +416,11 @@ function allIssuesCustomer(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
+                                            '<td>' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' +description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -508,6 +513,9 @@ function allIssuesBaseline(project_id, baseline_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -555,7 +563,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td>' + status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -563,11 +571,11 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
+                                            '<td>' +summary + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' + description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -590,9 +598,9 @@ function allIssuesBaseline(project_id, baseline_id) {
 
                                         docx += arr1;
 
-                                    }).catch(function (error) {
+                        })/*.catch(function (error) {
                                         showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                    });*/
                                 callback();
                             }
                         });
@@ -662,6 +670,9 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE ib.[issue_id] = @issue_id')
                                     .then(function (data2) {
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -709,7 +720,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                                 '<td>No Number</td>';
                                         }
                                         arr1 += '<td class="bold">Stauts:</td>' +
-                                            '<td>' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -717,11 +728,11 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' +(data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
+                                            '<td>' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' + description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -744,9 +755,9 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
 
                                         docx += arr1;
 
-                                    }).catch(function (error) {
+                        });/*.catch(function (error) {
                                         showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                    });*/
                                 callback();
                             }
                         });
@@ -767,9 +778,11 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
 $('#pdf').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
     e.preventDefault();
-    var customer_id = document.getElementById('customers').options[document.getElementById('customers').selectedIndex].value;
-    var baseline_id = document.getElementById('baselines').options[document.getElementById('baselines').selectedIndex].value;
-
+    var customer_id = $('#customers').find("option:selected").val();
+    var baseline_id = $('#baselines').find("option:selected").val();
+    var both_customer = $('#both-customers').find("option:selected").val();
+    var both_baseline = $('#both-baselines').find("option:selected").val();
+    console.log(baseline_id);
     switch ($("input[name=report-type]:checked").val()) {
         case 'all-issues':
             allIssuespdf(project_id);
@@ -784,7 +797,7 @@ $('#pdf').on('click', function (e) {
             break;
 
         case 'all-issues-both':
-            allIssueBothpdf(project_id, customer_id, baseline_id);
+            allIssueBothpdf(project_id, both_customer, both_baseline);
             break;
     }
 });
@@ -821,7 +834,7 @@ function allIssuespdf(project_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -847,6 +860,9 @@ function allIssuespdf(project_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -894,7 +910,7 @@ function allIssuespdf(project_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' +  (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td class="bold">Stauts: ' +status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -902,11 +918,11 @@ function allIssuespdf(project_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' +(data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
+                                            '<td>' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' +description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1029,7 +1045,9 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
-                                        console.log(data1.id);
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -1078,7 +1096,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td class="bold">Stauts: ' +status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1086,11 +1104,11 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
+                                            '<td>' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added'+ '</td>' +
+                                            '<td>' +description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1181,7 +1199,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1209,7 +1227,9 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                         'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
-                                        console.log(data1.id);
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -1258,7 +1278,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td class="bold">Stauts: ' +status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1266,11 +1286,11 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added' + '</td>' +
+                                            '<td>' + summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' + description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1361,7 +1381,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1388,8 +1408,12 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;')
+                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;'+
+                                        'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE ib.[issue_id] = @issue_id')
                                     .then(function (data2) {
+                                        var status = (data1.status) ? data1.status : 'No Status';
+                                        var summary = (data1) ? data1.summary : 'No Summary';
+                                        var description = (data1) ? data1.description : 'No Description';
                                         var arr1 = '';
                                         arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
@@ -1438,7 +1462,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + (data1.status) ? data1.status : 'No Status added' + '</td>' +
+                                            '<td class="bold">Stauts: ' +status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1446,11 +1470,11 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + (data1.summary) ? data1.summary : 'No Summary added'+ '</td>' +
+                                            '<td>' + summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + (data1.description) ? data1.description : 'No Description added' + '</td>' +
+                                            '<td>' + description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
@@ -1472,9 +1496,9 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
 
                                         docx += arr1;
 
-                                    }).catch(function (error) {
+                        });/*.catch(function (error) {
                                         showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                    });*/
                                 callback();
                             }
                         });
