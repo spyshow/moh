@@ -151,6 +151,7 @@ function getIssueBaseline(issue_id, project_id) {
           ' WHERE ib.[issue_id] = @issue_id ORDER BY ib.[baseline_id] DESC')
         .then(function (data) {
           if (data.length > 0) {
+            console.log('found baseline');
             if (data[0].name === null) {
               name = ' ';
             } else {
@@ -188,13 +189,13 @@ function getNewBaseline(project_id) {
           ' WHERE pb.[project_id] = @project_id ORDER BY pb.[baseline_id] DESC ')
         .then(function (data) {
           if (data) {
-            name = '';
-            cd = '';
-            id = '';
-          } else {
             name = data[0].name;
             cd = data[0].cd;
             id = data[0].id;
+          } else {
+            name = '';
+            cd = '';
+            id = '';
           }
           
           document.getElementById('baseline').value = name;
@@ -227,46 +228,75 @@ function deleteBaseline(issue_id, pre_id) {
 }
 
 function setBaseline(pre_id, name, cd, project_id, issue_id) {
-  var id = '';
+  console.log('pre_id='+pre_id+' , name = '+name+', cd = '+cd+', pro_id = '+project_id+', issue_id = '+issue_id+'');
+  if(name){
+    var conn5 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn5);
+        request
+          .input('name', sql.NVarChar(100), name)
+          .input('cd', sql.NVarChar(10), cd)
+          .query('SELECT id,cd,name FROM baselines WHERE cd = @cd AND name = @name;')
+          .then(function (data) {
+            if(data){
+              var id = data[0].id;
+              deleteBaseline(issue_id, pre_id);
+              var request2 = new sql.Request(conn5);
+              request2
+              .input('issue_id', sql.Int, issue_id)
+              .input('baseline_id', sql.Int, id)
+              .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+              .then(function (data) {
+                showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+              }).catch(function (error) {
+                showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              });
+            } else {
+              var conn4 = new sql.Connection(config, function (err) {
+                if (err) {
+                  showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                } else {
 
-  var conn4 = new sql.Connection(config, function (err) {
-    if (err) {
-      showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    } else {
-
-      var request = new sql.Request(conn4);
-      request
-        .input('name', sql.NVarChar(100), name)
-        .input('cd', sql.NVarChar(10), cd)
-        .query('INSERT INTO [baselines] ([name],[cd]) VALUES (@name, @cd);SELECT SCOPE_IDENTITY() AS id;')
-        .then(function (data) {
-          id = data[0].id;
-          deleteBaseline(issue_id, pre_id);
-          var request2 = new sql.Request(conn4);
-          request2
-            .input('issue_id', sql.Int, issue_id)
-            .input('baseline_id', sql.Int, id)
-            .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
-            .then(function (data) {
-              showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
-            }).catch(function (error) {
-              showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            });
-          var request3 = new sql.Request(conn4);
-          request3
-            .input('project_id', sql.Int, project_id)
-            .input('baseline_id', sql.Int, id)
-            .query('INSERT INTO [projects_baselines] ([project_id], [baseline_id]) VALUES (@project_id, @baseline_id);')
-            .then(function (data) {
-              getIssueBaseline(issue_id, project_id);
-            }).catch(function (error) {
-              showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            });
-        }).catch(function (error) {
-          showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-    }
-  });
+                  var request = new sql.Request(conn4);
+                  request
+                    .input('name', sql.NVarChar(100), name)
+                    .input('cd', sql.NVarChar(10), cd)
+                    .query('INSERT INTO [baselines] ([name],[cd]) VALUES (@name, @cd);SELECT SCOPE_IDENTITY() AS id;')
+                    .then(function (data) {
+                      var id = data[0].id;
+                      deleteBaseline(issue_id, pre_id);
+                      var request2 = new sql.Request(conn4);
+                      request2
+                      .input('issue_id', sql.Int, issue_id)
+                      .input('baseline_id', sql.Int, id)
+                      .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+                      .then(function (data) {
+                        showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+                      }).catch(function (error) {
+                        showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                      });
+                      var request3 = new sql.Request(conn4);
+                      request3
+                        .input('project_id', sql.Int, project_id)
+                        .input('baseline_id', sql.Int, id)
+                        .query('INSERT INTO [projects_baselines] ([project_id], [baseline_id]) VALUES (@project_id, @baseline_id);')
+                        .then(function (data) {
+                          getIssueBaseline(issue_id, project_id);
+                        }).catch(function (error) {
+                          showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                        });
+                    }).catch(function (error) {
+                      showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                    });
+                }
+              });
+            }
+          });
+       } 
+    });
+  }
 }
 
 $('#baseline-submit').on("mousedown", function (e) {
@@ -301,12 +331,21 @@ $('#baseline , #cd').focus(function (e) {
 });
 
 $('#baseline , #cd').blur(function (e) {
-  e.preventDefault();
-  var project_name = document.getElementById('project_name');
-  var project_ID = project_name.options[project_name.selectedIndex].value;
-  var issue_id = document.getElementById('issueID').value;
-  getIssueBaseline(issue_id, project_ID);
-  $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
+  setTimeout(function(){
+    if($('#baseline').is(":focus")){
+
+    } else if ($('#cd').is(":focus")){
+
+    } else {
+      e.preventDefault();
+      var project_name = document.getElementById('project_name');
+      var project_ID = project_name.options[project_name.selectedIndex].value;
+      var issue_id = document.getElementById('issueID').value;
+      getIssueBaseline(issue_id, project_ID);
+      $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
+    }
+  },50);
+  
 });
 
 
@@ -363,6 +402,38 @@ $(document).ready(function () {
     }).catch(function (error) {
       showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     });
+  });
+});
+
+ipc.on('refresh-projects', function () {
+  var html = '<option> Loading... </option>';
+  $('#project_name').html(html).selectpicker('refresh');
+  $('#project_submit').addClass('disabled');
+  // select all project names for the first screen
+  $('#project_select').modal({
+    show: true,
+    backdrop: "static",
+    keyboard: false
+  }); // show modal which cannot escape
+
+  sql.connect(config).then(function () {
+    new sql.Request()
+      .query('SELECT id,project_name,cpf_doc_id FROM projects')
+      .then(function (data) {
+        var project_list = ''; // variable to carry the options for the select
+        data.forEach(function (data) {
+          project_list += '<option value="' + data.id + '">' + data.project_name + '</option>'; //make an option for every project
+        });
+        $('#project_submit').removeClass('disabled');
+        $('#project_name').html(project_list).selectpicker('refresh'); // put them in the select div and refresh the select to show the new values
+
+      }).catch(function (error) {
+        showNotification('Error on project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      });
+
+
+  }).catch(function (error) {
+    showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
   });
 });
 
@@ -434,9 +505,12 @@ $('#project_submit').click(function () {
             document.getElementById('solution').value = data[0].solution;
             document.getElementById('solution_de').value = data[0].solution_de;
             document.getElementById('c2c').value = data[0].c2c;
-            if($('.customer_list li').length !== 0){
-              
+            if($('#charm').val().length !== 0){
+              $('#work,#vsn,#status').prop('disabled', true);
+            } else {
+              $('#work,#vsn,#status').prop('disabled', false);
             }
+
           }
           // customer list
         }).then(function () {
@@ -512,7 +586,7 @@ $('#submit').on('click',function (e) {
   if (!document.getElementById('no_further_action').checked) {
     var no_further_action = 0;
   } else {
-    no_further_action = 1;
+    var no_further_action = 1;
   }
   var reproducible = $('#reproducible').find("option:selected").val();
   var priority = $('#priority').find("option:selected").val();
@@ -524,7 +598,7 @@ $('#submit').on('click',function (e) {
   var solution_de = (document.getElementById('solution_de').value ? document.getElementById('solution_de').value : '');
   var c2c = (document.getElementById('c2c').value ? document.getElementById('c2c').value : '');
   var vsn = (document.getElementById('vsn').value ? document.getElementById('vsn').value : '');
-  if (document.getElementById('form_type').value === 'update') {
+  
 
     sql.connect(config).then(function () {
       new sql.Request()
@@ -565,9 +639,41 @@ $('#submit').on('click',function (e) {
     }).catch(function (error) {
       showNotification('error connecting for update: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     });
-  }
 
-  document.getElementById('form_type').value = 'update';
+    var conn2 = new sql.Connection(config, function (error) {
+    if (error) {
+        showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn2);
+      request
+      .input('project_id', sql.Int, project_ID)
+      .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
+        ' WHERE  project_id = @project_id')
+      .then(function (data) {
+        $('#cpf-all').text(data[0].issues_all);
+      }).catch(function (error) {
+        showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      });
+    }
+  });
+  //for cpf open
+  var conn1 = new sql.Connection(config, function (error) {
+    if (error) {
+        showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn1);
+      request
+      .input('project_id', sql.Int, project_ID)
+      .input('no_further_action', sql.SmallInt, 0)
+      .query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
+        ' WHERE project_id = @project_id AND no_further_action = @no_further_action ')
+      .then(function (data) {
+        document.getElementById('cpf-open').textContent = data[0].issues_open;
+      }).catch(function (error) {
+        showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      });
+    }
+  });
 });
 
 //======================================================================================================================
@@ -577,6 +683,7 @@ $('#new_issue').click(function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
+  $('#work,#vsn,#status').prop('disabled', true);
   var conn4 = new sql.Connection(config, function (err) {
     if (err) {
       showNotification('error connecting for inserting issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -827,6 +934,7 @@ $('#delete_issue').click(function (e) {
 $('#first_issue').click(function () {
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
+  
   getCustomersList(project_ID);
   sql.connect(config).then(function () {
     new sql.Request()
@@ -856,6 +964,11 @@ $('#first_issue').click(function () {
         document.getElementById('solution').value = data[0].solution;
         document.getElementById('solution_de').value = data[0].solution_de;
         document.getElementById('c2c').value = data[0].c2c;
+        if($('#charm').val().length !== 0){
+            $('#work,#vsn,#status').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status').prop('disabled', false);
+          }
         // customer list
         checkCustomers(issueID);
         // action current + history
@@ -907,6 +1020,11 @@ $('#last_issue').click(function () {
         document.getElementById('solution').value = data[0].solution;
         document.getElementById('solution_de').value = data[0].solution_de;
         document.getElementById('c2c').value = data[0].c2c;
+        if($('#charm').val().length !== 0){
+            $('#work,#vsn,#status').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status').prop('disabled', false);
+          }
         // customer list
         checkCustomers(issueID);
         // action current + history
@@ -964,6 +1082,11 @@ $('#next_issue').click(function () {
           document.getElementById('solution').value = data[0].solution;
           document.getElementById('solution_de').value = data[0].solution_de;
           document.getElementById('c2c').value = data[0].c2c;
+          if($('#charm').val().length !== 0){
+            $('#work,#vsn,#status').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status').prop('disabled', false);
+          }
           // customer list
           checkCustomers(issueID);
           // action current + history
@@ -1034,6 +1157,11 @@ $('#previous_issue').click(function () {
           document.getElementById('solution').value = data[0].solution;
           document.getElementById('solution_de').value = data[0].solution_de;
           document.getElementById('c2c').value = data[0].c2c;
+          if($('#charm').val().length !== 0){
+            $('#work,#vsn,#status').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status').prop('disabled', false);
+          }
           // customer list
           checkCustomers(issueID);
           // action current + history
@@ -1234,6 +1362,11 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
         document.getElementById('solution').value = data[0].solution;
         document.getElementById('solution_de').value = data[0].solution_de;
         document.getElementById('c2c').value = data[0].c2c;
+        if($('#charm').val().length !== 0){
+            $('#work,#vsn,#status').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status').prop('disabled', false);
+          }
         // customer list
         checkCustomers(issueID);
         // action current + history

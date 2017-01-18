@@ -188,7 +188,7 @@ $(document).ready(function () {
 //add or update project
 
 ipc.on('show-edit-project', function (event, project_id) {
-    
+    $(document).prop('title', 'Edit Project');
     var conn = new sql.Connection(config, function (err) {
         if (err) {
             showNotification('error connecting for selecting project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -229,6 +229,7 @@ ipc.on('show-new-project', function (event) {
     document.getElementById('cpf-doc-id').value = '';
     document.getElementById('syngo').checked = true;
     document.getElementById('charm').checked = true;
+    document.getElementById('type').value = '';
     $('#customerTable-body').empty();
     $('#baselineTable-body').empty();
 });
@@ -240,7 +241,7 @@ $('#projectSubmit').on('click', function (e) {
     var project_name = document.getElementById('project_name').value;
     var cpf_doc_id = document.getElementById('cpf-doc-id').value;
     var project_type = 0;
-    if (!project_name || !project_name) {
+    if (!project_name || !cpf_doc_id) {
         showNotification('You Have to enter all the information!', 'danger', 'glyphicon glyphicon-tasks');
     } else {
         if ($('#syngo').is(':checked')) {
@@ -288,9 +289,11 @@ $('#projectSubmit').on('click', function (e) {
                         .input('cpf_doc_id', cpf_doc_id)
                         .input('project_type', project_type)
                         .input('db_type', db_type)
-                        .query('INSERT INTO projects ([project_name],[project_type],[db_type],[cpf_doc_id]) VALUES (@project_name,@project_type,@db_type,@cpf_doc_id)')
-                        .then(function () {
+                        .query('INSERT INTO projects ([project_name],[project_type],[db_type],[cpf_doc_id]) VALUES (@project_name,@project_type,@db_type,@cpf_doc_id); SELECT SCOPE_IDENTITY() AS id;')
+                        .then(function (data) {
+                            document.getElementById('project_id').value = data[0].id;
                             showNotification('Project Created', 'success', 'glyphicon glyphicon-tasks');
+                            ipc.send('reload-projects');
                         }).catch(function (error) {
                             showNotification('Error on insert project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                         });

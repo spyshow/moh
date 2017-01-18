@@ -52,7 +52,7 @@ ipc.on('show-evaluation', function (event, project_id) {
         } else {
             var request = new sql.Request(conn);
             request
-                .input('project_id', sql.Int, project_id)
+                .input('project_id',  project_id)
                 .query('SELECT [project_name],[id] FROM [projects] WHERE [id] = @project_id')
                 .then(function (data) {
                     document.getElementById('projectID').value = data[0].project_name;
@@ -63,7 +63,7 @@ ipc.on('show-evaluation', function (event, project_id) {
                 });
         }
     });
-    $('#date').click();
+    
 
     $('#key-and-label').on('click', function () {
         $('#baselines').selectpicker('show');
@@ -325,49 +325,39 @@ $('#key').on('click', function (e) {
         if (error) {
             showNotification('error connecting for chart by date:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         } else {
-
-
-            /*if(document.getElementById('doc-id').checked === true ){
-                docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: '+document.getElementById('doc-id-name').value+'</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
-            }*/
-
-
             var request = new sql.Request(conn1);
-
             request
-                .input('project_id', sql.Int, project_id)
-                .query('SELECT [key] from [issues] WHERE [project_id] = @project_id GROUP BY [key] ORDER BY [key] ')
-                .then(function (data) {
-                    async.eachOfSeries(data, function (data1, i, callback) {
-                        var conn2 = new sql.Connection(config, function (err) {
-                            if (err) {
-                                showNotification('error connecting for selecting key for chart: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
-                            } else {
-                                var request = new sql.Request(conn2);
-                                request.multiple = true;
-                                request
-                                    .input('key', data1.key)
-                                    .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key;')
-                                    .then(function (data2) {
-                                        chartData.data.labels.push(data1.key);
-                                        chartData.data.datasets[0].data.push(data2[0][0]['']);
+            .input('project_id', sql.Int, project_id)
+            .query('SELECT [key] from [issues] WHERE [project_id] = @project_id GROUP BY [key] ORDER BY [key] ')
+            .then(function (data) {
+                async.eachOfSeries(data, function (data1, i, callback) {
+                    var conn2 = new sql.Connection(config, function (err) {
+                        if (err) {
+                            showNotification('error connecting for selecting key for chart: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                        } else {
+                            var request = new sql.Request(conn2);
+                            request.multiple = true;
+                            request
+                                .input('key', data1.key)
+                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key;')
+                                .then(function (data2) {
+                                    chartData.data.labels.push(data1.key);
+                                    chartData.data.datasets[0].data.push(data2[0][0]['']);
 
-                                    }).catch(function (error) {
-                                        showNotification('Error on selecting key for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
-                                callback();
-                            }
-                        });
+                                }).catch(function (error) {
+                                    showNotification('Error on selecting key for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
+                            callback();
+                        }
                     });
-
-                }).then(function () {
-                    setTimeout(function () {
-                        var myLineChart = new Chart(ctx, chartData);
-                        /**/
-                    }, 250);
-
                 });
 
+            }).then(function () {
+                setTimeout(function () {
+                    var myLineChart = new Chart(ctx, chartData);
+                    /**/
+                }, 250);
+            });
         }
     });
 });
@@ -606,7 +596,7 @@ $('#word-chart').on('click', function (e) {
         '</style>' +
         '</head>' +
         '<body>';
-    docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+    docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
     if (document.getElementById('chart-doc-id').checked === true) {
         docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('chart-doc-id-name').value + '</p><br><br><br><br><br>';
     }
@@ -649,9 +639,9 @@ $('#pdf-chart').on('click', function (e) {
         '</style>' +
         '</head>' +
         '<body>';
-    docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+    docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
     if (document.getElementById('chart-doc-id').checked === true) {
-        docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('chart-doc-id-name').value + '</p><br><br><br><br>';
+        docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('chart-doc-id-name').value + '</p><br><br><br><br>';
     }
     docx += '<table id="wrapper">' +
         '<tr>' +
@@ -740,7 +730,7 @@ $('#excel-chart').on('click', function (e) {
             size: 24
         }
     });
-    ws.cell(2, 2).string('Doc ID: ' + document.getElementById('projectID').value).style(style);
+    ws.cell(2, 2).string('Project ID: ' + document.getElementById('projectID').value).style(style);
     if (document.getElementById('chart-doc-id').checked === true) {
         ws.cell(6, 2).string('Doc ID: ' + document.getElementById('chart-doc-id-name').value).style(style);
     }
@@ -912,7 +902,7 @@ function distWord(project_id) {
                 '</style>' +
                 '</head>' +
                 '<body>';
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('table-doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -1042,7 +1032,7 @@ function distPdf(project_id) {
                 '</style>' +
                 '</head>' +
                 '<body>';
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('table-doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1366,7 +1356,7 @@ function fragWord(project_id) {
                         .input('project_id', project_id)
                         .query('SELECT DISTINCT cd FROM baselines ' +
                             'INNER JOIN projects_baselines AS pb ON pb.baseline_id = baselines.id ' +
-                            'WHERE project_id = 7 ORDER BY cd ')
+                            'WHERE project_id = @project_id ORDER BY cd ')
                         .then(function (data) {
                             var docx = '<!DOCTYPE html>' +
                                 '<html>' +
@@ -1393,7 +1383,7 @@ function fragWord(project_id) {
                                 '</style>' +
                                 '</head>' +
                                 '<body>';
-                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
                             if (document.getElementById('table-doc-id').checked === true) {
                                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
                             }
@@ -1443,8 +1433,9 @@ function fragWord(project_id) {
                     id: 6
                 }
             };
+            var num = [1,2,3,4,5,6];
             var areaArr = ['application', 'software', 'hardware', 'documentation', 'wish', 'training'];
-            async.eachOfSeries(areaArr, function (d, n, callback3) {
+            async.eachOfSeries(num, function (d, n, callback3) {
                 var conn1 = new sql.Connection(config, function (error) {
                     if (error) {
                         showNotification('error connecting for selecting CD baselines Table:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -1452,7 +1443,7 @@ function fragWord(project_id) {
                         var request = new sql.Request(conn1);
                         request
                             .input('project_id', project_id)
-                            .input('area', n)
+                            .input('area', d)
                             .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
@@ -1469,9 +1460,9 @@ function fragWord(project_id) {
                     } else {
                         rowSpan = keyArr[n].length + 1;
                     }
-                    getbasedata(n, keyArr[n], baselines, project_id, function (result) {
+                    getbasedata(n+1, keyArr[n], baselines, project_id, function (result) {
                         docx += '<tr>' +
-                            '<td rowspan="' + rowSpan + '">' + area[areaArr[n]].name + '</td>';
+                            '<td rowspan="' + rowSpan + '">' + areaArr[n] + '</td>';
                         docx += result + '</tr>';
                     });
                     callback3();
@@ -1505,7 +1496,7 @@ function fragPdf(project_id) {
                         .input('project_id', project_id)
                         .query('SELECT DISTINCT cd FROM baselines ' +
                             'INNER JOIN projects_baselines AS pb ON pb.baseline_id = baselines.id ' +
-                            'WHERE project_id = 7 ORDER BY cd ')
+                            'WHERE project_id = @project_id ORDER BY cd ')
                         .then(function (data) {
                             var docx = '<!DOCTYPE html>' +
                                 '<html>' +
@@ -1532,7 +1523,7 @@ function fragPdf(project_id) {
                                 '</style>' +
                                 '</head>' +
                                 '<body>';
-                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+                            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
                             if (document.getElementById('table-doc-id').checked === true) {
                                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('table-doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
                             }
@@ -1582,8 +1573,9 @@ function fragPdf(project_id) {
                     id: 6
                 }
             };
+            var num = [1,2,3,4,5,6];
             var areaArr = ['application', 'software', 'hardware', 'documentation', 'wish', 'training'];
-            async.eachOfSeries(areaArr, function (d, n, callback3) {
+            async.eachOfSeries(num, function (d, n, callback3) {
                 var conn1 = new sql.Connection(config, function (error) {
                     if (error) {
                         showNotification('error connecting for selecting CD baselines Table:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -1591,7 +1583,7 @@ function fragPdf(project_id) {
                         var request = new sql.Request(conn1);
                         request
                             .input('project_id', project_id)
-                            .input('area', n)
+                            .input('area', d)
                             .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
@@ -1608,9 +1600,9 @@ function fragPdf(project_id) {
                     } else {
                         rowSpan = keyArr[n].length + 1;
                     }
-                    getbasedata(n, keyArr[n], baselines, project_id, function (result) {
+                    getbasedata(n+1, keyArr[n], baselines, project_id, function (result) {
                         docx += '<tr>' +
-                            '<td rowspan="' + rowSpan + '">' + area[areaArr[n]].name + '</td>';
+                            '<td rowspan="' + rowSpan + '">' + areaArr[n] + '</td>';
                         docx += result + '</tr>';
                     });
                     callback3();
@@ -1658,7 +1650,7 @@ function fragExcel(project_id) {
                         .input('project_id', project_id)
                         .query('SELECT DISTINCT cd FROM baselines ' +
                             'INNER JOIN projects_baselines AS pb ON pb.baseline_id = baselines.id ' +
-                            'WHERE project_id = 7 ORDER BY cd ')
+                            'WHERE project_id = @project_id ORDER BY cd ')
                         .then(function (data) {
                             var docx = '<!DOCTYPE html>' +
                                 '<html>' +
@@ -1745,6 +1737,7 @@ function fragExcel(project_id) {
                     id: 6
                 }
             };
+            var num = [1,2,3,4,5,6];
             var areaArr = ['application', 'software', 'hardware', 'documentation', 'wish', 'training'];
             async.eachOfSeries(areaArr, function (d, n, callback3) {
                 var conn1 = new sql.Connection(config, function (error) {
@@ -1754,7 +1747,7 @@ function fragExcel(project_id) {
                         var request = new sql.Request(conn1);
                         request
                             .input('project_id', project_id)
-                            .input('area', n)
+                            .input('area', d)
                             .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
@@ -1771,9 +1764,9 @@ function fragExcel(project_id) {
                     } else {
                         rowSpan = keyArr[n].length + 1;
                     }
-                    getbasedata(n, keyArr[n], baselines, project_id, function (result) {
+                    getbasedata(n+1, keyArr[n], baselines, project_id, function (result) {
                         docx += '<tr>' +
-                            '<td rowspan="' + rowSpan + '">' + area[areaArr[n]].name + '</td>';
+                            '<td rowspan="' + rowSpan + '">' + areaArr[n] + '</td>';
                         docx += result + '</tr>';
                     });
                     callback3();

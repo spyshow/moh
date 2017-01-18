@@ -62,7 +62,7 @@ ipc.on('show-report', function (event, project_id) {
     console.log(project_id);
     var conn = new sql.Connection(config, function (err) {
         if (err) {
-            showNotification('error connecting for selecting project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+            showNotification('error connecting for selecting Project ID: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
         } else {
             var request = new sql.Request(conn);
             request
@@ -72,7 +72,7 @@ ipc.on('show-report', function (event, project_id) {
                     document.getElementById('projectID').value = data[0].project_name;
                     document.getElementById('projectID').dataset.id = data[0].id;
                 }).catch(function (error) {
-                    showNotification('Error on selecting project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                    showNotification('Error on selecting Project ID:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
         }
     });
@@ -175,7 +175,7 @@ function allIssues(project_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -201,8 +201,8 @@ function allIssues(project_id) {
                                     'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                 .then(function (data2) {
                                     var status = (data1.status) ? data1.status : 'No Status';
-                                    var summary = (data1) ? data1.summary : 'No Summary';
-                                    var description = (data1) ? data1.description : 'No Description';
+                                    var summary = (data1.summary) ? data1.summary : 'No Summary';
+                                    var description = (data1.description) ? data1.description : 'No Description';
                                     var arr1 = '';
                                     arr1 += '<table style="table-layout: fixed; width: 100%;">' +
                                         '<tbody>' +
@@ -249,29 +249,30 @@ function allIssues(project_id) {
                                             '<td class="bold">Charm/Defect:   </td>' +
                                             '<td>No Number</td>';
                                     }
-                                    arr1 += '<td class="bold">Stauts:</td>' +
+                                    arr1 += '<td style="vertical-align: top;" class="bold">Stauts:</td>' +
                                         '<td>' + status + '</td>' +
                                         '</tr>' +
                                         '</tbody>' +
                                         '</table>' +
-                                        '<table>' +
+                                        '<table style="table-layout: fixed; width: 100%;">' +
                                         '<tbody>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                        '<td>' + summary + '</td>' +
+                                        '<td style="vertical-align: top;">' + summary + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                        '<td>' + description + '</td>' +
+                                        '<td style="vertical-align: top;">' + description + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
                                         '<td style="vertical-align: top;" class="bold">action:</td>' +
-                                        '<td>' +
-                                        '<table>';
+                                        '<td style="vertical-align: top;">' +
+                                        '<table style="table-layout: fixed; width: 100%;">';
+                                    console.log(summary , description, status);
                                     data2[0].forEach(function (data21) {
                                         arr1 += '<tr>' +
-                                            '<td>' + data21.date + '</td>' +
-                                            '<td>' + data21.description + '</td>' +
+                                            '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data21.date + '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                                             '</tr>';
 
                                     });
@@ -294,7 +295,9 @@ function allIssues(project_id) {
                 });
 
             }).then(function () {
+                
                 setTimeout(function () {
+                    console.log(docx);
                     var converted = htmlDocx.asBlob(docx);
                     FileSaver.saveAs(converted, 'Report.docx');
                 }, 500);
@@ -330,7 +333,7 @@ function allIssuesCustomer(project_id, customer_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -412,24 +415,24 @@ function allIssuesCustomer(project_id, customer_id) {
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
-                                            '<table>' +
+                                            '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' +summary+ '</td>' +
+                                            '<td style="vertical-align: top;  padding-top:10px;">' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' +description+ '</td>' +
+                                            '<td style="vertical-align: top;  padding-top:10px;">' +description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px;  padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top;  padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -485,7 +488,7 @@ function allIssuesBaseline(project_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -567,24 +570,24 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
-                                            '<table>' +
+                                            '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' +summary + '</td>' +
+                                            '<td style="vertical-align: top;  padding-top:10px;">' +summary + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + description + '</td>' +
+                                            '<td style="vertical-align: top;  padding-top:10px;">' + description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px;  padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top;  padding-top:10px;"> ' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -640,7 +643,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<br style="page-break-before: always; clear: both" />';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project ID: ' + document.getElementById('projectID').value +'<br style="page-break-before: always; clear: both" />';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
             }
@@ -724,24 +727,24 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
-                                            '<table>' +
+                                            '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Summary:</td>' +
-                                            '<td>' +summary+ '</td>' +
+                                            '<td style="vertical-align: top;  padding-top:10px;">' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">Description:</td>' +
-                                            '<td>' + description+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px; padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top;  padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -834,7 +837,7 @@ function allIssuespdf(project_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -910,28 +913,28 @@ function allIssuespdf(project_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' +status+ '</td>' +
+                                            '<td class="bold" style="vertical-align: top;">Stauts: ' +status+ '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
-                                            '<table style="margin-top:20px;">' +
+                                            '<table style="table-layout: fixed; width: 100%;">' +
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' +summary+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' +description + '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' +description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -1016,7 +1019,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;" class="bold">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1104,20 +1107,20 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' +summary+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' +summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' +description+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' +description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px; padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -1199,7 +1202,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1286,20 +1289,20 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + summary+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + description + '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + description + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px; padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });
@@ -1381,7 +1384,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
             if (document.getElementById('first-page').checked === true) {
                 docx += '<div style="page-break-after:always;"></div>';
             }
-            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
+            docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + document.getElementById('projectID').value +'<div style="page-break-after:always;"></div>';
             if (document.getElementById('doc-id').checked === true) {
                 docx += '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Doc ID: ' + document.getElementById('doc-id-name').value + '</p><div style="page-break-after:always;"></div>';
             }
@@ -1470,20 +1473,20 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                             '<tbody>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                                            '<td>' + summary+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + summary+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                                            '<td>' + description+ '</td>' +
+                                            '<td style="vertical-align: top; padding-top:10px;">' + description+ '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td style="vertical-align: top;" class="bold">action:</td>' +
                                             '<td>' +
-                                            '<table>';
+                                            '<table style="table-layout: fixed; width: 100%;">';
                                         data2[0].forEach(function (data21) {
                                             arr1 += '<tr>' +
-                                                '<td>' + data21.date + '</td>' +
-                                                '<td>' + data21.description + '</td>' +
+                                                '<td style="vertical-align: top;width:100px; padding-top:10px;">' + data21.date + '</td>' +
+                                                '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                                                 '</tr>';
 
                                         });

@@ -99,7 +99,10 @@ app.on('ready', function () {
     report.close();
     report = null;
     mainWindow = null;
-    app.quit();
+    //if(newProject === null && newEvaluation === null && mainWindow === null && report === null){
+      app.quit();
+    //}
+    
   });
 
   const menu = Menu.buildFromTemplate(template)
@@ -156,7 +159,7 @@ app.on('ready', function () {
     maximizable: false,
     show: false
   });
-  report.openDevTools();
+  //report.openDevTools();
   report.setMenu(null);
   report.loadURL(reportPath);
   report.on('close', function (event) {
@@ -167,6 +170,10 @@ app.on('ready', function () {
 
 
 
+});
+
+ipc.on('reload-projects',function(){
+  mainWindow.webContents.send('refresh-projects');
 });
 
 ipc.on('show-new-project', function () {
@@ -243,6 +250,8 @@ function sendMail(issue_id,project_title) {
                   var summary = (data2[0][0]) ? data2[0][0].summary : 'No Summary';
                   var description = (data2[0][0]) ? data2[0][0].description : 'No Description';
                   var work = (data2[0][0]) ? data2[0][0].work : 'No Work';
+                  var key = (data2[0][0]) ? data2[0][0].key : 'No Key';
+                  console.dir(data2[0][0]);
                   var arr = '';
                   arr += '<table style="table-layout: fixed; width: 100%;">' +
                       '<tbody>' +
@@ -288,7 +297,7 @@ function sendMail(issue_id,project_title) {
                   arr +='</tr>' +
                       '<tr>' +
                       '<td class="bold">Key:</td>' +
-                      '<td class="td">' + data2[0][0].key + '</td>' +
+                      '<td class="td">' + key + '</td>' +
                       '</tr>' +
                       '<tr>' ;
                   switch(data2[0][0].priority){
@@ -415,15 +424,16 @@ function sendMail(issue_id,project_title) {
                       '<tr>' +
                       '<td class="bold" style="vertical-align: top;" >Description:</td>' +
                       '<td>' + description + '</td>' +
-                      '</tr>' +
+                      '</tr>'+
                       '<tr>' +
                       '<td style="vertical-align: top;" class="bold">action:</td>' +
                       '<td>' +
                       '<table>';
+                      
                   data2[1].forEach(function (data21) {
                       arr += '<tr>' +
-                          '<td width="100">' + data21.date + '</td>' +
-                          '<td>' + data21.description + '</td>' +
+                          '<td width="100" style="vertical-align: top;">' + data21.date + '</td>' +
+                          '<td style="vertical-align: top;">' + data21.description + '</td>' +
                           '</tr>';
 
                   });
@@ -436,8 +446,8 @@ function sendMail(issue_id,project_title) {
                          '<table>';
                   data2[4].forEach(function (data21) {
                       arr += '<tr>' +
-                          '<td width="100">' + data21.type + '</td>' +
-                          '<td>' + data21.path + '</td>' +
+                          '<td width="100" style="vertical-align: top;">' + data21.type + '</td>' +
+                          '<td style="vertical-align: top;">' + data21.path + '</td>' +
                           '</tr>';
 
                   });
@@ -460,7 +470,7 @@ function sendMail(issue_id,project_title) {
                       }
                       var email = 'cc: im.mr.cpf.healthcare@siemens.com\r\n'+
                                   'X-Unsent: 1\r\n'+
-                                  'Subject: '+project_title+':'+data2[0][0].summary+':'+issue_id+'\r\n'+
+                                  'Subject: '+project_title+':'+data2[0][0].summary+':'+data2[0][0].dbid+'\r\n'+
                                   'Mime-Version: 1.0\r\n'+
                                   'Content-Type: multipart/mixed; boundary="----=_Part_2192_32400445.1115745999735"\r\n\r\n'+
                                   '------=_Part_2192_32400445.1115745999735\r\n'+
@@ -480,9 +490,9 @@ function sendMail(issue_id,project_title) {
                                   'CUT team\r\n\r\n'+
                                   '------=_Part_2192_32400445.1115745999735\r\n'+
                                   '--6a82fb459dcaacd40ab3404529e808dc\r\n'+
-                                  'Content-Type: application/pdf; name="'+project_title+'-'+issue_id+'.pdf"\r\n'+
+                                  'Content-Type: application/pdf; name="'+project_title+'-'+data2[0][0].dbid+'.pdf"\r\n'+
                                   'Content-Transfer-Encoding: base64\r\n'+
-                                  'Content-Disposition: attachment; filename="'+project_title+'-'+issue_id+'.pdf"\r\n'+
+                                  'Content-Disposition: attachment; filename="'+project_title+'-'+data2[0][0].dbid+'.pdf"\r\n'+
                                   '\r\n'+
                                   ''+buffer.toString('base64')+' \r\n'+
                                   '------=_Part_2192_32400445.1115745999735--';
