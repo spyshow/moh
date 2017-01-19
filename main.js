@@ -13,6 +13,7 @@ const {Menu} = require('electron');
 const async = require('async');
 const sql = require('mssql');
 
+
 //======================================================================================================================
 //create MsSQL connection
 
@@ -50,14 +51,7 @@ var charm = {
 
 //======================================================================================================================
 //notification
-function showNotification(msg, type, icon) {
-  $.notify({
-    icon: icon,
-    message: msg
-  }, {
-    type: type
-  });
-}
+
 
 
 //======================================================================================================================
@@ -518,7 +512,7 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
   
       var connection1 = new sql.Connection(config, function (err) {
       if (err) {
-        showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        //showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       } else {
         let docx = '<!DOCTYPE html>' +
                   '<html>' +
@@ -546,7 +540,7 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
             async.timesSeries(data.length, function (n, callback) {
                 var conn2 = new sql.Connection(charm, function (err) {
                 if (err) {
-                    showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                   // showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                 } else {
                   var request = new sql.Request(conn2);
                   request
@@ -558,7 +552,7 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
                     if(data[n].vsn != data2[0].vsn){ docx += '<p>in Charm number  MR_00'+data[n].charm+' the vsn changed from "'+data[n].vsn+'" to "'+data2[0].vsn+'"</p>';}
                     console.log(docx);
                   }).catch(function (error) {
-                    showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
+                   // showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
                   });
                   callback();
                 }
@@ -597,7 +591,7 @@ const template = [{
   submenu: [{
     label: 'Load Project',
     click() {
-      mainWindow.reload();
+      mainWindow.webContents.send('load-project');
     }
   },{
     label: 'Import Charm',

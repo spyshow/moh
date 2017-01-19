@@ -188,7 +188,7 @@ function getNewBaseline(project_id) {
           ' INNER JOIN [projects_baselines] as pb ON [baselines].[id] = pb.[baseline_id] ' +
           ' WHERE pb.[project_id] = @project_id ORDER BY pb.[baseline_id] DESC ')
         .then(function (data) {
-          if (data) {
+          if (data === undefined) {
             name = data[0].name;
             cd = data[0].cd;
             id = data[0].id;
@@ -236,64 +236,71 @@ function setBaseline(pre_id, name, cd, project_id, issue_id) {
       } else {
         var request = new sql.Request(conn5);
         request
-          .input('name', sql.NVarChar(100), name)
-          .input('cd', sql.NVarChar(10), cd)
-          .query('SELECT id,cd,name FROM baselines WHERE cd = @cd AND name = @name;')
-          .then(function (data) {
-            if(data){
-              var id = data[0].id;
+        .input('project_id',  project_id)
+        .input('name', sql.NVarChar(100), name)
+        .input('cd', sql.NVarChar(10), cd)
+        .query('SELECT id,cd,name FROM baselines  '+
+        ' INNER JOIN [projects_baselines] as pb ON [baselines].[id] = pb.[baseline_id] ' +
+        ' WHERE pb.[project_id] = @project_id AND cd = @cd AND name = @name ORDER BY pb.[baseline_id] DESC ')
+        .then(function (data) {
+          console.log(data);
+          if(data[0] !== undefined){
+            if(pre_id){
               deleteBaseline(issue_id, pre_id);
-              var request2 = new sql.Request(conn5);
-              request2
-              .input('issue_id', sql.Int, issue_id)
-              .input('baseline_id', sql.Int, id)
-              .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
-              .then(function (data) {
-                showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
-              }).catch(function (error) {
-                showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-              });
-            } else {
-              var conn4 = new sql.Connection(config, function (err) {
-                if (err) {
-                  showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                } else {
+            }
+            var request2 = new sql.Request(conn5);
+            request2
+            .input('issue_id', sql.Int, issue_id)
+            .input('baseline_id', sql.Int, data[0].id)
+            .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+            .then(function (data) {
+              showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+            }).catch(function (error) {
+              showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            });
+          } else {
+            var conn4 = new sql.Connection(config, function (err) {
+              if (err) {
+                showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
 
-                  var request = new sql.Request(conn4);
-                  request
-                    .input('name', sql.NVarChar(100), name)
-                    .input('cd', sql.NVarChar(10), cd)
-                    .query('INSERT INTO [baselines] ([name],[cd]) VALUES (@name, @cd);SELECT SCOPE_IDENTITY() AS id;')
-                    .then(function (data) {
-                      var id = data[0].id;
+                var request = new sql.Request(conn4);
+                request
+                  .input('name', sql.NVarChar(100), name)
+                  .input('cd', sql.NVarChar(10), cd)
+                  .query('INSERT INTO [baselines] ([name],[cd]) VALUES (@name, @cd);SELECT SCOPE_IDENTITY() AS id;')
+                  .then(function (data) {
+                    var id = data[0].id;
+                    if(pre_id){
                       deleteBaseline(issue_id, pre_id);
-                      var request2 = new sql.Request(conn4);
-                      request2
-                      .input('issue_id', sql.Int, issue_id)
+                    }
+                    var request2 = new sql.Request(conn4);
+                    request2
+                    .input('issue_id', sql.Int, issue_id)
+                    .input('baseline_id', sql.Int, id)
+                    .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+                    .then(function (data) {
+                      showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+                    }).catch(function (error) {
+                      showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                    });
+                    var request3 = new sql.Request(conn4);
+                    request3
+                      .input('project_id', sql.Int, project_id)
                       .input('baseline_id', sql.Int, id)
-                      .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+                      .query('INSERT INTO [projects_baselines] ([project_id], [baseline_id]) VALUES (@project_id, @baseline_id);')
                       .then(function (data) {
-                        showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+                        getIssueBaseline(issue_id, project_id);
                       }).catch(function (error) {
                         showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                       });
-                      var request3 = new sql.Request(conn4);
-                      request3
-                        .input('project_id', sql.Int, project_id)
-                        .input('baseline_id', sql.Int, id)
-                        .query('INSERT INTO [projects_baselines] ([project_id], [baseline_id]) VALUES (@project_id, @baseline_id);')
-                        .then(function (data) {
-                          getIssueBaseline(issue_id, project_id);
-                        }).catch(function (error) {
-                          showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                        });
-                    }).catch(function (error) {
-                      showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                    });
-                }
-              });
-            }
-          });
+                  }).catch(function (error) {
+                    showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                  });
+              }
+            });
+          }
+        });
        } 
     });
   }
@@ -405,6 +412,10 @@ $(document).ready(function () {
   });
 });
 
+ipc.on('load-project',function(){
+  $('#project_select').modal('show');
+});
+
 ipc.on('refresh-projects', function () {
   var html = '<option> Loading... </option>';
   $('#project_name').html(html).selectpicker('refresh');
@@ -478,6 +489,7 @@ $('#project_submit').click(function () {
           ' WHERE [issues].[project_id] = @project_id ORDER BY [issues].[id] DESC')
         .then(function (data) {
           if (data[0] === undefined) {
+            console.log('new issue');
             $('#new_issue').click();
           } else {
             issueID = data[0].id;
@@ -683,7 +695,7 @@ $('#new_issue').click(function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
-  $('#work,#vsn,#status').prop('disabled', true);
+  $('#work,#vsn,#status').prop('disabled', false);
   var conn4 = new sql.Connection(config, function (err) {
     if (err) {
       showNotification('error connecting for inserting issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -696,7 +708,7 @@ $('#new_issue').click(function (e) {
         .query('SELECT TOP 1 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
                ' INSERT INTO [issues] ([date],[project_id]) VALUES (@date , @project_id);SELECT SCOPE_IDENTITY() AS id;')
         .then(function (data) {
-          if(data[0][0]){
+          if(data[0][0] !== undefined){
             document.getElementById('dbid').value = data[0][0].dbid+1;
           } else {
             document.getElementById('dbid').value = 1;
