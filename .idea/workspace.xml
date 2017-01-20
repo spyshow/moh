@@ -564,7 +564,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484918720575</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="bug crash">
+      <created>1484918731558</created>
+      <option name="number" value="00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1484918731558</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TodoView">
