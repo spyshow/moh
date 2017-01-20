@@ -1,3 +1,10 @@
+/*
+  TODO
+
+  1- email
+*/
+
+
 "use strict";
 
 const electron = require('electron');
@@ -239,13 +246,7 @@ function sendMail(issue_id,project_title) {
                   'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id; '+
                   'SELECT type,path FROM files WHERE issue_id = @issue_id;')
               .then(function (data2) {
-                  var status = (data2[0][0]) ? data2[0][0].status : 'No Status';
-                  var baseline = (data2[3][0]) ? data2[3][0].name : 'No Baseline';
-                  var summary = (data2[0][0]) ? data2[0][0].summary : 'No Summary';
-                  var description = (data2[0][0]) ? data2[0][0].description : 'No Description';
-                  var work = (data2[0][0]) ? data2[0][0].work : 'No Work';
-                  var key = (data2[0][0]) ? data2[0][0].key : 'No Key';
-                  console.dir(data2[0][0]);
+                  var baseline = (data2[3][0])? data2[3][0].name : 'No Baseline';
                   var arr = '';
                   arr += '<table style="table-layout: fixed; width: 100%;">' +
                       '<tbody>' +
@@ -259,7 +260,7 @@ function sendMail(issue_id,project_title) {
                       '</tr>' +
                       '<tr>' +
                       '<td class="bold">Work:</td>' +
-                      '<td class="td">' + work +'</td>' +
+                      '<td class="td">' + data2[0][0].work +'</td>' +
                       '</tr>' +
                       '<tr>' ;
                   switch(data2[0][0].area){
@@ -291,7 +292,7 @@ function sendMail(issue_id,project_title) {
                   arr +='</tr>' +
                       '<tr>' +
                       '<td class="bold">Key:</td>' +
-                      '<td class="td">' + key + '</td>' +
+                      '<td class="td">' + data2[0][0].key + '</td>' +
                       '</tr>' +
                       '<tr>' ;
                   switch(data2[0][0].priority){
@@ -358,13 +359,13 @@ function sendMail(issue_id,project_title) {
                       break;
                   }
                   switch(data2[0][0].no_further_action){
-                    case 0:
+                    case '0':
                       arr +='<tr>'+
                             '<td class="bold">No further action:</td>' +
                             '<td class="td">No</td>' +
                             '</tr>';
                       break;
-                    case 1:
+                    case '1':
                       arr +='<tr>'+
                             '<td class="bold">No further action:</td>' +
                             '<td class="td">Yes</td>' +
@@ -405,7 +406,7 @@ function sendMail(issue_id,project_title) {
                           '<td  class="td">No Number</td>';
                   }
                   arr += '<td></td>' +
-                      '<td class="bold">Stauts: ' + status + '</td>' +
+                      '<td class="bold" style="vertical-align: top;">Stauts: ' + data2[0][0].status + '</td>' +
                       '</tr>' +
                       '</tbody>' +
                       '</table>' +
@@ -413,21 +414,22 @@ function sendMail(issue_id,project_title) {
                       '<tbody>' +
                       '<tr>' +
                       '<td class="bold" style="vertical-align: top;" >Summary:</td>' +
-                      '<td>' + summary+ '</td>' +
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].summary+ '</td>' +
                       '</tr>' +
                       '<tr>' +
                       '<td class="bold" style="vertical-align: top;" >Description:</td>' +
-                      '<td>' + description + '</td>' +
-                      '</tr>'+
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].description + '</td>' +
+                      '</tr>' +
                       '<tr>' +
                       '<td style="vertical-align: top;" class="bold">action:</td>' +
                       '<td>' +
-                      '<table>';
+                      '<table style="table-layout: fixed; width: 100%;">';
                       
                   data2[1].forEach(function (data21) {
+                    console.log(data21.date , data21.description);
                       arr += '<tr>' +
-                          '<td width="100" style="vertical-align: top;">' + data21.date + '</td>' +
-                          '<td style="vertical-align: top;">' + data21.description + '</td>' +
+                          '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data21.date + '</td>' +
+                          '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
                           '</tr>';
 
                   });
@@ -435,13 +437,13 @@ function sendMail(issue_id,project_title) {
                          '</td>' +
                          '</tr>' +
                          '<tr>' +
-                         '<td style="vertical-align: top;" class="bold">Files:</td>' +
+                         '<td  class="bold">Files:</td>' +
                          '<td>' +
-                         '<table>';
-                  data2[4].forEach(function (data21) {
+                         '<table style="table-layout: fixed; width: 100%;">';
+                  data2[4].forEach(function (data22) {
                       arr += '<tr>' +
-                          '<td width="100" style="vertical-align: top;">' + data21.type + '</td>' +
-                          '<td style="vertical-align: top;">' + data21.path + '</td>' +
+                          '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data22.type + '</td>' +
+                          '<td style="vertical-align: top; padding-top:10px;">' + data22.path + '</td>' +
                           '</tr>';
 
                   });

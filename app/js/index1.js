@@ -117,8 +117,8 @@ function checkCustomers(issue_id) {
       request
         .input('issue_id', sql.Int, issue_id)
         .query('SELECT [id],[name] FROM [customers] ' +
-          ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
-          ' WHERE issue_id = @issue_id ')
+               ' INNER JOIN issues_customers as ic ON customers.id = ic.customer_id' +
+               ' WHERE issue_id = @issue_id ')
         .then(function (data) {
           data.forEach(function (data) {
             if (document.getElementById(data.name).dataset.id == data.id) {
@@ -316,9 +316,9 @@ $('#baseline-submit').on("mousedown", function (e) {
   var cd = document.getElementById('cd').value;
   var issue_id = document.getElementById('issueID').value;
   setBaseline(pre_id, name, cd, project_ID, issue_id);
-  getIssueBaseline(issue_id, project_ID);
   $('#baseline-submit,#baseline-cancel,#baseline-div').addClass('hidden');
   $('#baseline , #cd').blur();
+  getIssueBaseline(issue_id, project_ID);
 });
 
 $('#baseline-cancel').on("mousedown", function (e) {
@@ -1288,9 +1288,9 @@ $('.search-btn').click(function (e) {
           } else {
             $('.search-ph').removeClass('show').addClass('hidden');
             for (let i = 0; i < data.length; i++) {
-              var charm = (data[i].charm) ? data[i].charm : '';
-              var defect =   (data[i].defect) ? data[i].defect : '';
-              var summary = (data[i].summary) ? data[i].summary : '';
+              var charm = (data[i].charm) ? data[i].charm : 'null';
+              var defect =   (data[i].defect) ? data[i].defect : 'null';
+              var summary = (data[i].summary) ? data[i].summary : 'null';
               $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
                 ' data-charm="' + charm + '" data-defect="' + defect + '" href="' + data[i].id + '"><li class="list-group-item animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + summary + '</p></li></a>');
             }
@@ -1374,15 +1374,17 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
         document.getElementById('solution').value = data[0].solution;
         document.getElementById('solution_de').value = data[0].solution_de;
         document.getElementById('c2c').value = data[0].c2c;
-        if($('#charm').val().length !== 0){
-            $('#work,#vsn,#status').prop('disabled', true);
-          } else {
-            $('#work,#vsn,#status').prop('disabled', false);
-          }
         // customer list
         checkCustomers(issueID);
+        if($('#charm').val().length !== 0){
+          $('#work,#vsn,#status').prop('disabled', true);
+        } else {
+          $('#work,#vsn,#status').prop('disabled', false);
+        }
         // action current + history
         updateAction(document.getElementById('issueID').value);
+        $('#files-table-body').empty();
+        refreshFiles(document.getElementById('issueID').value);
       }).catch(function (error) {
         showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       });
