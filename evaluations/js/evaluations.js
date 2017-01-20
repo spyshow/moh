@@ -236,17 +236,17 @@ $('#date').on('click', function (e) {
                                 showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                             } else {
                                 var request = new sql.Request(conn2);
-                                request.multiple = true;
                                 request
-                                    .input('date', data1.date)
-                                    .query('SELECT COUNT(*) FROM [issues] WHERE [date] = @date;')
-                                    .then(function (data2) {
-                                        chartData.data.labels.push(data1.date);
-                                        chartData.data.datasets[0].data.push(data2[0][0]['']);
+                                .input('project_id', sql.Int, project_id)
+                                .input('date', data1.date)
+                                .query('SELECT COUNT(*) AS counts FROM [issues] WHERE [date] = @date AND project_id = @project_id;')
+                                .then(function (data2) {
+                                    chartData.data.labels.push(data1.date);
+                                    chartData.data.datasets[0].data.push(data2[0].counts);
 
-                                    }).catch(function (error) {
-                                        showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                }).catch(function (error) {
+                                    showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
                                 callback();
                             }
                         });
@@ -338,15 +338,16 @@ $('#key').on('click', function (e) {
                             var request = new sql.Request(conn2);
                             request.multiple = true;
                             request
-                                .input('key', data1.key)
-                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key;')
-                                .then(function (data2) {
-                                    chartData.data.labels.push(data1.key);
-                                    chartData.data.datasets[0].data.push(data2[0][0]['']);
+                            .input('project_id', sql.Int, project_id)
+                            .input('key', data1.key)
+                            .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND project_id = @project_id;')
+                            .then(function (data2) {
+                                chartData.data.labels.push(data1.key);
+                                chartData.data.datasets[0].data.push(data2[0][0]['']);
 
-                                }).catch(function (error) {
-                                    showNotification('Error on selecting key for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                });
+                            }).catch(function (error) {
+                                showNotification('Error on selecting key for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                            });
                             callback();
                         }
                     });
@@ -443,15 +444,16 @@ $('#key-and-label').on('click', function (e) {
                                 var request = new sql.Request(conn2);
                                 request.multiple = true;
                                 request
-                                    .input('key', data1.key)
-                                    .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key;')
-                                    .then(function (data2) {
-                                        chartData.data.labels.push(data1.key);
-                                        chartData.data.datasets[0].data.push(data2[0][0]['']);
+                                .input('project_id', sql.Int, project_id)
+                                .input('key', data1.key)
+                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND [project_id] = @project_id;')
+                                .then(function (data2) {
+                                    chartData.data.labels.push(data1.key);
+                                    chartData.data.datasets[0].data.push(data2[0][0]['']);
 
-                                    }).catch(function (error) {
-                                        showNotification('Error on selecting key for chart by baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                }).catch(function (error) {
+                                    showNotification('Error on selecting key for chart by baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
                                 callback();
                             }
                         });
@@ -550,15 +552,16 @@ $('#key-and-customers').on('click', function (e) {
                                 var request = new sql.Request(conn2);
                                 request.multiple = true;
                                 request
-                                    .input('key', data1.key)
-                                    .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key;')
-                                    .then(function (data2) {
-                                        chartData.data.labels.push(data1.key);
-                                        chartData.data.datasets[0].data.push(data2[0][0]['']);
+                                .input('project_id', sql.Int, project_id)
+                                .input('key', data1.key)
+                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND [project_id] = @project_id;')
+                                .then(function (data2) {
+                                    chartData.data.labels.push(data1.key);
+                                    chartData.data.datasets[0].data.push(data2[0][0]['']);
 
-                                    }).catch(function (error) {
-                                        showNotification('Error on selecting key for chart by customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                    });
+                                }).catch(function (error) {
+                                    showNotification('Error on selecting key for chart by customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
                                 callback();
                             }
                         });
