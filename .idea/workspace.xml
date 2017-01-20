@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +26,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7361809">
-              <caret line="132" column="16" selection-start-line="132" selection-start-column="16" selection-end-line="132" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.18090452">
+              <caret line="125" column="5" selection-start-line="125" selection-start-column="5" selection-end-line="125" selection-end-column="5" />
               <folding>
                 <marker date="1484915847701" expanded="true" signature="6737:6770" placeholder="..." />
                 <marker date="1484915847701" expanded="true" signature="13747:13767" placeholder="..." />
@@ -560,7 +558,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484918675757</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="bug crash">
+      <created>1484918720575</created>
+      <option name="number" value="00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1484918720575</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TodoView">
@@ -652,9 +656,9 @@
     <MESSAGE value="dbid start from 1 for each project" />
     <MESSAGE value="add project id  for reports" />
     <MESSAGE value="adjust reports" />
-    <MESSAGE value="bug crash" />
     <MESSAGE value="fix chart for each project&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix chart for each project&#10;" />
+    <MESSAGE value="bug crash" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug crash" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1140,8 +1144,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7361809">
-          <caret line="132" column="16" selection-start-line="132" selection-start-column="16" selection-end-line="132" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.18090452">
+          <caret line="125" column="5" selection-start-line="125" selection-start-column="5" selection-end-line="125" selection-end-column="5" />
           <folding>
             <marker date="1484915847701" expanded="true" signature="6737:6770" placeholder="..." />
             <marker date="1484915847701" expanded="true" signature="13747:13767" placeholder="..." />
