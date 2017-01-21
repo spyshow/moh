@@ -10,7 +10,7 @@
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
-const {webContents , dialog} = require('electron');
+const  {dialog} = require('electron');
 const ipc = electron.ipcMain;
 const path = require('path');
 const {shell} = require('electron');
@@ -210,6 +210,14 @@ ipc.on('mail', function (event,issueID,project_title) {
 });
 
 function sendMail(issue_id,project_title) {
+  //makeing a temp folder if not exist
+  if (!fs.existsSync(app.getPath('userData')+'\\temp\\')){
+    fs.mkdirSync(app.getPath('userData')+'\\temp\\');
+  }
+
+  // building the PDF
+
+  
   var conn2 = new sql.Connection(config, function (err) {
       if (err) {
           console.log(err);
@@ -230,7 +238,7 @@ function sendMail(issue_id,project_title) {
                 'padding-top:10px;' +
                 'text-align: left;' +
                 'font-weight: bold;' +
-                'width: 18%;' +
+                'width: 20%;' +
                 '}' +
                 '</style>' +
                 '</head>' +
@@ -421,6 +429,18 @@ function sendMail(issue_id,project_title) {
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].description + '</td>' +
                       '</tr>' +
                       '<tr>' +
+                      '<td class="bold" style="vertical-align: top;" >Description [Dutch]:</td>' +
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].description_de + '</td>' +
+                      '</tr>' +
+                      '<tr>' +
+                      '<td class="bold" style="vertical-align: top;" >Solution:</td>' +
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].solution + '</td>' +
+                      '</tr>' +
+                      '<tr>' +
+                      '<td class="bold" style="vertical-align: top;" >Solution [Dutch]:</td>' +
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].solution_de + '</td>' +
+                      '</tr>' +
+                      '<tr>' +
                       '<td style="vertical-align: top;" class="bold">action:</td>' +
                       '<td>' +
                       '<table style="table-layout: fixed; width: 100%;">';
@@ -490,8 +510,9 @@ function sendMail(issue_id,project_title) {
                                   'Content-Transfer-Encoding: base64\r\n'+
                                   'Content-Disposition: attachment; filename="'+project_title+'-'+data2[0][0].dbid+'.pdf"\r\n'+
                                   '\r\n'+
-                                  ''+buffer.toString('base64')+' \r\n'+
+                                  ''+buffer.toString('base64')+'\r\n\r\n'+
                                   '------=_Part_2192_32400445.1115745999735--';
+                      console.log(email);
                       fs.writeFile(app.getPath('userData')+'\\temp\\1.eml', email, (err) => {
                         if (err) throw err;
                         shell.openItem(app.getPath('userData')+'\\temp\\1.eml');
@@ -587,7 +608,8 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
 });
 
 //============================================================================================================================
-// template for main menu 
+// template for main menu
+
 const template = [{
   label: 'Project',
   submenu: [{
