@@ -189,13 +189,13 @@ function getNewBaseline(project_id) {
           ' WHERE pb.[project_id] = @project_id ORDER BY pb.[baseline_id] DESC ')
         .then(function (data) {
           if (data === undefined) {
-            name = data[0].name;
-            cd = data[0].cd;
-            id = data[0].id;
-          } else {
             name = '';
             cd = '';
             id = '';
+          } else {
+            name = data[0].name;
+            cd = data[0].cd;
+            id = data[0].id;
           }
           
           document.getElementById('baseline').value = name;

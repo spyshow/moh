@@ -139,6 +139,7 @@ app.on('ready', function () {
     maximizable: false,
     show: false
   });
+  //newEvaluation.openDevTools();
   newEvaluation.setMenu(null);
   newEvaluation.loadURL(newEvaluationPath);
   newEvaluation.on('close', function (event) {
@@ -441,6 +442,10 @@ function sendMail(issue_id,project_title) {
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].solution_de + '</td>' +
                       '</tr>' +
                       '<tr>' +
+                      '<td class="bold" style="vertical-align: top;" >Communication to  customer:</td>' +
+                      '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].c2c + '</td>' +
+                      '</tr>' +
+                      '<tr>' +
                       '<td style="vertical-align: top;" class="bold">action:</td>' +
                       '<td>' +
                       '<table style="table-layout: fixed; width: 100%;">';
@@ -611,82 +616,82 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
 // template for main menu
 
 const template = [{
-  label: 'Project',
-  submenu: [{
-    label: 'Load Project',
-    click() {
-      mainWindow.webContents.send('load-project');
-    }
-  },{
-    label: 'Import Charm',
-    click() {
-      mainWindow.webContents.executeJavaScript(`
-        var ipcRenderer = require('electron').ipcRenderer;
-        var project_name = document.getElementById('project_name');
-        var project_title = project_name.options[project_name.selectedIndex].text;
-        var project_ID = project_name.options[project_name.selectedIndex].value;
-        ipcRenderer.send('importCharm',project_ID,project_title);
-      `);
-    }
+    label: 'Project',
+    submenu: [{
+      label: 'Load Project',
+      click() {
+        mainWindow.webContents.send('load-project');
+      }
+    },{
+      label: 'Import Charm',
+      click() {
+        mainWindow.webContents.executeJavaScript(`
+          var ipcRenderer = require('electron').ipcRenderer;
+          var project_name = document.getElementById('project_name');
+          var project_title = project_name.options[project_name.selectedIndex].text;
+          var project_ID = project_name.options[project_name.selectedIndex].value;
+          ipcRenderer.send('importCharm',project_ID,project_title);
+        `);
+      }
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Quit',
+      accelerator: 'CmdOrCtrl+Q',
+      click() {
+        app.quit();
+      }
+    }]
   }, {
-    type: 'separator'
+    label: 'Mail',
+    submenu: [{
+      label: 'Send issue as PDF',
+      click() {
+        mainWindow.webContents.executeJavaScript(`
+          var ipcRenderer = require('electron').ipcRenderer;
+          var issueID = document.getElementById("issueID").value; 
+          var project_name = document.getElementById('project_name');
+          var project_title = project_name.options[project_name.selectedIndex].text;
+          ipcRenderer.send('mail', issueID,project_title);
+        `);
+      }
+    }]
   }, {
-    label: 'Quit',
-    accelerator: 'CmdOrCtrl+Q',
-    click() {
-      app.quit();
-    }
-  }]
-}, {
-  label: 'Mail',
-  submenu: [{
-    label: 'Send issue as PDF',
-    click() {
-      mainWindow.webContents.executeJavaScript(`
-        var ipcRenderer = require('electron').ipcRenderer;
-        var issueID = document.getElementById("issueID").value; 
-        var project_name = document.getElementById('project_name');
-        var project_title = project_name.options[project_name.selectedIndex].text;
-        ipcRenderer.send('mail', issueID,project_title);
-      `);
-    }
-  }]
-}, {
-  label: 'Pages',
-  submenu: [{
-    label: 'Reports',
-    click() {
-      mainWindow.webContents.executeJavaScript(`
-        var ipcRenderer = require('electron').ipcRenderer;
-        var project_name = document.getElementById('project_name');
-        var project_id = project_name.options[project_name.selectedIndex].value;
-        ipcRenderer.send('show-report-win', project_id);
-      `);
-    }
+    label: 'Pages',
+    submenu: [{
+      label: 'Reports',
+      click() {
+        mainWindow.webContents.executeJavaScript(`
+          var ipcRenderer = require('electron').ipcRenderer;
+          var project_name = document.getElementById('project_name');
+          var project_id = project_name.options[project_name.selectedIndex].value;
+          ipcRenderer.send('show-report-win', project_id);
+        `);
+      }
+    }, {
+      label: 'Evaluations',
+      click() {
+        mainWindow.webContents.executeJavaScript(`
+          var ipcRenderer = require('electron').ipcRenderer;
+          var project_name = document.getElementById('project_name');
+          var project_id = project_name.options[project_name.selectedIndex].value;
+          ipcRenderer.send('show-evaluation', project_id);
+        `);
+      }
+    }]
   }, {
-    label: 'Evaluations',
-    click() {
-      mainWindow.webContents.executeJavaScript(`
-        var ipcRenderer = require('electron').ipcRenderer;
-        var project_name = document.getElementById('project_name');
-        var project_id = project_name.options[project_name.selectedIndex].value;
-        ipcRenderer.send('show-evaluation', project_id);
-      `);
-    }
-  }]
-}, {
-  label: 'dev',
-  submenu: [{
-    label: 'reload',
-    accelerator: 'CmdOrCtrl+R',
-    click: (item, focusedWindow) => {
-      if (focusedWindow) focusedWindow.reload();
-    }
-  }, {
-    label: 'toggle Developer Tools',
-    accelerator: 'Ctrl+Shift+I',
-    click: (item, focusedWindow) => {
-      if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-    }
-  }]
+    label: 'dev',
+    submenu: [{
+      label: 'reload',
+      accelerator: 'CmdOrCtrl+R',
+      click: (item, focusedWindow) => {
+        if (focusedWindow) focusedWindow.reload();
+      }
+    }, {
+      label: 'toggle Developer Tools',
+      accelerator: 'Ctrl+Shift+I',
+      click: (item, focusedWindow) => {
+        if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+      }
+    }]
 }];

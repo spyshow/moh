@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.1.js" afterPath="$PROJECT_DIR$/main.1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evaluations/js/evaluations.js" afterPath="$PROJECT_DIR$/evaluations/js/evaluations.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +29,7 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2631578">
+            <state vertical-scroll-proportion="1.4761904">
               <caret line="611" column="0" selection-start-line="611" selection-start-column="0" selection-end-line="611" selection-end-column="0" />
               <folding>
                 <element signature="e#690#900#0" expanded="false" />
@@ -606,7 +606,13 @@
       <option name="project" value="LOCAL" />
       <updated>1484918736711</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="email fix">
+      <created>1485023842306</created>
+      <option name="number" value="00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1485023842306</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView">
@@ -675,7 +681,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="add an sql test database" />
     <MESSAGE value="issues navigation button ready &#10;search form and functionality ready" />
     <MESSAGE value="search done&#10;" />
     <MESSAGE value="new project window" />
@@ -700,7 +705,8 @@
     <MESSAGE value="adjust reports" />
     <MESSAGE value="fix chart for each project&#10;" />
     <MESSAGE value="bug crash" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug crash" />
+    <MESSAGE value="email fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="email fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -716,6 +722,56 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#690#900#0" expanded="false" />
+            <element signature="e#915#1136#0" expanded="false" />
+            <element signature="e#1552#1613#0" expanded="false" />
+            <element signature="e#1645#3863#0" expanded="false" />
+            <element signature="e#3902#3956#0" expanded="false" />
+            <element signature="e#3999#4097#0" expanded="false" />
+            <element signature="e#4158#4269#0" expanded="false" />
+            <element signature="e#4328#4446#0" expanded="false" />
+            <element signature="n#!!block;n#sendMail#0" expanded="false" />
+            <element signature="e#20580#24167#0" expanded="false" />
+            <element signature="e#24343#25077#0" expanded="false" />
+            <element signature="e#25079#25561#0" expanded="false" />
+            <element signature="e#25110#25558#0" expanded="false" />
+            <element signature="e#25563#26346#0" expanded="false" />
+            <element signature="e#25595#25966#0" expanded="false" />
+            <element signature="e#25968#26343#0" expanded="false" />
+            <element signature="e#26008#26339#0" expanded="false" />
+            <element signature="e#26348#26722#0" expanded="false" />
+            <element signature="e#26378#26529#0" expanded="false" />
+            <element signature="e#26531#26719#0" expanded="false" />
+            <element signature="e#26639#26715#0" expanded="false" />
+            <marker date="1485023618043" expanded="true" signature="6907:6940" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="13917:13937" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14121:14137" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14255:14275" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14329:14367" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14513:14533" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14591:14629" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14780:14800" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="14866:14904" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15058:15078" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15133:15171" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15319:15339" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15402:15440" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15578:15598" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15697:15730" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="15956:16007" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="16075:16113" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="16483:16516" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="16652:16703" placeholder="..." />
+            <marker date="1485023618043" expanded="true" signature="16771:16809" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1513,7 +1569,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2631578">
+        <state vertical-scroll-proportion="1.4761904">
           <caret line="611" column="0" selection-start-line="611" selection-start-column="0" selection-end-line="611" selection-end-column="0" />
           <folding>
             <element signature="e#690#900#0" expanded="false" />

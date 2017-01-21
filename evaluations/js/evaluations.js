@@ -230,7 +230,8 @@ $('#date').on('click', function (e) {
                 .input('project_id', sql.Int, project_id)
                 .query('SELECT [date] from [issues] WHERE [project_id] = @project_id GROUP BY [date] ORDER BY [date] ')
                 .then(function (data) {
-                    async.eachOfSeries(data, function (data1, i, callback) {
+                    console.log(data.length);
+                    async.times(data.length, function (n) {
                         var conn2 = new sql.Connection(config, function (err) {
                             if (err) {
                                 showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -238,16 +239,16 @@ $('#date').on('click', function (e) {
                                 var request = new sql.Request(conn2);
                                 request
                                 .input('project_id', sql.Int, project_id)
-                                .input('date', data1.date)
+                                .input('date', data[n].date)
                                 .query('SELECT COUNT(*) AS counts FROM [issues] WHERE [date] = @date AND project_id = @project_id;')
                                 .then(function (data2) {
-                                    chartData.data.labels.push(data1.date);
+                                    chartData.data.labels.push(data[n].date);
                                     chartData.data.datasets[0].data.push(data2[0].counts);
 
                                 }).catch(function (error) {
                                     showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                                 });
-                                callback();
+                                
                             }
                         });
                     });
@@ -1742,7 +1743,7 @@ function fragExcel(project_id) {
             };
             var num = [1,2,3,4,5,6];
             var areaArr = ['application', 'software', 'hardware', 'documentation', 'wish', 'training'];
-            async.eachOfSeries(areaArr, function (d, n, callback3) {
+            async.eachOfSeries(num, function (d, n, callback3) {
                 var conn1 = new sql.Connection(config, function (error) {
                     if (error) {
                         showNotification('error connecting for selecting CD baselines Table:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
