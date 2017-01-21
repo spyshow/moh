@@ -235,8 +235,12 @@ ipc.on('show-new-project', function (event) {
 });
 
 $('#projectSubmit').on('click', function (e) {
-
     e.preventDefault();
+    btn = $(this);
+    btn.prop('disabled', true);
+    setTimeout(function(){
+      btn.prop('disabled', false);
+    }, 1000);
     var project_id = document.getElementById('project_id').value;
     var project_name = document.getElementById('project_name').value;
     var cpf_doc_id = document.getElementById('cpf-doc-id').value;
@@ -293,6 +297,7 @@ $('#projectSubmit').on('click', function (e) {
                         .then(function (data) {
                             document.getElementById('project_id').value = data[0].id;
                             showNotification('Project Created', 'success', 'glyphicon glyphicon-tasks');
+                            document.getElementById('type').value = 'update';
                             ipc.send('reload-projects');
                         }).catch(function (error) {
                             showNotification('Error on insert project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');

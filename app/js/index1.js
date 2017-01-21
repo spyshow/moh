@@ -467,6 +467,9 @@ $('#project_edit').click(function (e) {
 //selected project submit button [ok]
 
 $('#project_submit').click(function () {
+  setTimeout(function(){
+      btn.prop('disabled', false);
+    }, 1000);
   var issueID;
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
@@ -583,6 +586,9 @@ $('#project_submit').click(function () {
 //submit or update issue button [ok]
 
 $('#submit').on('click',function (e) {
+  setTimeout(function(){
+      btn.prop('disabled', false);
+    }, 1000);
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
@@ -692,6 +698,9 @@ $('#submit').on('click',function (e) {
 //new issue button [ok]
 
 $('#new_issue').click(function (e) {
+  setTimeout(function(){
+      btn.prop('disabled', false);
+    }, 1000);
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
