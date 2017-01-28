@@ -1,6 +1,6 @@
 /* TODO
 
-    1-add realvsn
+    1-strip spaces from the project name input field  
      
  */
 var electron = require('electron');
@@ -282,13 +282,40 @@ $('#projectSubmit').on('click', function (e) {
                 }
             });
         } else {
-
-            var conn2 = new sql.Connection(config, function (err) {
-                if (err) {
-                    showNotification('error connecting on insert project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+          var conn1 = new sql.Connection(config, function (err) {
+            if (err) {
+                showNotification('error connecting on insert project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+              var request = new sql.Request(conn1);
+              request
+              .input('project_name', project_name)
+              .query('SELECT * FROM [projects] WHERE [project_name] = @project_name')
+              .then(function(data1){
+                if(data1[0] !== undefined){
+                  document.getElementById('type').value = 'update';
+                  document.getElementById('project_id').value = data1[0].id;
+                  document.getElementById('project_name').value = data1[0].project_name;
+                  document.getElementById('cpf-doc-id').value = data1[0].cpf_doc_id;
+                  if (data1[0].project_type === 0) {
+                      document.getElementById('syngo').checked = true;
+                  } else {
+                      document.getElementById('mr').checked = true;
+                  }
+                  if (data1[0].db_type === 0) {
+                      document.getElementById('charm').checked = true;
+                  } else {
+                      document.getElementById('TFS').checked = true;
+                  }
+                  refreshCustomer(data1[0].id);
+                  refreshBaseline(data1[0].id);
+                  showNotification('There is another Project with the same values, Project Loaded', 'warning', 'glyphicon glyphicon-tasks');
                 } else {
-                    var request = new sql.Request(conn2);
-                    request
+                  var conn2 = new sql.Connection(config, function (err) {
+                    if (err) {
+                        showNotification('error connecting on insert project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                    } else {
+                        var request = new sql.Request(conn2);
+                        request
                         .input('project_name', project_name)
                         .input('cpf_doc_id', cpf_doc_id)
                         .input('project_type', project_type)
@@ -302,11 +329,14 @@ $('#projectSubmit').on('click', function (e) {
                         }).catch(function (error) {
                             showNotification('Error on insert project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                         });
+                     }
+                 });
                 }
-            });
+              });  
+            }
+          });
         }
     }
-
 });
 
 //============================================================================================================================

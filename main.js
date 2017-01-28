@@ -217,8 +217,6 @@ function sendMail(issue_id,project_title) {
   }
 
   // building the PDF
-
-  
   var conn2 = new sql.Connection(config, function (err) {
       if (err) {
           console.log(err);

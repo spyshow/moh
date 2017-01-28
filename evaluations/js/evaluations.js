@@ -1,3 +1,8 @@
+/*
+    TODO
+    1- date chart async.timesSeries not working
+*/
+
 const electron = require('electron');
 const {dialog} = require('electron').remote;
 const {app} = require('electron').remote;
@@ -13,6 +18,7 @@ const FileSaver = require('file-saver');
 const htmlTo = require('html2xlsx');
 var base64Img = require('base64-img');
 var xl = require('excel4node');
+var toBuffer = require('blob-to-buffer');
 $('#baselines').selectpicker('hide');
 $('#customers').selectpicker('hide');
 
@@ -65,17 +71,17 @@ ipc.on('show-evaluation', function (event, project_id) {
     });
     
 
-    $('#key-and-label').on('click', function () {
+    $('#area-and-label').on('click', function () {
         $('#baselines').selectpicker('show');
     });
-    $('#key-and-customers').on('click', function () {
+    $('#area-and-customers').on('click', function () {
         $('#customers').selectpicker('show');
     });
     $("input[name=chart-type]").on('click', function () {
-        if (!document.getElementById('key-and-label').checked) {
+        if (!document.getElementById('area-and-label').checked) {
             $('#baselines').selectpicker('hide');
         }
-        if (!document.getElementById('key-and-customers').checked) {
+        if (!document.getElementById('area-and-customers').checked) {
             $('#customers').selectpicker('hide');
         }
     });
@@ -127,10 +133,10 @@ ipc.on('show-evaluation', function (event, project_id) {
     });
     //update chart on baseline update
     $('#baselines').on('changed.bs.select', function (e) {
-        $('#key-and-label').click();
+        $('#area-and-label').click();
     });
     $('#customers').on('changed.bs.select', function (e) {
-        $('#key-and-customers').click();
+        $('#area-and-customers').click();
     });
 });
 
@@ -225,32 +231,28 @@ $('#date').on('click', function (e) {
             showNotification('error connecting for chart by date:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         } else {
             var request = new sql.Request(conn1);
-
             request
                 .input('project_id', sql.Int, project_id)
                 .query('SELECT [date] from [issues] WHERE [project_id] = @project_id GROUP BY [date] ORDER BY [date] ')
                 .then(function (data) {
-                    console.log(data.length);
-                    async.times(data.length, function (n) {
-                        var conn2 = new sql.Connection(config, function (err) {
-                            if (err) {
-                                showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
-                            } else {
-                                var request = new sql.Request(conn2);
-                                request
-                                .input('project_id', sql.Int, project_id)
-                                .input('date', data[n].date)
-                                .query('SELECT COUNT(*) AS counts FROM [issues] WHERE [date] = @date AND project_id = @project_id;')
-                                .then(function (data2) {
-                                    chartData.data.labels.push(data[n].date);
-                                    chartData.data.datasets[0].data.push(data2[0].counts);
-
-                                }).catch(function (error) {
-                                    showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                                });
-                                
-                            }
-                        });
+                    async.timesSeries(data.length, function (n) {
+                      var conn2 = new sql.Connection(config, function (err) {
+                        if (err) {
+                          showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                        } else {
+                          var request = new sql.Request(conn2);
+                          request
+                          .input('project_id', sql.Int, project_id)
+                          .input('date', data[n].date)
+                          .query('SELECT COUNT(*) AS counts FROM [issues] WHERE [date] = @date AND project_id = @project_id;')
+                          .then(function (data2) {
+                            chartData.data.labels.push(data[n].date);
+                            chartData.data.datasets[0].data.push(data2[0].counts);
+                          }).catch(function (error) {
+                              showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                          });
+                        }
+                      });
                     });
 
                 }).then(function () {
@@ -264,7 +266,7 @@ $('#date').on('click', function (e) {
     });
 });
 
-$('#key').on('click', function (e) {
+$('#area').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
     $('.canvas').html('<canvas id="myChart" width="548" height="274" style="display: block; width: 548px; height: 274px;"></canvas>');
     var ctx = document.getElementById("myChart").getContext("2d");
@@ -274,7 +276,7 @@ $('#key').on('click', function (e) {
         data: {
             labels: [],
             datasets: [{
-                label: "Issue / Key",
+                label: "Issue / area",
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: "rgba(75,192,192,0.4)",
@@ -302,7 +304,7 @@ $('#key').on('click', function (e) {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Key'
+                        labelString: 'area'
                     },
                     color: '#f39c12',
                     ticks: {
@@ -329,25 +331,44 @@ $('#key').on('click', function (e) {
             var request = new sql.Request(conn1);
             request
             .input('project_id', sql.Int, project_id)
-            .query('SELECT [key] from [issues] WHERE [project_id] = @project_id GROUP BY [key] ORDER BY [key] ')
+            .query('SELECT [area] from [issues] WHERE [project_id] = @project_id GROUP BY [area] ORDER BY [area] ')
             .then(function (data) {
                 async.eachOfSeries(data, function (data1, i, callback) {
                     var conn2 = new sql.Connection(config, function (err) {
                         if (err) {
-                            showNotification('error connecting for selecting key for chart: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                            showNotification('error connecting for selecting area for chart: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                         } else {
                             var request = new sql.Request(conn2);
                             request.multiple = true;
                             request
                             .input('project_id', sql.Int, project_id)
-                            .input('key', data1.key)
-                            .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND project_id = @project_id;')
+                            .input('area', data1.area)
+                            .query('SELECT COUNT(*) FROM [issues] WHERE [area] = @area AND project_id = @project_id;')
                             .then(function (data2) {
-                                chartData.data.labels.push(data1.key);
+                                switch(data1.area){
+                                    case 1:
+                                        chartData.data.labels.push('Application');
+                                        break;
+                                    case 2:
+                                        chartData.data.labels.push('Software');
+                                    break;
+                                    case 3:
+                                        chartData.data.labels.push('Hardware');
+                                    break;
+                                    case 4:
+                                        chartData.data.labels.push('Documentation');
+                                    break;
+                                    case 5:
+                                        chartData.data.labels.push('Wish');
+                                    break;
+                                    case 6:
+                                        chartData.data.labels.push('Training');
+                                    break;
+                                }
                                 chartData.data.datasets[0].data.push(data2[0][0]['']);
 
                             }).catch(function (error) {
-                                showNotification('Error on selecting key for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                showNotification('Error on selecting area for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                             });
                             callback();
                         }
@@ -364,7 +385,7 @@ $('#key').on('click', function (e) {
     });
 });
 
-$('#key-and-label').on('click', function (e) {
+$('#area-and-label').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
     var baseline = $('#baselines').find("option:selected").val();
     $('.canvas').html('<canvas id="myChart" width="548" height="274" style="display: block; width: 548px; height: 274px;"></canvas>');
@@ -403,7 +424,7 @@ $('#key-and-label').on('click', function (e) {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Key'
+                        labelString: 'area'
                     },
                     color: '#f39c12',
                     ticks: {
@@ -432,28 +453,47 @@ $('#key-and-label').on('click', function (e) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('baseline', baseline)
-                .query('SELECT [key] from [issues] ' +
+                .query('SELECT [area] from [issues] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id]' +
-                    ' WHERE [project_id] = @project_id AND  ib.[baseline_id] = @baseline GROUP BY [key] ORDER BY [key] ')
+                    ' WHERE [project_id] = @project_id AND  ib.[baseline_id] = @baseline GROUP BY [area] ORDER BY [area] ')
                 .then(function (data) {
-                    chartData.data.datasets[0].label = 'issue / key of label: ' + document.getElementById('baselines').options[document.getElementById('baselines').selectedIndex].innerText;
+                    chartData.data.datasets[0].label = 'issue / area of label: ' + document.getElementById('baselines').options[document.getElementById('baselines').selectedIndex].innerText;
                     async.eachOfSeries(data, function (data1, i, callback) {
                         var conn2 = new sql.Connection(config, function (err) {
                             if (err) {
-                                showNotification('error connecting for selecting key for chart by baseline: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                                showNotification('error connecting for selecting area for chart by baseline: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                             } else {
                                 var request = new sql.Request(conn2);
                                 request.multiple = true;
                                 request
                                 .input('project_id', sql.Int, project_id)
-                                .input('key', data1.key)
-                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND [project_id] = @project_id;')
+                                .input('area', data1.area)
+                                .query('SELECT COUNT(*) FROM [issues] WHERE [area] = @area AND [project_id] = @project_id;')
                                 .then(function (data2) {
-                                    chartData.data.labels.push(data1.key);
+                                    switch(data1.area){
+                                        case 1:
+                                            chartData.data.labels.push('Application');
+                                            break;
+                                        case 2:
+                                            chartData.data.labels.push('Software');
+                                        break;
+                                        case 3:
+                                            chartData.data.labels.push('Hardware');
+                                        break;
+                                        case 4:
+                                            chartData.data.labels.push('Documentation');
+                                        break;
+                                        case 5:
+                                            chartData.data.labels.push('Wish');
+                                        break;
+                                        case 6:
+                                            chartData.data.labels.push('Training');
+                                        break;
+                                    }
                                     chartData.data.datasets[0].data.push(data2[0][0]['']);
 
                                 }).catch(function (error) {
-                                    showNotification('Error on selecting key for chart by baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                    showNotification('Error on selecting area for chart by baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                                 });
                                 callback();
                             }
@@ -472,7 +512,7 @@ $('#key-and-label').on('click', function (e) {
     });
 });
 
-$('#key-and-customers').on('click', function (e) {
+$('#area-and-customers').on('click', function (e) {
     var project_id = document.getElementById('projectID').dataset.id;
     var customer = $('#customers').find("option:selected").val();
     $('.canvas').html('<canvas id="myChart" width="548" height="274" style="display: block; width: 548px; height: 274px;"></canvas>');
@@ -511,7 +551,7 @@ $('#key-and-customers').on('click', function (e) {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Key'
+                        labelString: 'Area'
                     },
                     color: '#f39c12',
                     ticks: {
@@ -540,28 +580,47 @@ $('#key-and-customers').on('click', function (e) {
             request
                 .input('project_id', sql.Int, project_id)
                 .input('customer', customer)
-                .query('SELECT [key] from [issues] ' +
+                .query('SELECT [area] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id]' +
-                    ' WHERE [project_id] = @project_id AND  ic.[customer_id] = @customer GROUP BY [key] ORDER BY [key] ')
+                    ' WHERE [project_id] = @project_id AND  ic.[customer_id] = @customer GROUP BY [area] ORDER BY [area] ')
                 .then(function (data) {
-                    chartData.data.datasets[0].label = 'issue / key of Customer: ' + document.getElementById('customers').options[document.getElementById('customers').selectedIndex].innerText;
+                    chartData.data.datasets[0].label = 'issue / area of Customer: ' + document.getElementById('customers').options[document.getElementById('customers').selectedIndex].innerText;
                     async.eachOfSeries(data, function (data1, i, callback) {
                         var conn2 = new sql.Connection(config, function (err) {
                             if (err) {
-                                showNotification('error connecting for selecting key for chart by customer: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                                showNotification('error connecting for selecting area for chart by customer: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
                             } else {
                                 var request = new sql.Request(conn2);
                                 request.multiple = true;
                                 request
                                 .input('project_id', sql.Int, project_id)
-                                .input('key', data1.key)
-                                .query('SELECT COUNT(*) FROM [issues] WHERE [key] = @key AND [project_id] = @project_id;')
+                                .input('area', data1.area)
+                                .query('SELECT COUNT(*) FROM [issues] WHERE [area] = @area AND [project_id] = @project_id;')
                                 .then(function (data2) {
-                                    chartData.data.labels.push(data1.key);
+                                    switch(data1.area){
+                                        case 1:
+                                            chartData.data.labels.push('Application');
+                                            break;
+                                        case 2:
+                                            chartData.data.labels.push('Software');
+                                        break;
+                                        case 3:
+                                            chartData.data.labels.push('Hardware');
+                                        break;
+                                        case 4:
+                                            chartData.data.labels.push('Documentation');
+                                        break;
+                                        case 5:
+                                            chartData.data.labels.push('Wish');
+                                        break;
+                                        case 6:
+                                            chartData.data.labels.push('Training');
+                                        break;
+                                    }
                                     chartData.data.datasets[0].data.push(data2[0][0]['']);
 
                                 }).catch(function (error) {
-                                    showNotification('Error on selecting key for chart by customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                    showNotification('Error on selecting area for chart by customer:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                                 });
                                 callback();
                             }
@@ -612,16 +671,20 @@ $('#word-chart').on('click', function (e) {
         '</body>' +
         '</html>';
     var converted = htmlDocx.asBlob(docx);
-    FileSaver.saveAs(converted, 'chart.docx');
-    /*dialog.showSaveDialog({
-        filters: [{ name: 'Docx', extensions: ['docx']}],
-        title: 'Save the Chart as Docx',
-        defaultPath: path.join(app.getPath('desktop'), 'Chart.docx')}
-    , function(filename) {
-        fs.writeFileSync(filename, Buffer.from(new Uint8Array(converted)));
-    
-    });*/
-
+    var buffer = toBuffer(converted, function (err, buffer) {
+      if (err) throw err;
+      dialog.showSaveDialog({
+        filters: [{
+            name: 'Word',
+            extensions: ['docx']
+        }],
+        title: 'Save the Table as Word',
+        defaultPath: path.join(app.getPath('desktop'), 'Chart')
+      }, function (filename) {
+          fs.writeFileSync(filename, buffer);
+      });                                
+    });
+    //FileSaver.saveAs(converted, 'chart.docx');
 });
 
 //prepare PDF file
@@ -993,8 +1056,21 @@ function distWord(project_id) {
                                     if (err) throw err;
                                 });
                             
-                        });*/
-                                FileSaver.saveAs(converted, 'table.docx', true);
+                      });*/ 
+                              var buffer = toBuffer(converted, function (err, buffer) {
+                                if (err) throw err;
+                                dialog.showSaveDialog({
+                                  filters: [{
+                                      name: 'Word',
+                                      extensions: ['docx']
+                                  }],
+                                  title: 'Save the Table as Word',
+                                  defaultPath: path.join(app.getPath('desktop'), 'Table')
+                                }, function (filename) {
+                                    fs.writeFileSync(filename, buffer);
+                                });                                
+                              });
+                              //FileSaver.saveAs(converted, 'table.docx', true);
                             }, 500);
                         });
 
@@ -1478,7 +1554,20 @@ function fragWord(project_id) {
                             '</body>' +
                             '</html>';
                         var converted = htmlDocx.asBlob(docx);
-                        FileSaver.saveAs(converted, 'table.docx');
+                        var buffer = toBuffer(converted, function (err, buffer) {
+                          if (err) throw err;
+                          dialog.showSaveDialog({
+                            filters: [{
+                                name: 'Word',
+                                extensions: ['docx']
+                            }],
+                            title: 'Save the Table as Word',
+                            defaultPath: path.join(app.getPath('desktop'), 'Table')
+                          }, function (filename) {
+                              fs.writeFileSync(filename, buffer);
+                          });                                
+                        });
+                        //FileSaver.saveAs(converted, 'table.docx');
                     }, 500);
                 });
                 callback(null, docx);

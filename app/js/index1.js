@@ -150,24 +150,29 @@ function getIssueBaseline(issue_id, project_id) {
           'INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id]' +
           ' WHERE ib.[issue_id] = @issue_id ORDER BY ib.[baseline_id] DESC')
         .then(function (data) {
-          if (data.length > 0) {
-            console.log('found baseline');
-            if (data[0].name === null) {
-              name = ' ';
+          if(data){
+            if (data.length > 0) {
+              if(data[0]){
+                if (data[0].name === null) {
+                  name = ' ';
+                } else {
+                  document.getElementById('baseline').value = data[0].name;
+                }
+                if (data[0].cd === null) {
+                  cd = ' ';
+                } else {
+                  document.getElementById('cd').value = data[0].cd;
+                }
+                document.getElementById('baseline').dataset.id = data[0].id;
+              } 
             } else {
-              document.getElementById('baseline').value = data[0].name;
+              getNewBaseline(project_id);
             }
-            if (data[0].cd === null) {
-              cd = ' ';
-            } else {
-              document.getElementById('cd').value = data[0].cd;
-            }
-            document.getElementById('baseline').dataset.id = data[0].id;
           } else {
             getNewBaseline(project_id);
           }
         }).catch(function (error) {
-          showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          showNotification('Error on getting issue baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
   });
@@ -188,7 +193,7 @@ function getNewBaseline(project_id) {
           ' INNER JOIN [projects_baselines] as pb ON [baselines].[id] = pb.[baseline_id] ' +
           ' WHERE pb.[project_id] = @project_id ORDER BY pb.[baseline_id] DESC ')
         .then(function (data) {
-          if (data === undefined) {
+          if (data[0] === undefined) {
             name = '';
             cd = '';
             id = '';
@@ -202,7 +207,7 @@ function getNewBaseline(project_id) {
           document.getElementById('cd').value = cd;
           document.getElementById('baseline').dataset.id = id;
         }).catch(function (error) {
-          showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          showNotification('Error on newest baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
   });
@@ -220,7 +225,7 @@ function deleteBaseline(issue_id, pre_id) {
           .input('pre_id', sql.Int, pre_id)
           .query('DELETE FROM [issues_baselines] WHERE [issues_baselines].[issue_id] = @issue_id AND [issues_baselines].[baseline_id] = @pre_id ')
           .then(function () {}).catch(function (error) {
-            showNotification('Error on issues_baselines:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            showNotification('Error on deleting baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
           });
       }
     });
@@ -228,7 +233,6 @@ function deleteBaseline(issue_id, pre_id) {
 }
 
 function setBaseline(pre_id, name, cd, project_id, issue_id) {
-  console.log('pre_id='+pre_id+' , name = '+name+', cd = '+cd+', pro_id = '+project_id+', issue_id = '+issue_id+'');
   if(name){
     var conn5 = new sql.Connection(config, function (err) {
       if (err) {
@@ -243,7 +247,6 @@ function setBaseline(pre_id, name, cd, project_id, issue_id) {
         ' INNER JOIN [projects_baselines] as pb ON [baselines].[id] = pb.[baseline_id] ' +
         ' WHERE pb.[project_id] = @project_id AND cd = @cd AND name = @name ORDER BY pb.[baseline_id] DESC ')
         .then(function (data) {
-          console.log(data);
           if(data[0] !== undefined){
             if(pre_id){
               deleteBaseline(issue_id, pre_id);
@@ -295,7 +298,7 @@ function setBaseline(pre_id, name, cd, project_id, issue_id) {
                         showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                       });
                   }).catch(function (error) {
-                    showNotification('Error on baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                    showNotification('Error on projects_baselines:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                   });
               }
             });
@@ -468,7 +471,7 @@ $('#project_edit').click(function (e) {
 
 $('#project_submit').click(function () {
   setTimeout(function(){
-      btn.prop('disabled', false);
+      $(this).prop('disabled', false);
     }, 1000);
   var issueID;
   var project_name = document.getElementById('project_name');
@@ -483,7 +486,7 @@ $('#project_submit').click(function () {
       var request = new sql.Request(connection1);
       request
         .input('project_id', sql.Int, project_ID)
-        .query('SELECT TOP 1 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
+        .query('SELECT TOP 2 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
           '[issues].[defect],[issues].[charm],[issues].[status],[issues].[no_further_action],' +
           '[issues].[cd],[issues].[reproducible],[issues].[priority],[issues].[messenger],[issues].[summary],' +
           '[issues].[description],[issues].[description_de],[issues].[solution],[issues].[solution_de],[issues].[c2c],[projects].[cpf_doc_id]' +
@@ -491,12 +494,11 @@ $('#project_submit').click(function () {
           ' INNER JOIN [test].[dbo].[projects] ON [projects].[id] = [issues].[project_id] ' +
           ' WHERE [issues].[project_id] = @project_id ORDER BY [issues].[id] DESC')
         .then(function (data) {
-          if (data[0] === undefined) {
-            console.log('new issue');
+          if (!data[0]) {
+            console.dir('new issue');
             $('#new_issue').click();
           } else {
             issueID = data[0].id;
-
             document.getElementById('cpf-doc-id').textContent = data[0].cpf_doc_id;
             document.getElementById('issueID').value = data[0].id;
             document.getElementById('form_type').value = 'update';
@@ -525,7 +527,15 @@ $('#project_submit').click(function () {
             } else {
               $('#work,#vsn,#status').prop('disabled', false);
             }
-
+            if (data[1] === undefined) {
+              $('#last_issue').addClass('disabled');
+              $('#next_issue').addClass('disabled');
+              $('#first_issue').addClass('disabled');
+              $('#previous_issue').addClass('disabled');
+            } else {
+              $('#first_issue').removeClass('disabled');
+              $('#previous_issue').removeClass('disabled');
+            }
           }
           // customer list
         }).then(function () {
@@ -576,7 +586,7 @@ $('#project_submit').click(function () {
   });
   
     
-
+  
   $('#cancel').addClass('disabled');
   $('#last_issue').addClass('disabled');
   $('#next_issue').addClass('disabled');
@@ -587,7 +597,7 @@ $('#project_submit').click(function () {
 
 $('#submit').on('click',function (e) {
   setTimeout(function(){
-      btn.prop('disabled', false);
+      $(this).prop('disabled', false);
     }, 1000);
   e.preventDefault();
   var project_name = document.getElementById('project_name');
@@ -668,6 +678,10 @@ $('#submit').on('click',function (e) {
       .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
         ' WHERE  project_id = @project_id')
       .then(function (data) {
+        if(data[0].issues_all > 1){
+          $('#first_issue').removeClass('disabled');
+          $('#previous_issue').removeClass('disabled');
+        }
         $('#cpf-all').text(data[0].issues_all);
       }).catch(function (error) {
         showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -699,7 +713,7 @@ $('#submit').on('click',function (e) {
 
 $('#new_issue').click(function (e) {
   setTimeout(function(){
-      btn.prop('disabled', false);
+      $(this).prop('disabled', false);
     }, 1000);
   e.preventDefault();
   var project_name = document.getElementById('project_name');
@@ -714,7 +728,7 @@ $('#new_issue').click(function (e) {
       request
         .input('date', sql.NVarChar(10), getDate())
         .input('project_id', sql.Int, project_ID)
-        .query('SELECT TOP 1 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
+        .query('SELECT TOP 2 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
                ' INSERT INTO [issues] ([date],[project_id]) VALUES (@date , @project_id);SELECT SCOPE_IDENTITY() AS id;')
         .then(function (data) {
           if(data[0][0] !== undefined){
@@ -722,6 +736,12 @@ $('#new_issue').click(function (e) {
           } else {
             document.getElementById('dbid').value = 1;
           } 
+          if (data[0][1] === undefined) {
+              $('#last_issue').addClass('disabled');
+              $('#next_issue').addClass('disabled');
+              $('#first_issue').addClass('disabled');
+              $('#previous_issue').addClass('disabled');
+          }
           document.getElementById('issueID').value = data[1][0].id;
         }).catch(function (error) {
           showNotification('Error on inseting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');

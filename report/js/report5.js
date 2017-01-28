@@ -9,6 +9,7 @@ const pdf = require('html-pdf');
 const path = require('path');
 const async = require('async');
 const FileSaver = require('file-saver');
+var toBuffer = require('blob-to-buffer');
 
 
 //======================================================================================================================
@@ -299,7 +300,20 @@ function allIssues(project_id) {
                 setTimeout(function () {
                     console.log(docx);
                     var converted = htmlDocx.asBlob(docx);
-                    FileSaver.saveAs(converted, 'Report.docx');
+                    var buffer = toBuffer(converted, function (err, buffer) {
+                        if (err) throw err;
+                        dialog.showSaveDialog({
+                        filters: [{
+                            name: 'Word',
+                            extensions: ['docx']
+                        }],
+                        title: 'Save the Table as Word',
+                        defaultPath: path.join(app.getPath('desktop'), 'Report')
+                        }, function (filename) {
+                            fs.writeFileSync(filename, buffer);
+                        });                                
+                    });
+                    //FileSaver.saveAs(converted, 'Report.docx');
                 }, 500);
 
             });
@@ -457,7 +471,20 @@ function allIssuesCustomer(project_id, customer_id) {
                 }).then(function () {
                     setTimeout(function () {
                         var converted = htmlDocx.asBlob(docx);
-                        FileSaver.saveAs(converted, 'Report.docx');
+                        var buffer = toBuffer(converted, function (err, buffer) {
+                          if (err) throw err;
+                          dialog.showSaveDialog({
+                            filters: [{
+                                name: 'Word',
+                                extensions: ['docx']
+                            }],
+                            title: 'Save the Table as Word',
+                            defaultPath: path.join(app.getPath('desktop'), 'Report')
+                          }, function (filename) {
+                              fs.writeFileSync(filename, buffer);
+                          });                                
+                        });
+                        //FileSaver.saveAs(converted, 'Report.docx');
                     }, 500);
 
                 });
@@ -612,7 +639,20 @@ function allIssuesBaseline(project_id, baseline_id) {
                 }).then(function () {
                     setTimeout(function () {
                         var converted = htmlDocx.asBlob(docx);
-                        FileSaver.saveAs(converted, 'Report.docx');
+                        var buffer = toBuffer(converted, function (err, buffer) {
+                          if (err) throw err;
+                          dialog.showSaveDialog({
+                            filters: [{
+                                name: 'Word',
+                                extensions: ['docx']
+                            }],
+                            title: 'Save the Table as Word',
+                            defaultPath: path.join(app.getPath('desktop'), 'Report')
+                          }, function (filename) {
+                              fs.writeFileSync(filename, buffer);
+                          });                                
+                        });
+                        //FileSaver.saveAs(converted, 'Report.docx');
                     }, 500);
 
                 });
@@ -769,7 +809,20 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                 }).then(function () {
                     setTimeout(function () {
                         var converted = htmlDocx.asBlob(docx);
-                        FileSaver.saveAs(converted, 'Report.docx');
+                        var buffer = toBuffer(converted, function (err, buffer) {
+                          if (err) throw err;
+                          dialog.showSaveDialog({
+                            filters: [{
+                                name: 'Word',
+                                extensions: ['docx']
+                            }],
+                            title: 'Save the Table as Word',
+                            defaultPath: path.join(app.getPath('desktop'), 'Report')
+                          }, function (filename) {
+                              fs.writeFileSync(filename, buffer);
+                          });                                
+                        });
+                        //FileSaver.saveAs(converted, 'Report.docx');
                     }, 500);
 
                 });
