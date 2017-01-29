@@ -718,7 +718,11 @@ $('#new_issue').click(function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
-  
+  var dbid;
+  if(document.getElementById('dbid').value === ""){
+    dbid = 1 ;
+    document.getElementById('dbid').value = 1;
+  } 
   $('#work,#vsn,#status').prop('disabled', false);
   var conn4 = new sql.Connection(config, function (err) {
     if (err) {
@@ -727,10 +731,11 @@ $('#new_issue').click(function (e) {
       var request = new sql.Request(conn4);
       request.multiple = true;
       request
+        .input('dbid',dbid)
         .input('date', sql.NVarChar(10), getDate())
         .input('project_id', sql.Int, project_ID)
         .query('SELECT TOP 2 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
-               ' INSERT INTO [issues] ([date],[project_id]) VALUES (@date , @project_id);SELECT SCOPE_IDENTITY() AS id;')
+               ' INSERT INTO [issues] ([date],[dbid],[project_id]) VALUES (@date ,@dbid, @project_id);SELECT SCOPE_IDENTITY() AS id;')
         .then(function (data) {
           if(data[0][0] !== undefined){
             document.getElementById('dbid').value = data[0][0].dbid+1;
