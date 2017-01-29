@@ -139,7 +139,7 @@ app.on('ready', function () {
     maximizable: false,
     show: false
   });
-  //newEvaluation.openDevTools();
+  newEvaluation.openDevTools();
   newEvaluation.setMenu(null);
   newEvaluation.loadURL(newEvaluationPath);
   newEvaluation.on('close', function (event) {

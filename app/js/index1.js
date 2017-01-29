@@ -718,6 +718,7 @@ $('#new_issue').click(function (e) {
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
+  
   $('#work,#vsn,#status').prop('disabled', false);
   var conn4 = new sql.Connection(config, function (err) {
     if (err) {

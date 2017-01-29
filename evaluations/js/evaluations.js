@@ -1,6 +1,5 @@
 /*
     TODO
-    1- date chart async.timesSeries not working
 */
 
 const electron = require('electron');
@@ -235,7 +234,9 @@ $('#date').on('click', function (e) {
                 .input('project_id', sql.Int, project_id)
                 .query('SELECT [date] from [issues] WHERE [project_id] = @project_id GROUP BY [date] ORDER BY [date] ')
                 .then(function (data) {
-                    async.timesSeries(data.length, function (n) {
+                    var num = data.length ;
+                    console.log(num);
+                    async.timesSeries(3, function (n,callback) {                        
                       var conn2 = new sql.Connection(config, function (err) {
                         if (err) {
                           showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -248,20 +249,19 @@ $('#date').on('click', function (e) {
                           .then(function (data2) {
                             chartData.data.labels.push(data[n].date);
                             chartData.data.datasets[0].data.push(data2[0].counts);
+                            callback();
                           }).catch(function (error) {
                               showNotification('Error on selecting actions for ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                           });
                         }
-                      });
+                      });                      
                     });
-
                 }).then(function () {
                     setTimeout(function () {
                         var myLineChart = new Chart(ctx, chartData);
                     }, 250);
 
                 });
-
         }
     });
 });
