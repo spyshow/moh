@@ -1024,8 +1024,6 @@ $('#first_issue').click(function () {
         $('#files-table-body').empty();
         refreshFiles(document.getElementById('issueID').value);
       });
-  }).catch(function (error) {
-    showNotification('Error connecting for first issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
   });
 
   $('#first_issue').addClass('disabled');
@@ -1080,8 +1078,6 @@ $('#last_issue').click(function () {
         $('#files-table-body').empty();
         refreshFiles(document.getElementById('issueID').value);
       });
-  }).catch(function (error) {
-    showNotification('Error connecting for first issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
   });
   $('#files-table-body').empty();
   refreshFiles(document.getElementById('issueID').value);
@@ -1141,13 +1137,11 @@ $('#next_issue').click(function () {
           // update file list 
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
-        }).catch(function (error) {
-          showNotification('can\'t move to the next issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
     // check if issue is the last issue
-    var request = new sql.Request(connect1);
-    request
+    var request1 = new sql.Request(connect1);
+    request1
       .input('project_id', sql.Int, project_ID)
       .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
       .then(function (data) {
@@ -1156,8 +1150,6 @@ $('#next_issue').click(function () {
           $('#last_issue').addClass('disabled');
           $('#next_issue').addClass('disabled');
         }
-      }).catch(function (error) {
-        showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       });
 
   });
@@ -1215,12 +1207,10 @@ $('#previous_issue').click(function () {
           updateAction(document.getElementById('issueID').value);
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
-        }).catch(function (error) {
-          showNotification('can\'t move to the next issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
       // check if issue is the last issue
-      var request = new sql.Request(connect1);
-      request
+      var request1 = new sql.Request(connect1);
+      request1
         .input('project_id', sql.Int, project_ID)
         .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
         .then(function (data) {
@@ -1228,8 +1218,6 @@ $('#previous_issue').click(function () {
             $('#first_issue').addClass('disabled');
             $('#previous_issue').addClass('disabled');
           }
-        }).catch(function (error) {
-          showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
   });
