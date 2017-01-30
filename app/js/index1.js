@@ -749,11 +749,29 @@ $('#new_issue').click(function (e) {
               $('#previous_issue').addClass('disabled');
           }
           document.getElementById('issueID').value = data[1][0].id;
+          //insert baseline to database
+          var conn5 = new sql.Connection(config, function (err) {
+              if (err) {
+                showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
+                var request2 = new sql.Request(conn5);
+                request2
+                .input('issue_id', sql.Int, data[1][0].id)
+                .input('baseline_id', sql.Int, document.getElementById('baseline').dataset.id)
+                .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+                .then(function (data) {
+                }).catch(function (error) {
+                  showNotification('Error on issues_baselines: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+              }
+            });
         }).catch(function (error) {
           showNotification('Error on inseting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
   });
+  
+
   //for customers list
   getCustomersList(project_ID);
   $('#action-current').empty();
