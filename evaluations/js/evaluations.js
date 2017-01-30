@@ -1109,6 +1109,18 @@ function distPdf(project_id) {
                 'font-weight: bold;' +
                 'width: 20%;' +
                 '}' +
+                '.table-cell{'+
+                'position: relative;'+
+                '}'+
+                '.table-cell:before{'+
+                'position: absolute;'+
+                'content: "";'+
+                'top: 0;'+
+                'left: -1px;'+
+                'background-color: black;'+
+                'width: 1px;'+
+                'height: 100%;'+
+                '}'+
                 '</style>' +
                 '</head>' +
                 '<body>';
@@ -1177,8 +1189,8 @@ function distPdf(project_id) {
                         async.timesSeries(issueCount.length, function (n, callback3) {
                             getdataTable(baselines[n], customers[n].id, function (result) {
                                 docx += '<tr>' +
-                                    '<td rowspan="' + (baselines[n].length + 1) + '">' + customers[n].name + '</td>' +
-                                    '<td rowspan="' + (baselines[n].length + 1) + '">' + issueCount[n][0].total + '</td>';
+                                    '<td class="table-cell" rowspan="' + (baselines[n].length + 1) + '">' + customers[n].name + '</td>' +
+                                    '<td class="table-cell" rowspan="' + (baselines[n].length + 1) + '">' + issueCount[n][0].total + '</td>';
                                 docx += result + '</tr>';
                             });
                             callback3();
@@ -1374,7 +1386,7 @@ function getbasedata(area, key, baselines, project_id, callback) {
                     query += ' (SELECT COUNT(*) FROM issues ' +
                         'INNER JOIN issues_baselines AS ib ON ib.issue_id = issues.id ' +
                         'INNER JOIN baselines ON ib.baseline_id = baselines.id ' +
-                        'WHERE [key] = @key AND area = @area AND project_id = @project_id AND baselines.cd = @baseline' + s + ') AS ' + baselines[s].cd + ' ';
+                        'WHERE [key] = @key AND [key] IS NOT NULL AND area = @area AND project_id = @project_id AND baselines.cd = @baseline' + s + ') AS ' + baselines[s].cd + ' ';
                     if (s !== (baselines.length - 1)) {
                         query += ', ';
                     }
@@ -1422,6 +1434,7 @@ function getbasedata(area, key, baselines, project_id, callback) {
         callback(text);
     });
 }
+
 // word doc for frag Table 
 function fragWord(project_id) {
 
@@ -1524,7 +1537,7 @@ function fragWord(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area AND [key] IS NOT NULL  ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();
@@ -1575,6 +1588,7 @@ function fragWord(project_id) {
         }
     ]);
 }
+
 // pdf doc for frag Table 
 function fragPdf(project_id) {
 
@@ -1613,6 +1627,18 @@ function fragPdf(project_id) {
                                 'font-weight: bold;' +
                                 'width: 20%;' +
                                 '}' +
+                                '.table-cell{'+
+                                'position: relative;'+
+                                '}'+
+                                '.table-cell:before{'+
+                                'position: absolute;'+
+                                'content: "";'+
+                                'top: 0;'+
+                                'left: -1px;'+
+                                'background-color: black;'+
+                                'width: 1px;'+
+                                'height: 100%;'+
+                                '}'+
                                 '</style>' +
                                 '</head>' +
                                 '<body>';
@@ -1677,7 +1703,7 @@ function fragPdf(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id  AND [key] IS NOT NULL  AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();
@@ -1695,7 +1721,7 @@ function fragPdf(project_id) {
                     }
                     getbasedata(n+1, keyArr[n], baselines, project_id, function (result) {
                         docx += '<tr>' +
-                            '<td rowspan="' + rowSpan + '">' + areaArr[n] + '</td>';
+                            '<td class="table-cell" rowspan="' + rowSpan + '">' + areaArr[n] + '</td>';
                         docx += result + '</tr>';
                     });
                     callback3();
@@ -1719,6 +1745,7 @@ function fragPdf(project_id) {
                             title: 'Save the Table as PDF',
                             defaultPath: path.join(app.getPath('desktop'), 'Table.pdf')
                         }, function (filename) {
+                            console.log(docx);
                             pdf.create(docx, conf).toFile(filename, function (err, res) {});
                         });
                     }, 500);
@@ -1841,7 +1868,7 @@ function fragExcel(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [key] FROM issues WHERE AND [key] IS NOT NULL  project_id = @project_id AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();
