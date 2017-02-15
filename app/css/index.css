@@ -3,19 +3,26 @@
 */
 
 body {
-    background: #8e9eab; /* fallback for old browsers */
-    background: -webkit-linear-gradient( #8e9eab , #eef2f3); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient( #8e9eab , #eef2f3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
-    min-width : 992px;
+    background: #8e9eab;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient( #8e9eab, #eef2f3);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient( #8e9eab, #eef2f3);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */
+    min-width: 992px;
 }
 
 .container {
     background-color: rgba(255, 255, 255, 0.5);
-    width : 96%;
+    width: 96%;
 }
 
 .page-head {
@@ -27,29 +34,38 @@ body {
    Main Form
 */
 
-.form-group{
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #666  !important
+}
+
+.form-group {
     width: 100%;
 }
+
 #dbid {
-    width: 70%;
+    width: 80%;
     margin-bottom: 10px;
 }
-div.input-group.date{
-    width: 70%;
+
+div.input-group.date {
+    width: 80%;
 }
+
 #date {
     width: 100%;
     margin-left: 7px;
 }
 
 #work {
-    width: 70%;
-    margin: 10px 0 5px 3px;
+    
+    width: 60%;
+    margin: 10px 0 5px 2px;
 }
 
+
 #key {
-    width: 70%;
-    margin: 10px 0 10px 12px;
+    width: 60%;
+    margin: 10px 0 10px 60px;
 }
 
 .area {
@@ -62,26 +78,35 @@ div.input-group.date{
     margin-left: 15px;
     margin-bottom: 10px;
 }
+
 #charm {
     width: 70%;
     margin-left: 6px;
     margin-bottom: 10px;
 }
+
 #status {
-    width: 30%;
+    width: 70%;
     margin-left: 15px;
     margin-bottom: 10px;
 }
-#baseline {
-    width: 61%;
-    margin-bottom: 10px;
+.baseline-group{
+    height: 40px;
+}
+
+.select {
+    width: 110% !important;
+    position: relative;
+    bottom: 27px;
+    left: 70px;
+}
+
+.baseline-label {
     z-index: 2;
     position: relative;
+    top: 5px;
 }
-.baseline-label{
-    z-index: 2;
-    position: relative;
-}
+
 #baseline-submit {
     margin: 0 10px 0 0;
     position: absolute;
@@ -98,36 +123,29 @@ div.input-group.date{
     z-index: 2;
 }
 
-
-
-#baseline-div{
-    width:90%;
+#baseline-div {
+    width: 125%;
     height: 85px;
     background: #eef2f3;
     border: solid #8E9EAB 1px;
     border-radius: 5px;
     position: absolute;
-    top:212px;
-    left:10px;
+    top: 212px;
+    left: 10px;
     z-index: 1;
 }
 
-
 #vsn {
-    width: 70%;
-    margin: 0 0 10px 10px;
+    width: 60%;
+    margin: 0 0 10px 19px;
 }
 
-.cd-label{
-    z-index: 2;
-    position: relative;
-}
 
-#cd{
+#cd {
     width: 56%;
     margin-top: 3px;
     margin-bottom: 7px;
-    margin-left: 30px;
+    margin-left: 105px;
     z-index: 2;
     position: relative;
 }
@@ -136,14 +154,15 @@ div.input-group.date{
     margin-right: 10px;
     margin-bottom: 15px;
 }
+
 .priority {
     margin-right: 53px;
     margin-bottom: 15px;
 }
+
 .messenger {
     margin-right: 26px;
     margin-bottom: 15px;
-
 }
 
 #customer {
@@ -153,8 +172,8 @@ div.input-group.date{
 
 .customer_list {
     height: 228px;
-    overflow-y:auto;
-    overflow-x:auto;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 fieldset {
@@ -171,14 +190,14 @@ fieldset {
 
 #description {
     resize: vertical;
-    max-height:80px;
+    max-height: 80px;
     width: 42%;
     margin: 10px 0 0 39px;
 }
 
 #description_de {
     resize: vertical;
-    max-height:80px;
+    max-height: 80px;
     width: 41%;
     margin: 10px 0 0 4px;
 }
@@ -186,13 +205,14 @@ fieldset {
 #action {
     margin-left: 122px;
 }
+
 .tab-pane {
     background-color: #fff;
-    margin : 0 0 0 122px;
+    margin: 0 0 0 122px;
     padding: 10px;
     width: 84%;
     height: 140px;
-    border: solid 1px #CCCCCC ;
+    border: solid 1px #CCCCCC;
     border-top-style: hidden;
     overflow-y: auto;
     position: relative;
@@ -203,42 +223,41 @@ fieldset {
     height: 8em;
 }
 
-#new-action-btn{
+#new-action-btn {
     position: absolute;
-    top:55%;
+    top: 55%;
     left: 85%;
 }
 
 #solution {
-    margin : 10px 0 0 60px;
+    margin: 10px 0 0 60px;
     width: 42%;
 }
+
 #solution_de {
     width: 41%;
     margin: 10px 0 0 4px;
 }
 
-
-
 #c2c {
-    resize:vertical;
-    max-height:80px;
+    resize: vertical;
+    max-height: 80px;
     width: 84%;
-    margin : 10px 0 10px 10px;
+    margin: 10px 0 10px 10px;
 }
 
-#save-file{
-    resize:vertical;
-    max-height:80px;
+#save-file {
+    resize: vertical;
+    max-height: 80px;
     width: 84%;
-    margin : 0 0 30px 87px;
+    margin: 0 0 30px 87px;
 }
 
 .file-type {
     margin: 0 85px 30px 0;
 }
 
-#file-path{
+#file-path {
     width: 56.5%;
 }
 
@@ -246,9 +265,10 @@ fieldset {
     width: 20%;
 }
 
-#delete{
+#delete {
     width: 10%;
 }
+
 
 /* =====================================================================================================================
    Search panel
@@ -256,17 +276,17 @@ fieldset {
 
 .search {
     margin-left: -7px;
-    padding: 10px ;
-    border:solid 1px #8E9EAB ;
+    padding: 10px;
+    border: solid 1px #8E9EAB;
     border-radius: 3px;
 }
 
-
 .s_list {
-    margin: 10px 0 0 0 ;
+    margin: 10px 0 0 0;
     height: 535px;
 }
-.search-ph{
+
+.search-ph {
     display: block;
     border-radius: 3px;
     height: 97%;
@@ -277,7 +297,7 @@ fieldset {
     margin: 10px 0 0 0;
 }
 
-.search-ph>span{
+.search-ph>span {
     padding: 50% 0;
 }
 
@@ -296,10 +316,10 @@ fieldset {
     margin: 10px 0 0 38px;
 }
 
-#s_customer {
-    width: 65%;
-    margin: 10px 0 0 16px;
+.s_customer {
+    margin: 15px 15px 0 0;
 }
+
 #s_desc {
     width: 65%;
     margin: 10px 0 0 3px;
@@ -314,56 +334,62 @@ fieldset {
     width: 65%;
     margin: 10px 0 0 19px;
 }
+
 #s_status {
     width: 65%;
     margin: 10px 0 0 38px;
 }
 
-
 #s_open_issues {
-    margin-top:10px;
+    margin-top: 10px;
 }
 
-.s_open_issues{
+.s_open_issues {
     font-size: smaller;
 }
 
-#s-buttons{
+#s-buttons {
     width: 50%;
     margin-top: 43px;
 }
 
-#s-info,#s-success,#s-danger,#s-warning{
+#s-info,
+#s-success,
+#s-danger,
+#s-warning {
     height: 30px;
 }
 
-.search-btns{
+.search-btns {
     padding-left: 0;
 }
+
 .search-btn {
     padding: 6px 10px;
     margin: 0 1px 10px 0;
     width: 100%;
 }
-.search-reset-btn{
+
+.search-reset-btn {
     padding: 6px 10px;
     margin-bottom: 10px;
     float: right;
     width: 100%;
 }
 
-.advance-search-btn {
-    font-size: 90%;
+.search-without-btn {
+    padding: 6px;
+    margin-bottom: 10px;
+    float: right;
     width: 100%;
 }
 
 .list-group {
-    overflow-y:auto;
-    overflow-x:auto;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 .pagination_btn {
-
     margin: 10px 0 30px 0;
 }
 
@@ -376,6 +402,5 @@ fieldset {
     margin: 0 20px;
     padding: 5px 10px;
     border-radius: 3px;
-    border: 1px solid #bce1f2  ;
-
+    border: 1px solid #bce1f2;
 }

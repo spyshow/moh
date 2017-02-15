@@ -198,7 +198,7 @@ function allIssues(project_id) {
                             request
                                 .input('issue_id', sql.Int, data1.id)
                                 .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                    'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
+                                    'SELECT [name],[sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                     'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                 .then(function (data2) {
                                     var status = (data1.status) ? data1.status : 'No Status';
@@ -219,9 +219,9 @@ function allIssues(project_id) {
                                         '<td class="bold">Customers:</td><td>';
                                     for (let s = 0; s < data2[1].length; s++) {
                                         if (s === (data2[1].length - 1)) {
-                                            arr1 += data2[1][s].name;
+                                            arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                         } else {
-                                            arr1 += data2[1][s].name + ', ';
+                                            arr1 += data2[1][s].name +' ('+data2[1][s].sn+') , ';
                                         }
                                     }
 
@@ -372,7 +372,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
+                                        'SELECT [name],[sn]  FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -393,9 +393,9 @@ function allIssuesCustomer(project_id, customer_id) {
                                             '<td class="bold">Customers:</td><td>';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 
@@ -540,7 +540,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -561,9 +561,9 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             '<td class="bold">Customers:</td><td>';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 
@@ -710,7 +710,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE ic.[issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE ib.[issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -731,9 +731,9 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '<td class="bold">Customers:</td><td>';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 
@@ -913,7 +913,7 @@ function allIssuespdf(project_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -934,9 +934,9 @@ function allIssuespdf(project_id) {
                                             '<td class="bold">Customers:</td><td  class="td">';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
                                         arr1 += '</td></tr>' +
@@ -1098,7 +1098,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -1119,9 +1119,9 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             '<td class="bold">Customers:</td><td  class="td">';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 
@@ -1280,7 +1280,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;' +
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -1301,9 +1301,9 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             '<td class="bold">Customers:</td><td  class="td">';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 
@@ -1464,7 +1464,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;'+
+                                        'SELECT [name], [cd]FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;'+
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE ib.[issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
@@ -1485,9 +1485,9 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                             '<td class="bold">Customers:</td><td  class="td">';
                                         for (let s = 0; s < data2[1].length; s++) {
                                             if (s === (data2[1].length - 1)) {
-                                                arr1 += data2[1][s].name;
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ')';
                                             } else {
-                                                arr1 += data2[1][s].name + ', ';
+                                                arr1 += data2[1][s].name + ' (' + data2[1][s].sn + ') , ';
                                             }
                                         }
 

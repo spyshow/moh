@@ -1,7 +1,6 @@
 /*
   TODO
 
-  1- email
 */
 
 
@@ -103,7 +102,10 @@ app.on('ready', function () {
     //if(newProject === null && newEvaluation === null && mainWindow === null && report === null){
       app.quit();
     //}
-    
+  });
+  mainWindow.webContents.on('new-window', function (e, url) {
+    e.preventDefault();
+    shell.openExternal(url);
   });
 
   const menu = Menu.buildFromTemplate(template)
@@ -125,8 +127,6 @@ app.on('ready', function () {
     event.preventDefault();
   });
 
-
-
   //New Evaluation window
   const newEvaluationPath = path.join('file://' + __dirname + '/evaluations/evaluations.html');
   newEvaluation = new BrowserWindow({
@@ -147,8 +147,6 @@ app.on('ready', function () {
     event.preventDefault();
   });
 
-
-
   //report page
   const reportPath = path.join('file://' + __dirname + '/report/report.html');
   report = new BrowserWindow({
@@ -168,10 +166,6 @@ app.on('ready', function () {
     report.hide();
     event.preventDefault();
   });
-
-
-
-
 });
 
 ipc.on('reload-projects',function(){
@@ -201,6 +195,8 @@ ipc.on('show-report-win', function (event, project_id) {
   report.center();
   report.webContents.send('show-report',project_id);
 });
+
+
 
 //============================================================================================================================
 // Mail
@@ -466,7 +462,7 @@ function sendMail(issue_id,project_title) {
                   data2[4].forEach(function (data22) {
                       arr += '<tr>' +
                           '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data22.type + '</td>' +
-                          '<td style="vertical-align: top; padding-top:10px;">' + data22.path + '</td>' +
+                          '<td style="vertical-align: top; padding-top:10px;"><a href="file:///' + data22.path+ '">' + data22.path + '</a></td>' +
                           '</tr>';
 
                   });
@@ -489,7 +485,7 @@ function sendMail(issue_id,project_title) {
                       }
                       var email = 'cc: im.mr.cpf.healthcare@siemens.com\r\n'+
                                   'X-Unsent: 1\r\n'+
-                                  'Subject: '+project_title+':'+data2[0][0].summary+':'+data2[0][0].dbid+'\r\n'+
+                                  'Subject: '+project_title+': Issue '+data2[0][0].dbid+':'+data2[0][0].summary+'\r\n'+
                                   'Mime-Version: 1.0\r\n'+
                                   'Content-Type: multipart/mixed; boundary="----=_Part_2192_32400445.1115745999735"\r\n\r\n'+
                                   '------=_Part_2192_32400445.1115745999735\r\n'+
@@ -506,7 +502,8 @@ function sendMail(issue_id,project_title) {
                                   'Anbei eine Rückmeldung aus dem '+project_title+' als .pdf im Anhang dieser E-Mail.\r\n'+
                                   'Wir bitten um Antwort.\r\n\r\n'+
                                   'Viele Grüße\r\n'+
-                                  'CUT team\r\n\r\n'+
+                                  'CUT team\r\n\r\n\r\n\r\n'+
+                                  ''+project_title+''+
                                   '------=_Part_2192_32400445.1115745999735\r\n'+
                                   '--6a82fb459dcaacd40ab3404529e808dc\r\n'+
                                   'Content-Type: application/pdf; name="'+project_title+'-'+data2[0][0].dbid+'.pdf"\r\n'+
@@ -621,7 +618,7 @@ const template = [{
         mainWindow.webContents.send('load-project');
       }
     },{
-      label: 'Import Charm',
+      label: 'Update Database',
       click() {
         mainWindow.webContents.executeJavaScript(`
           var ipcRenderer = require('electron').ipcRenderer;

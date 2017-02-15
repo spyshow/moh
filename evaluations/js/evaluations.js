@@ -62,7 +62,7 @@ ipc.on('show-evaluation', function (event, project_id) {
                 .then(function (data) {
                     document.getElementById('projectID').value = data[0].project_name;
                     document.getElementById('projectID').dataset.id = data[0].id;
-                    $('#date').click();
+                    
                 }).catch(function (error) {
                     showNotification('Error on selecting project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
@@ -235,8 +235,7 @@ $('#date').on('click', function (e) {
                 .query('SELECT [date] from [issues] WHERE [project_id] = @project_id GROUP BY [date] ORDER BY [date] ')
                 .then(function (data) {
                     var num = data.length ;
-                    console.log(num);
-                    async.timesSeries(3, function (n,callback) {                        
+                    async.timesSeries(num, function (n,callback) {                        
                       var conn2 = new sql.Connection(config, function (err) {
                         if (err) {
                           showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -468,7 +467,10 @@ $('#area-and-label').on('click', function (e) {
                                 request
                                 .input('project_id', sql.Int, project_id)
                                 .input('area', data1.area)
-                                .query('SELECT COUNT(*) FROM [issues] WHERE [area] = @area AND [project_id] = @project_id;')
+                                .input('baseline', baseline)
+                                .query('SELECT COUNT(*) FROM [issues] ' +
+                                        'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' + 
+                                        'WHERE [area] = @area AND ib.[baseline_id] = @baseline AND [project_id] = @project_id;')
                                 .then(function (data2) {
                                     switch(data1.area){
                                         case 1:
@@ -595,7 +597,10 @@ $('#area-and-customers').on('click', function (e) {
                                 request
                                 .input('project_id', sql.Int, project_id)
                                 .input('area', data1.area)
-                                .query('SELECT COUNT(*) FROM [issues] WHERE [area] = @area AND [project_id] = @project_id;')
+                                .input('customer', customer)
+                                .query('SELECT COUNT(*) FROM [issues] ' +
+                                        'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' + 
+                                        'WHERE [area] = @area AND ic.[customer_id] = @customer AND [project_id] = @project_id;')
                                 .then(function (data2) {
                                     switch(data1.area){
                                         case 1:
