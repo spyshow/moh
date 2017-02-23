@@ -140,7 +140,7 @@ app.on('ready', function () {
     show: false
   });
   newEvaluation.openDevTools();
-  newEvaluation.setMenu(null);
+  //newEvaluation.setMenu(null);
   newEvaluation.loadURL(newEvaluationPath);
   newEvaluation.on('close', function (event) {
     newEvaluation.hide();
@@ -498,12 +498,11 @@ function sendMail(issue_id,project_title) {
                                   'Best regards\r\n'+
                                   'Your CUT team\r\n\r\n'+
                                   '***************************************************************************\r\n\r\n'+
-                                  'Liebe Kollegin, lieber Kollege,\r\n\r\n'+
+                                  'Liebe Kollegin, Lieber Kollege,\r\n\r\n'+
                                   'Anbei eine Rückmeldung aus dem '+project_title+' als .pdf im Anhang dieser E-Mail.\r\n'+
                                   'Wir bitten um Antwort.\r\n\r\n'+
                                   'Viele Grüße\r\n'+
                                   'CUT team\r\n\r\n\r\n\r\n'+
-                                  ''+project_title+''+
                                   '------=_Part_2192_32400445.1115745999735\r\n'+
                                   '--6a82fb459dcaacd40ab3404529e808dc\r\n'+
                                   'Content-Type: application/pdf; name="'+project_title+'-'+data2[0][0].dbid+'.pdf"\r\n'+
