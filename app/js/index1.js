@@ -244,7 +244,7 @@ $(document).ready(function () {
     backdrop: "static",
     keyboard: false
   }); // show modal which cannot escape
-
+  //load projects names 
   sql.connect(config).then(function () {
     new sql.Request()
       .query('SELECT id,project_name,cpf_doc_id FROM projects')
@@ -393,7 +393,7 @@ $('#project_submit').click(function () {
         .input('project_id', sql.Int, project_ID)
         .query('SELECT TOP 2 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
           '[issues].[defect],[issues].[charm],[issues].[status],[issues].[no_further_action],' +
-          '[issues].[cd],[issues].[reproducible],[issues].[priority],[issues].[messenger],[issues].[summary],' +
+          '[issues].[reproducible],[issues].[priority],[issues].[messenger],[issues].[summary],' +
           '[issues].[description],[issues].[description_de],[issues].[solution],[issues].[solution_de],[issues].[c2c],[projects].[cpf_doc_id]' +
           ' FROM [issues] ' +
           ' INNER JOIN [test].[dbo].[projects] ON [projects].[id] = [issues].[project_id] ' +
