@@ -696,13 +696,7 @@ $('#new_issue').click(function (e) {
               $('#first_issue').addClass('disabled').attr("disabled","disabled");
               $('#previous_issue').addClass('disabled').attr("disabled","disabled");
           }
-          if(data[0][0] !== undefined){
-            
-            document.getElementById('issueID').value = data[1][0].id;
-            console.log(data[1][0].id);
-            
-          }
-          
+          document.getElementById('issueID').value = data[1][0].id;
         }).catch(function (error) {
           showNotification('Error on inseting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
