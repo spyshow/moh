@@ -172,7 +172,8 @@ $('#baseline').on('change',function(e){
 });
 
 
-function deleteBaseline(issue_id) {
+
+function setBaseline(id, issue_id) {
   var conn3 = new sql.Connection(config, function (err) {
     if (err) {
       showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -181,32 +182,32 @@ function deleteBaseline(issue_id) {
       request
         .input('issue_id', sql.Int, issue_id)
         .query('DELETE FROM [issues_baselines] WHERE [issues_baselines].[issue_id] = @issue_id')
-        .then(function () {}).catch(function (error) {
+        .then(function () {
+          showNotification('baseline deleted', 'success', 'glyphicon glyphicon-tasks');
+          var conn5 = new sql.Connection(config, function (err) {
+            if (err) {
+              showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+              console.log(issue_id,id);
+              var request2 = new sql.Request(conn5);
+              request2
+              .input('issue_id', sql.Int, issue_id)
+              .input('baseline_id', sql.Int, id)
+              .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
+              .then(function (data) {
+                showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
+              }).catch(function (error) {
+                showNotification('Error on issues_baselines 1: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              });
+                
+              } 
+          });
+        }).catch(function (error) {
           showNotification('Error on deleting baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
     }
   });
-}
-
-function setBaseline(id, issue_id) {
-  var conn5 = new sql.Connection(config, function (err) {
-    if (err) {
-      showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    } else {
-      console.log(issue_id,id);
-      var request2 = new sql.Request(conn5);
-      request2
-      .input('issue_id', sql.Int, issue_id)
-      .input('baseline_id', sql.Int, id)
-      .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
-      .then(function (data) {
-        showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
-      }).catch(function (error) {
-        showNotification('Error on issues_baselines 1: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-        
-      } 
-  });
+  
 }
 
 function issueBaseline(issue_id){
@@ -588,7 +589,6 @@ $('#submit').on('click',function (e) {
           'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
           'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
         .then(function (data) {
-          deleteBaseline(issueID);
           var baseline_id = document.getElementById('baseline').options[document.getElementById('baseline').selectedIndex].value;
           setBaseline(baseline_id,  issueID);
           showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
@@ -634,6 +634,7 @@ $('#submit').on('click',function (e) {
                 });
             }
           });
+          
         }).catch(function (error) {
           showNotification('No baseline selected', 'danger', 'glyphicon glyphicon-tasks');
         });
@@ -658,10 +659,20 @@ $('#new_issue').click(function (e) {
   var project_ID = project_name.options[project_name.selectedIndex].value;
   var dbid;
   if(document.getElementById('dbid').value === ""){
-    dbid = 1;
+    dbid = '001';
     document.getElementById('dbid').value = '001';
   } else {
-    dbid = document.getElementById('dbid').value ;
+    var dbidNum = parseInt(document.getElementById('dbid').value)+1 ;
+    if(dbidNum < 10){
+      document.getElementById('dbid').value = '00'+dbidNum;
+      dbid = '00'+dbidNum;
+    } else if(dbidNum < 100){
+      document.getElementById('dbid').value = '0'+dbidNum;
+      dbid = '0'+dbidNum;
+    } else {
+      document.getElementById('dbid').value = dbidNum;
+      dbid = dbidNum;
+    }
   }
   console.log(dbid);
   $('#work,#vsn,#status,#priority').prop('disabled', false);
@@ -673,13 +684,12 @@ $('#new_issue').click(function (e) {
       var request = new sql.Request(conn4);
       request.multiple = true;
       request
-        .input('dbid',parseInt(dbid))
+        .input('dbid',dbid)
         .input('date', sql.NVarChar(10), getDate())
         .input('project_id', sql.Int, project_ID)
         .query('SELECT TOP 2 dbid From issues WHERE project_id = @project_id ORDER BY id desc;'+
                ' INSERT INTO [issues] ([date],[dbid],[project_id]) VALUES (@date ,@dbid, @project_id);SELECT SCOPE_IDENTITY() AS id;')
         .then(function (data) {
-          
           if (data[0][1] === undefined) {
               $('#last_issue').addClass('disabled').attr("disabled","disabled");
               $('#next_issue').addClass('disabled').attr("disabled","disabled");
@@ -687,15 +697,10 @@ $('#new_issue').click(function (e) {
               $('#previous_issue').addClass('disabled').attr("disabled","disabled");
           }
           if(data[0][0] !== undefined){
-            var dbidNum = data[0][0].dbid+1;
+            
             document.getElementById('issueID').value = data[1][0].id;
-            if(dbidNum < 10){
-              document.getElementById('dbid').value = '00'+dbidNum;
-            } else if(dbidNum < 100){
-              document.getElementById('dbid').value = '0'+dbidNum;
-            } else {
-              document.getElementById('dbid').value = dbidNum;
-            }
+            console.log(data[1][0].id);
+            
           }
           
         }).catch(function (error) {
@@ -714,6 +719,7 @@ $('#new_issue').click(function (e) {
   document.getElementById('work').value = 'CUT-Team';
   document.getElementById('date').value = getDate();
   $('#area').val(1).selectpicker('refresh');
+  $('#baseline').val(1).selectpicker('refresh');
   document.getElementById('key').value = '';
   document.getElementById('vsn').value = '';
   document.getElementById('defect').value = '';
