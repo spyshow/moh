@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +25,7 @@
     <favorites_list name="moh" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -231,12 +232,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00018" summary="add sql backup file">
-      <created>1478045726299</created>
-      <option name="number" value="00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1478045726299</updated>
     </task>
     <task id="LOCAL-00019" summary="change some interface design">
       <created>1478180090456</created>
@@ -526,7 +521,13 @@
       <option name="project" value="LOCAL" />
       <updated>1488133767089</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="bug fix">
+      <created>1488138072068</created>
+      <option name="number" value="00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1488138072068</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView">
@@ -983,33 +984,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.64411026">
           <caret line="139" column="15" selection-start-line="139" selection-start-column="15" selection-end-line="139" selection-end-column="15" />
-          <folding>
-            <element signature="n#!!block;n#sendMail#0" expanded="false" />
-            <element signature="e#21039#24626#0" expanded="false" />
-            <element signature="e#24802#25593#0" expanded="false" />
-            <marker date="1488129742786" expanded="true" signature="7036:7069" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14046:14066" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14250:14266" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14384:14404" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14458:14496" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14642:14662" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14720:14758" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14909:14929" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="14995:15033" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15187:15207" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15262:15300" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15448:15468" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15531:15569" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15720:15740" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15813:15851" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="15981:16001" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="16100:16133" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="16359:16410" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="16478:16516" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="16886:16919" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="17055:17106" placeholder="..." />
-            <marker date="1488129742786" expanded="true" signature="17174:17212" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>

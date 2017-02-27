@@ -424,7 +424,7 @@ function sendMail(issue_id,project_title) {
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].description + '</td>' +
                       '</tr>' +
                       '<tr>' +
-                      '<td class="bold" style="vertical-align: top;" >Description [Dutch]:</td>' +
+                      '<td class="bold" style="vertical-align: top;" >Description [German]:</td>' +
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].description_de + '</td>' +
                       '</tr>' +
                       '<tr>' +
@@ -432,7 +432,7 @@ function sendMail(issue_id,project_title) {
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].solution + '</td>' +
                       '</tr>' +
                       '<tr>' +
-                      '<td class="bold" style="vertical-align: top;" >Solution [Dutch]:</td>' +
+                      '<td class="bold" style="vertical-align: top;" >Solution [German]:</td>' +
                       '<td style="vertical-align: top; padding-top:10px;">' +data2[0][0].solution_de + '</td>' +
                       '</tr>' +
                       '<tr>' +

@@ -404,3 +404,15 @@ fieldset {
     border-radius: 3px;
     border: 1px solid #bce1f2;
 }
+
+.list-group-item-purple{
+    color: #b05fd8;
+    background-color: #edd4f9;
+    border-radius: 4px;
+    
+}
+
+
+ a:active , a:focus{
+    text-decoration: none;
+}
