@@ -509,7 +509,7 @@ $('#project_submit').click(function () {
           ' INNER JOIN [projects_customers] as pc ON [customers].[id] = pc.[customer_id]' +
           ' WHERE pc.[project_id] = @project_id')
       .then(function (data) {
-        var html = '<option value="0">None</option>';
+        var html = '<option value="none">None</option>';
         data.forEach(function (data) {
           
             html += '<option value="' + data.name + '">' + data.name + '</option>';
@@ -1219,22 +1219,23 @@ $('.search-btn').click(function (e) {
   e.preventDefault();
   $('.search-div').empty();
   var dbid = document.getElementById('s_dbid').value;
-  if(dbid < 10){
-    dbid = '00'+dbid;
-  } else if(dbid < 100){
-    dbid = '0'+dbid;
-  } 
+  if(dbid !== ''){
+    if(dbid < 10){
+      dbid = '00'+dbid;
+    } else if(dbid < 100){
+      dbid = '0'+dbid;
+    } 
+  }
   var defect = document.getElementById('s_defect').value;
   var charm = document.getElementById('s_charm').value;
   var desc = document.getElementById('s_desc').value;
   var desc_de = document.getElementById('s_desc_de').value;
   var customer ;
-  if(document.getElementById('s_customer').value == 0){
+  if(document.getElementById('s_customer').value === 'none'){
     customer = null;
   } else {
     customer = document.getElementById('s_customer').value;
   }
-  
   var summary = document.getElementById('s_summary').value;
   var status = document.getElementById('s_status').value;
   var open_issue = 0;
@@ -1479,9 +1480,11 @@ $('.search-without-btn').click(function(e){
 $('.search-reset-btn').click(function (e) {
   e.preventDefault();
   document.getElementById('s_defect').value = '';
+  document.getElementById('s_dbid').value = '';
   document.getElementById('s_charm').value = '';
   document.getElementById('s_desc').value = '';
-  document.getElementById('s_customer').value = '';
+  document.getElementById('s_desc_de').value = '';
+  $('#s_customer').val('none').selectpicker('refresh');
   document.getElementById('s_summary').value = '';
   document.getElementById('s_status').value = '';
   $('.search-ph').removeClass('hidden').addClass('show');
