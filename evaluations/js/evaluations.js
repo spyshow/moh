@@ -68,7 +68,6 @@ ipc.on('show-evaluation', function (event, project_id) {
                 });
         }
     });
-    
 
     $('#area-and-label').on('click', function () {
         $('#baselines').selectpicker('show');
@@ -137,6 +136,10 @@ ipc.on('show-evaluation', function (event, project_id) {
     $('#customers').on('changed.bs.select', function (e) {
         $('#area-and-customers').click();
     });
+    setTimeout(function(){
+        $('#date').click();
+    },500);
+    
 });
 
 //======================================================================================================================
@@ -952,6 +955,7 @@ function distWord(project_id) {
             docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 'table{' +
                 'width: 100%;' +
@@ -1238,6 +1242,7 @@ function distExcel(project_id) {
             docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 'table{' +
                 'width: 100%;' +
@@ -1459,6 +1464,7 @@ function fragWord(project_id) {
                             var docx = '<!DOCTYPE html>' +
                                 '<html>' +
                                 '<head>' +
+                                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                                 '<style>' +
                                 'table{' +
                                 'width: 100%;' +
@@ -1780,6 +1786,7 @@ function fragExcel(project_id) {
                             var docx = '<!DOCTYPE html>' +
                                 '<html>' +
                                 '<head>' +
+                                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                                 '<style>' +
                                 'table{' +
                                 'width: 100%;' +
@@ -1873,7 +1880,7 @@ function fragExcel(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE AND [key] IS NOT NULL  project_id = @project_id AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [key] FROM issues WHERE  [key] IS NOT NULL AND project_id = @project_id AND area = @area ORDER BY [Key]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();

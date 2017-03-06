@@ -132,7 +132,8 @@ $('#word').on('click', function (e) {
     e.preventDefault();
     var customer_id = document.getElementById('customers').options[document.getElementById('customers').selectedIndex].value;
     var baseline_id = document.getElementById('baselines').options[document.getElementById('baselines').selectedIndex].value;
-
+    var both_customer = $('#both-customers').find("option:selected").val();
+    var both_baseline = $('#both-baselines').find("option:selected").val();
     switch ($("input[name=report-type]:checked").val()) {
         case 'all-issues':
             allIssues(project_id);
@@ -147,7 +148,7 @@ $('#word').on('click', function (e) {
             break;
 
         case 'all-issues-both':
-            allIssueBoth(project_id, customer_id, baseline_id);
+            allIssueBoth(project_id, both_customer, both_baseline);
             break;
     }
 
@@ -164,6 +165,7 @@ function allIssues(project_id) {
             var docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 '.bold {' +
                 'text-align: left;' +
@@ -335,6 +337,7 @@ function allIssuesCustomer(project_id, customer_id) {
             var docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 '.bold {' +
                 'text-align: left;' +
@@ -503,6 +506,7 @@ function allIssuesBaseline(project_id, baseline_id) {
             var docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 '.bold {' +
                 'text-align: left;' +
@@ -671,6 +675,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
             var docx = '<!DOCTYPE html>' +
                 '<html>' +
                 '<head>' +
+                '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'+
                 '<style>' +
                 '.bold {' +
                 'text-align: left;' +
@@ -1464,7 +1469,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                 request
                                     .input('issue_id', sql.Int, data1.id)
                                     .query('SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id;' +
-                                        'SELECT [name], [cd]FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;'+
+                                        'SELECT [name], [sn] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id;'+
                                         'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE ib.[issue_id] = @issue_id')
                                     .then(function (data2) {
                                         var status = (data1.status) ? data1.status : 'No Status';
