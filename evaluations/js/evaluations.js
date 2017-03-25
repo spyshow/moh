@@ -816,7 +816,6 @@ $('#excel-chart').on('click', function (e) {
     base64Img.imgSync(url_base64, app.getPath('userData')+'\\temp\\', '1', function (err, filepath) {
         if (err) throw err;
         imgPath = filepath;
-        console.log(filepath);
     });
     /*var bitmap = new Buffer(url_base64 , 'base64');
     fs.writeFileSync(app.getPath('userData')+'\\1.jpeg', bitmap,'binary');*/
@@ -843,7 +842,6 @@ $('#excel-chart').on('click', function (e) {
     }, function (filename) {
         wb.write(filename, function (err, stats) {
             if (err) {
-                console.error(err);
             }
             fs.unlinkSync(app.getPath('userData') + '\\1.png');
         });
@@ -1351,7 +1349,6 @@ function distExcel(project_id) {
                                     '</table>' +
                                     '</body>' +
                                     '</html>';
-                                console.log(docx);
                                 dialog.showSaveDialog({
                                     filters: [{
                                         name: 'Xlsx',
@@ -1361,8 +1358,6 @@ function distExcel(project_id) {
                                     defaultPath: path.join(app.getPath('desktop'), 'Table.xlsx')
                                 }, function (filename) {
                                     htmlTo(docx, (err, file) => {
-                                        if (err) return console.error(err);
-
                                         file.saveAs()
                                             .pipe(fs.createWriteStream(filename))
                                             .on('finish', () => console.log('Done.'));
@@ -1756,7 +1751,6 @@ function fragPdf(project_id) {
                             title: 'Save the Table as PDF',
                             defaultPath: path.join(app.getPath('desktop'), 'Table.pdf')
                         }, function (filename) {
-                            console.log(docx);
                             pdf.create(docx, conf).toFile(filename, function (err, res) {});
                         });
                     }, 500);
@@ -1916,7 +1910,6 @@ function fragExcel(project_id) {
                             title: 'Save the Table as Excel',
                             defaultPath: path.join(app.getPath('desktop'), 'Table.xlsx')
                         }, function (filename) {
-                            console.log(docx);
                             htmlTo(docx, (err, file) => {
                                 if (err) showNotification('Error on saveing file: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
 

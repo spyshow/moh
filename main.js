@@ -215,7 +215,6 @@ function sendMail(issue_id,project_title) {
   // building the PDF
   var conn2 = new sql.Connection(config, function (err) {
       if (err) {
-          console.log(err);
       } else {
           var docx = '<!DOCTYPE html>' +
                 '<html>' +
@@ -445,7 +444,6 @@ function sendMail(issue_id,project_title) {
                       '<table style="table-layout: fixed; width: 100%;">';
                       
                   data2[1].forEach(function (data21) {
-                    console.log(data21.date , data21.description);
                       arr += '<tr>' +
                           '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data21.date + '</td>' +
                           '<td style="vertical-align: top; padding-top:10px;">' + data21.description + '</td>' +
@@ -511,7 +509,6 @@ function sendMail(issue_id,project_title) {
                                   '\r\n'+
                                   ''+buffer.toString('base64')+'\r\n\r\n'+
                                   '------=_Part_2192_32400445.1115745999735--';
-                      console.log(email);
                       fs.writeFile(app.getPath('userData')+'\\temp\\1.eml', email, (err) => {
                         if (err) throw err;
                         shell.openItem(app.getPath('userData')+'\\temp\\1.eml');
@@ -572,7 +569,6 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
                     if(data[n].work != data2[0].work){ docx += '<p>in Charm number MR_00'+data[n].charm+' the work changed from "'+data[n].work+'" to "'+data2[0].work+'"</p>';}
                     if(data[n].status  != data2[0].status ){ docx += '<p>in Charm number  MR_00'+data[n].charm+' the status  changed from "'+data[n].status +'" to "'+data2[0].status+'"</p>' ;}
                     if(data[n].vsn != data2[0].vsn){ docx += '<p>in Charm number  MR_00'+data[n].charm+' the vsn changed from "'+data[n].vsn+'" to "'+data2[0].vsn+'"</p>';}
-                    console.log(docx);
                   }).catch(function (error) {
                    // showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
                   });

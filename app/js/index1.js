@@ -179,19 +179,16 @@ function setBaseline(id, issue_id) {
         .input('issue_id', sql.Int, issue_id)
         .query('DELETE FROM [issues_baselines] WHERE [issues_baselines].[issue_id] = @issue_id')
         .then(function () {
-          showNotification('baseline deleted', 'success', 'glyphicon glyphicon-tasks');
           var conn5 = new sql.Connection(config, function (err) {
             if (err) {
               showNotification('error connecting for baseline: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
             } else {
-              console.log(issue_id,id);
               var request2 = new sql.Request(conn5);
               request2
               .input('issue_id', sql.Int, issue_id)
               .input('baseline_id', sql.Int, id)
               .query('INSERT INTO [issues_baselines] ([issue_id],[baseline_id]) VALUES (@issue_id, @baseline_id);')
               .then(function (data) {
-                showNotification('Baseline Updated', 'info', 'glyphicon glyphicon-tasks');
               }).catch(function (error) {
                 showNotification('Error on issues_baselines 1: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
               });
@@ -235,20 +232,22 @@ function loadCharm(){
       sql.connect(charm).then(function () {
         new sql.Request()
         .input('id','MR_00'+document.getElementById('charm').value)
-        .query('SELECT priority ,state_num as status,remain_name as work,real_version as vsn FROM Defect where id=@id')
+        .query('SELECT priority ,state_num as status,summary ,details,remain_name as work,real_version as vsn FROM Defect where id=@id')
         .then(function (data) {
           var priority = data[0].priority;
           switch(priority.trim()){
-            case 'high':
+            case '1-high':
               $('#priority').val(1).selectpicker('refresh');
               break;
-            case 'medium':
+            case '2-medium':
               $('#priority').val(2).selectpicker('refresh');
               break;
-            case 'low':
+            case '3-low':
               $('#priority').val(3).selectpicker('refresh');
               break;  
           }
+          document.getElementById('summary').value = data[0].summary;
+          document.getElementById('desc').value = data[0].details;
           document.getElementById('work').value = data[0].work;
           document.getElementById('status').value = data[0].status;
           document.getElementById('vsn').value = data[0].vsn;
@@ -310,10 +309,12 @@ $(document).ready(function () {
   //change status , work and vsn when charm field changes.
   $('#charm').on('blur',function(e){
     if($('#charm').val() === ""){
-        $('#work').attr("disabled", false).removeClass('disabled');
-        $('#priority').attr("disabled", false).removeClass('disabled');
-        $('#status').attr("disabled", false).removeClass('disabled');
-        $('#vsn').attr("disabled", false).removeClass('disabled');
+      $('#desc').attr("disabled", false).removeClass('disabled');
+      $('#summary').attr("disabled", false).removeClass('disabled');
+      $('#work').attr("disabled", false).removeClass('disabled');
+      $('#priority').attr("disabled", false).removeClass('disabled');
+      $('#status').attr("disabled", false).removeClass('disabled');
+      $('#vsn').attr("disabled", false).removeClass('disabled');
       }
   });
   
@@ -538,121 +539,123 @@ $('#submit').on('click',function (e) {
       $(this).prop('disabled', false);
     }, 1000);
   e.preventDefault();
-  var project_name = document.getElementById('project_name');
-  var project_ID = project_name.options[project_name.selectedIndex].value;
-  var issueID = document.getElementById('issueID').value;
-  var dbid = document.getElementById('dbid').value;
-  var work = (document.getElementById('work').value ? document.getElementById('work').value : '');
-  var date = document.getElementById('date').value;
-  var area = $('#area').find("option:selected").val();
-  var key = (document.getElementById('key').value ? document.getElementById('key').value : null);
-  if(key){
-    key = key.toLowerCase();
-    key = key.charAt(0).toUpperCase() + key.slice(1);
-  }
-  var defect = (document.getElementById('defect').value ? document.getElementById('defect').value : null);
-  var charm = (document.getElementById('charm').value ? document.getElementById('charm').value : null);
-  var status = (document.getElementById('status').value ? document.getElementById('status').value : null);
-  var no_further_action;
-  if (!document.getElementById('no_further_action').checked) {
-    no_further_action = 0;
+  if($('#reproducible').val() === '0' || $('#messenger').val() === '0' || $('#area').val() === '0'){
+    showNotification('Reproducible , Messenger or Area can\'t be none', 'danger', 'glyphicon glyphicon-tasks');
   } else {
-     no_further_action = 1;
-  }
-  var reproducible = $('#reproducible').find("option:selected").val();
-  var priority = $('#priority').find("option:selected").val();
-  var messenger = $('#messenger').find("option:selected").val();
-  var summary = (document.getElementById('summary').value ? document.getElementById('summary').value : '');
-  var description = (document.getElementById('description').value ? document.getElementById('description').value : '');
-  var description_de = (document.getElementById('description_de').value ? document.getElementById('description_de').value : '');
-  var solution = (document.getElementById('solution').value ? document.getElementById('solution').value : '');
-  var solution_de = (document.getElementById('solution_de').value ? document.getElementById('solution_de').value : '');
-  var c2c = (document.getElementById('c2c').value ? document.getElementById('c2c').value : '');
-  var vsn = (document.getElementById('vsn').value ? document.getElementById('vsn').value : '');
-  
-
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('work',  work)
-        .input('area',  area)
-        .input('key',  key)
-        .input('dbid',  dbid)
-        .input('vsn',  vsn)
-        .input('defect',  defect)
-        .input('charm',  charm)
-        .input('status',  status)
-        .input('no_further_action', no_further_action)
-        .input('reproducible',  reproducible)
-        .input('priority',  priority)
-        .input('messenger', messenger)
-        .input('summary',  summary)
-        .input('description', description)
-        .input('description_de', description_de)
-        .input('solution', solution)
-        .input('solution_de', solution_de)
-        .input('c2c',  c2c)
-        .input('id', issueID)
-        .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
-          'status = @status,no_further_action = @no_further_action,reproducible = @reproducible,priority = @priority,' +
-          'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
-          'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
-        .then(function (data) {
-          var baseline_id = document.getElementById('baseline').options[document.getElementById('baseline').selectedIndex].value;
-          setBaseline(baseline_id,  issueID);
-          showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
-          $('.nav-btn').removeClass('disabled').attr("disabled",false);
-          $('#cancel').addClass('disabled').attr("disabled","disabled");
-          $('#new_issue').removeClass('disabled').attr("disabled",false);
-          $('#delete_btn').removeClass('disabled').attr("disabled",false);
-          var conn2 = new sql.Connection(config, function (error) {
-            if (error) {
-              showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-              var request = new sql.Request(conn2);
-              request
-                .input('project_id', sql.Int, project_ID)
-                .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
-                ' WHERE  project_id = @project_id')
-                .then(function (data) {
-                  if (data[0].issues_all > 1) {
-                    $('#first_issue').removeClass('disabled').attr("disabled", false);
-                    $('#previous_issue').removeClass('disabled').attr("disabled", false);
-                  }
-                  $('#cpf-all').text(data[0].issues_all);
-                }).catch(function (error) {
-                  showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                });
-            }
-          });
-          //for cpf open
-          var conn1 = new sql.Connection(config, function (error) {
-            if (error) {
-              showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-              var request = new sql.Request(conn1);
-              request
-                .input('project_id', sql.Int, project_ID)
-                .input('no_further_action', sql.SmallInt, 0)
-                .query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
-                ' WHERE project_id = @project_id AND no_further_action = @no_further_action ')
-                .then(function (data) {
-                  document.getElementById('cpf-open').textContent = data[0].issues_open;
-                }).catch(function (error) {
-                  showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                });
-            }
-          });
-          
-        }).catch(function (error) {
-          showNotification('No baseline selected', 'danger', 'glyphicon glyphicon-tasks');
-        });
-
-
-    }).catch(function (error) {
-      showNotification('error connecting for update: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    });
-
+    var project_name = document.getElementById('project_name');
+    var project_ID = project_name.options[project_name.selectedIndex].value;
+    var issueID = document.getElementById('issueID').value;
+    var dbid = document.getElementById('dbid').value;
+    var work = (document.getElementById('work').value ? document.getElementById('work').value : '');
+    var date = document.getElementById('date').value;
+    var area = $('#area').find("option:selected").val();
+    var key = (document.getElementById('key').value ? document.getElementById('key').value : null);
+    if(key){
+      key = key.toLowerCase();
+      key = key.charAt(0).toUpperCase() + key.slice(1);
+    }
+    var defect = (document.getElementById('defect').value ? document.getElementById('defect').value : null);
+    var charm = (document.getElementById('charm').value ? document.getElementById('charm').value : null);
+    var status = (document.getElementById('status').value ? document.getElementById('status').value : null);
+    var no_further_action;
+    if (!document.getElementById('no_further_action').checked) {
+      no_further_action = 0;
+    } else {
+      no_further_action = 1;
+    }
+    var reproducible = $('#reproducible').find("option:selected").val();
+    var priority = $('#priority').find("option:selected").val();
+    var messenger = $('#messenger').find("option:selected").val();
+    var summary = (document.getElementById('summary').value ? document.getElementById('summary').value : '');
+    var description = (document.getElementById('description').value ? document.getElementById('description').value : '');
+    var description_de = (document.getElementById('description_de').value ? document.getElementById('description_de').value : '');
+    var solution = (document.getElementById('solution').value ? document.getElementById('solution').value : '');
+    var solution_de = (document.getElementById('solution_de').value ? document.getElementById('solution_de').value : '');
+    var c2c = (document.getElementById('c2c').value ? document.getElementById('c2c').value : '');
+    var vsn = (document.getElementById('vsn').value ? document.getElementById('vsn').value : '');
     
+
+      sql.connect(config).then(function () {
+        new sql.Request()
+          .input('work',  work)
+          .input('area',  area)
+          .input('key',  key)
+          .input('dbid',  dbid)
+          .input('vsn',  vsn)
+          .input('defect',  defect)
+          .input('charm',  charm)
+          .input('status',  status)
+          .input('no_further_action', no_further_action)
+          .input('reproducible',  reproducible)
+          .input('priority',  priority)
+          .input('messenger', messenger)
+          .input('summary',  summary)
+          .input('description', description)
+          .input('description_de', description_de)
+          .input('solution', solution)
+          .input('solution_de', solution_de)
+          .input('c2c',  c2c)
+          .input('id', issueID)
+          .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
+            'status = @status,no_further_action = @no_further_action,reproducible = @reproducible,priority = @priority,' +
+            'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
+            'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
+          .then(function (data) {
+            var baseline_id = document.getElementById('baseline').options[document.getElementById('baseline').selectedIndex].value;
+            setBaseline(baseline_id,  issueID);
+            showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
+            $('.nav-btn').removeClass('disabled').attr("disabled",false);
+            $('#cancel').addClass('disabled').attr("disabled","disabled");
+            $('#new_issue').removeClass('disabled').attr("disabled",false);
+            $('#delete_btn').removeClass('disabled').attr("disabled",false);
+            var conn2 = new sql.Connection(config, function (error) {
+              if (error) {
+                showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
+                var request = new sql.Request(conn2);
+                request
+                  .input('project_id', sql.Int, project_ID)
+                  .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
+                  ' WHERE  project_id = @project_id')
+                  .then(function (data) {
+                    if (data[0].issues_all > 1) {
+                      $('#first_issue').removeClass('disabled').attr("disabled", false);
+                      $('#previous_issue').removeClass('disabled').attr("disabled", false);
+                    }
+                    $('#cpf-all').text(data[0].issues_all);
+                  }).catch(function (error) {
+                    showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                  });
+              }
+            });
+            //for cpf open
+            var conn1 = new sql.Connection(config, function (error) {
+              if (error) {
+                showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
+                var request = new sql.Request(conn1);
+                request
+                  .input('project_id', sql.Int, project_ID)
+                  .input('no_further_action', sql.SmallInt, 0)
+                  .query('SELECT COUNT(issues.id) AS issues_open FROM issues ' +
+                  ' WHERE project_id = @project_id AND no_further_action = @no_further_action ')
+                  .then(function (data) {
+                    document.getElementById('cpf-open').textContent = data[0].issues_open;
+                  }).catch(function (error) {
+                    showNotification('Error :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                  });
+              }
+            });
+            
+          }).catch(function (error) {
+            showNotification('No baseline selected', 'danger', 'glyphicon glyphicon-tasks');
+          });
+
+
+      }).catch(function (error) {
+        showNotification('error connecting for update: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      });
+  } 
 });
 
 //======================================================================================================================
@@ -692,7 +695,6 @@ $('#new_issue').click(function (e) {
                 dbid = dbidNum;
               }
             }
-            console.log(dbid);
             $('#work,#vsn,#status,#priority').prop('disabled', false);
             $('#priority').selectpicker('refresh');
             var conn4 = new sql.Connection(config, function (err) {
@@ -737,7 +739,7 @@ $('#new_issue').click(function (e) {
   document.getElementById('form_type').value = 'insert';
   document.getElementById('work').value = 'CUT-Team';
   document.getElementById('date').value = getDate();
-  $('#area').val(1).selectpicker('refresh');
+  $('#area').val(0).selectpicker('refresh');
   $('#baseline').val(1).selectpicker('refresh');
   document.getElementById('key').value = '';
   document.getElementById('vsn').value = '';
@@ -745,9 +747,9 @@ $('#new_issue').click(function (e) {
   document.getElementById('charm').value = '';
   document.getElementById('status').value = '';
   document.getElementById('no_further_action').checked = 0;
-  $('#reproducible').val(1).selectpicker('refresh');
+  $('#reproducible').val(0).selectpicker('refresh');
   $('#priority').val(1).selectpicker('refresh');
-  $('#messenger').val(1).selectpicker('refresh');
+  $('#messenger').val(0).selectpicker('refresh');
   document.getElementById('summary').value = '';
   document.getElementById('description').value = '';
   document.getElementById('description_de').value = '';

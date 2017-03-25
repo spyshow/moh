@@ -60,7 +60,6 @@ var config = {
 //======================================================================================================================
 //load project name
 ipc.on('show-report', function (event, project_id) {
-    console.log(project_id);
     var conn = new sql.Connection(config, function (err) {
         if (err) {
             showNotification('error connecting for selecting Project ID: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -271,7 +270,6 @@ function allIssues(project_id) {
                                         '<td style="vertical-align: top;" class="bold">action:</td>' +
                                         '<td style="vertical-align: top;">' +
                                         '<table style="table-layout: fixed; width: 100%;">';
-                                    console.log(summary , description, status);
                                     data2[0].forEach(function (data21) {
                                         arr1 += '<tr>' +
                                             '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data21.date + '</td>' +
@@ -300,7 +298,6 @@ function allIssues(project_id) {
             }).then(function () {
                 
                 setTimeout(function () {
-                    console.log(docx);
                     var converted = htmlDocx.asBlob(docx);
                     var buffer = toBuffer(converted, function (err, buffer) {
                         if (err) throw err;
@@ -843,7 +840,6 @@ $('#pdf').on('click', function (e) {
     var baseline_id = $('#baselines').find("option:selected").val();
     var both_customer = $('#both-customers').find("option:selected").val();
     var both_baseline = $('#both-baselines').find("option:selected").val();
-    console.log(baseline_id);
     switch ($("input[name=report-type]:checked").val()) {
         case 'all-issues':
             allIssuespdf(project_id);

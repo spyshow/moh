@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --overwrite --asar=true"
+    "build": "electron-packager . --overwrite --platform=win32 --arch=x64"
   },
   "author": "",
   "license": "ISC",
