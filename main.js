@@ -56,7 +56,21 @@ var charm = {
 };
 
 //======================================================================================================================
-//notification
+//Get Date 
+
+function getDate() {
+  var currentTime = new Date();
+  var month = currentTime.getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var day = currentTime.getDate();
+  if (day < 10) {
+    day = '0' + day;
+  }
+  var year = currentTime.getFullYear();
+  return ''+year + '-' + month + '-' + day+'';
+}
 
 
 
@@ -525,10 +539,10 @@ function sendMail(issue_id,project_title) {
 }
 
 //============================================================================================================================
-// import Charm
+// Update Database
 
 ipc.on('importCharm', function (event,project_ID,project_title) {
-  
+      var file = app.getPath('desktop')+'\\'+'Upadte_Database-' + project_title + '-'+getDate()+'.pdf';
       var connection1 = new sql.Connection(config, function (err) {
       if (err) {
         //showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -583,17 +597,20 @@ ipc.on('importCharm', function (event,project_ID,project_title) {
                             "height": "20mm"
                         }
                     };
+                var date = getDate();
                 dialog.showSaveDialog({
                     filters: [{
                         name: 'PDFs',
                         extensions: ['pdf']
                     }],
-                    title: 'Save the Import Charm as PDF',
-                    defaultPath: path.join(app.getPath('desktop'), 'Import Charm.pdf')
+                    title: 'Save the Update Database as PDF',
+                    defaultPath: path.join(app.getPath('desktop'), 'Update Database-'+project_title+'-'+date+'.pdf')
                 }, function (filename) {
-                    pdf.create(docx, conf).toFile(filename, function (err, res) {
-                    });
-                });
+                      pdf.create(docx, conf).toFile(filename, function (err, res) {
+                        if (err) return console.log(err);
+                      });
+
+                  });
               }, 100);
             });
           });
@@ -685,3 +702,9 @@ const template = [{
       }
     }]
 }];
+
+
+// to handel the error when user press cancel on update Datebase save dialog
+process.on('uncaughtException', function (exception) {
+   // handle or ignore error
+  });

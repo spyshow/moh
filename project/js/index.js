@@ -415,7 +415,7 @@ $('#customerTable-body').delegate('.customer-delete', 'click', function (e) {
 $('#add-baseline').on('click', function (e) {
     e.preventDefault();
     var baseline = document.getElementById('baseline').value;
-    var cd = document.getElementById('cd').value;
+    var cd = 'CD#'+document.getElementById('cd').value;
     var conn = new sql.Connection(config, function (err) {
         if (err) {
             showNotification('error connecting for adding baseline: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');

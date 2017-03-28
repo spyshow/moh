@@ -95,7 +95,7 @@ div.input-group.date {
 }
 
 .select {
-    width: 110% !important;
+    width: 119% !important;
     position: relative;
     bottom: 27px;
     left: 70px;
@@ -107,33 +107,6 @@ div.input-group.date {
     top: 5px;
 }
 
-#baseline-submit {
-    margin: 0 10px 0 0;
-    position: absolute;
-    top: 43px;
-    left: 140px;
-    z-index: 2;
-}
-
-#baseline-cancel {
-    margin: 0 0 0 10px;
-    position: absolute;
-    top: 43px;
-    left: 56px;
-    z-index: 2;
-}
-
-#baseline-div {
-    width: 125%;
-    height: 85px;
-    background: #eef2f3;
-    border: solid #8E9EAB 1px;
-    border-radius: 5px;
-    position: absolute;
-    top: 212px;
-    left: 10px;
-    z-index: 1;
-}
 
 #vsn {
     width: 60%;
@@ -190,14 +163,14 @@ fieldset {
 
 #description {
     resize: vertical;
-    max-height: 80px;
+    max-height: 120px;
     width: 42%;
     margin: 10px 0 0 39px;
 }
 
 #description_de {
     resize: vertical;
-    max-height: 80px;
+    max-height: 120px;
     width: 41%;
     margin: 10px 0 0 4px;
 }
@@ -206,12 +179,16 @@ fieldset {
     margin-left: 122px;
 }
 
+textarea {
+   resize: none;
+}
+
 .tab-pane {
     background-color: #fff;
     margin: 0 0 0 122px;
     padding: 10px;
     width: 84%;
-    height: 140px;
+    height: 75px;
     border: solid 1px #CCCCCC;
     border-top-style: hidden;
     overflow-y: auto;
@@ -219,14 +196,14 @@ fieldset {
 }
 
 #new-action {
-    width: 100%;
-    height: 8em;
+    width: 85%;
+    height: 4em;
 }
 
 #new-action-btn {
     position: absolute;
-    top: 55%;
-    left: 85%;
+    top: 28%;
+    left: 86%;
 }
 
 #solution {
@@ -269,6 +246,9 @@ fieldset {
     width: 10%;
 }
 
+#submit {
+    margin-left: 20px;
+}
 
 /* =====================================================================================================================
    Search panel
@@ -415,4 +395,10 @@ fieldset {
 
  a:active , a:focus{
     text-decoration: none;
+}
+
+.navi{
+    padding: 5px 10px;
+    margin: 0 20px;
+    display: inline-flex;
 }
