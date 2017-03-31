@@ -3,11 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/js/index.js" afterPath="$PROJECT_DIR$/project/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/project.html" afterPath="$PROJECT_DIR$/project/project.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/css/index.css" afterPath="$PROJECT_DIR$/project/css/index.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/js/report5.js" afterPath="$PROJECT_DIR$/report/js/report5.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -129,6 +128,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -149,8 +150,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -234,12 +233,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00024" summary="file input ... ok">
-      <created>1478304755968</created>
-      <option name="number" value="00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1478304755968</updated>
     </task>
     <task id="LOCAL-00025" summary="file input ... ok">
       <created>1478304820245</created>
@@ -529,7 +522,13 @@
       <option name="project" value="LOCAL" />
       <updated>1490482402573</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="UI Redesgin">
+      <created>1490739199561</created>
+      <option name="number" value="00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1490739199561</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TodoView">
@@ -598,7 +597,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="report work" />
     <MESSAGE value="need a lot of work in the main app" />
     <MESSAGE value="Merge branch 'master' of https://github.com/spyshow/moh&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;" />
     <MESSAGE value="live edit working" />
@@ -623,7 +621,8 @@
     <MESSAGE value="dbid  = 00X" />
     <MESSAGE value="bug fix" />
     <MESSAGE value="pull summary and desc from charm database" />
-    <option name="LAST_COMMIT_MESSAGE" value="pull summary and desc from charm database" />
+    <MESSAGE value="UI Redesgin" />
+    <option name="LAST_COMMIT_MESSAGE" value="UI Redesgin" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

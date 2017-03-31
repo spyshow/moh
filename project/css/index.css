@@ -119,3 +119,7 @@ legend{
 #customerTable , #baselineTable{
     margin: 30px 0;
 }
+
+#baseline {
+    width : 40%
+}

@@ -541,7 +541,7 @@ function sendMail(issue_id,project_title) {
 //============================================================================================================================
 // Update Database
 
-ipc.on('importCharm', function (event,project_ID,project_title) {
+ipc.on('updateDatabase', function (event,project_ID,project_title) {
       var file = app.getPath('desktop')+'\\'+'Upadte_Database-' + project_title + '-'+getDate()+'.pdf';
       var connection1 = new sql.Connection(config, function (err) {
       if (err) {
@@ -637,7 +637,7 @@ const template = [{
           var project_name = document.getElementById('project_name');
           var project_title = project_name.options[project_name.selectedIndex].text;
           var project_ID = project_name.options[project_name.selectedIndex].value;
-          ipcRenderer.send('importCharm',project_ID,project_title);
+          ipcRenderer.send('updateDatabase',project_ID,project_title);
         `);
       }
     }, {
