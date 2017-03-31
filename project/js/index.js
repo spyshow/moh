@@ -124,6 +124,36 @@ function refreshBaseline(projectID) {
     });
 }
 
+function refreshKey(projectID) {
+    $('#keyTable-body').empty();
+
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting on refreshing key: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('project_id', sql.Int, projectID)
+                .query('SELECT * FROM keys' +
+                    ' INNER JOIN projects_keys AS pb ON keys.id = pb.key_id ' +
+                    ' WHERE  pb.project_id = @project_id')
+                .then(function (data) {
+                    var html = '';
+                    data.forEach(function (data) {
+                        html += '<tr>';
+                        html += '<td class="td editablekeys" data-type="name" data-pk="' + data.id + '" contenteditable>' + data.name + '</td>';
+                        html += '<td class="delete-td text-center"><button type="button" class="btn btn-danger key-delete btn-xs" data-pk="' + data.id + '" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>';
+                        html += '</tr>';
+                    });
+                    $('#keyTable-body').append(html);
+                    html = '';
+                }).catch(function (error) {
+                    showNotification('Error on refreshing key:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
+    });
+}
+
 function edit_data(id, type, newValue, table, el) {
     if (currentValue !== newValue) {
 
@@ -181,6 +211,18 @@ $(document).ready(function () {
         edit_data(id, type, newValue, 'baselines', el);
     });
 
+    //baseline table 
+    $(document).on('focus', '.editablekeys', function () {
+        currentValue = $(this).text();
+    });
+    $(document).on('blur', '.editablekeys', function () {
+        var el = $(this);
+        var id = $(this).data("pk");
+        var type = $(this).data("type");
+        var newValue = $(this).text();
+        edit_data(id, type, newValue, 'keys', el);
+    });
+
 });
 
 
@@ -215,6 +257,7 @@ ipc.on('show-edit-project', function (event, project_id) {
                     document.getElementById('type').value = 'update';
                     refreshCustomer(data[0].id);
                     refreshBaseline(data[0].id);
+                    refreshKey(data[0].id);
                 }).catch(function (error) {
                     showNotification('Error on selecting project:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
@@ -243,6 +286,7 @@ $('#projectSubmit').on('click', function (e) {
     }, 1000);
     var project_id = document.getElementById('project_id').value;
     var project_name = document.getElementById('project_name').value;
+    project_name = project_name.trim();
     var cpf_doc_id = document.getElementById('cpf-doc-id').value;
     var project_type = 0;
     if (!project_name || !cpf_doc_id) {
@@ -308,6 +352,7 @@ $('#projectSubmit').on('click', function (e) {
                   }
                   refreshCustomer(data1[0].id);
                   refreshBaseline(data1[0].id);
+                  refreshKey(data[0].id);
                   showNotification('There is another Project with the same values, Project Loaded', 'warning', 'glyphicon glyphicon-tasks');
                 } else {
                   var conn2 = new sql.Connection(config, function (err) {
@@ -371,6 +416,9 @@ $('#add-customer').on('click', function (e) {
                                 .query('INSERT INTO projects_customers (project_id,customer_id) VALUES (@project_id ,@customer_id)')
                                 .then(function () {
                                     showNotification('Customer ' + customerName + ' Added', 'success', 'glyphicon glyphicon-tasks');
+                                    $('#customer-name').val('');
+                                    $('#system').val('');
+                                    $('#sn').val('');
                                     refreshCustomer(document.getElementById('project_id').value);
                                 }).catch(function (error) {
                                     showNotification('Error adding customer to project :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -437,6 +485,8 @@ $('#add-baseline').on('click', function (e) {
                                 .query('INSERT INTO projects_baselines (project_id,baseline_id) VALUES (@project_id ,  @baseline_id)')
                                 .then(function () {
                                     showNotification('Baseline Added', 'success', 'glyphicon glyphicon-tasks');
+                                    $('#baseline').val('');
+                                    $('#cd').val('');
                                     refreshBaseline(document.getElementById('project_id').value);
                                 }).catch(function (error) {
                                     showNotification('Error adding baseline to project :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -469,6 +519,69 @@ $('#baselineTable-body').delegate('.baseline-delete', 'click', function (e) {
                     document.getElementById('cd').value = '';
                 }).catch(function (error) {
                     showNotification('Error on deleting Baselines:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
+    });
+});
+
+//============================================================================================================================
+//add and remove key
+
+$('#add-key').on('click', function (e) {
+    e.preventDefault();
+    var key = document.getElementById('key').value;
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting for adding key: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('key', key)
+                .query('INSERT INTO [keys] ([name]) VALUES (@key); SELECT SCOPE_IDENTITY() AS id;')
+                .then(function (data) {
+                    var conn2 = new sql.Connection(config, function (err) {
+                        if (err) {
+                            showNotification('error connecting for adding key to project: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+                        } else {
+                            var request = new sql.Request(conn2);
+                            request
+                                .input('project_id', document.getElementById('project_id').value)
+                                .input('key_id', data[0].id)
+                                .query('INSERT INTO projects_keys (project_id,key_id) VALUES (@project_id ,  @key_id)')
+                                .then(function () {
+                                    showNotification('key Added', 'success', 'glyphicon glyphicon-tasks');
+                                    $('#key').val('');
+                                    refreshKey(document.getElementById('project_id').value);
+                                }).catch(function (error) {
+                                    showNotification('Error adding key to project :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                                });
+                        }
+                    });
+                }).catch(function (error) {
+                    showNotification('Error adding key :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+        }
+    });
+});
+
+$('#keyTable-body').delegate('.key-delete', 'click', function (e) {
+    e.preventDefault();
+    var id = this.dataset.pk;
+
+    var conn = new sql.Connection(config, function (err) {
+        if (err) {
+            showNotification('error connecting for deleting keys: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+            var request = new sql.Request(conn);
+            request
+                .input('id', sql.Int, id)
+                .query('DELETE FROM keys WHERE id = @id')
+                .then(function (data) {
+                    showNotification('Key Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
+                    refreshKey(document.getElementById('project_id').value);
+                    document.getElementById('key').value = '';
+                }).catch(function (error) {
+                    showNotification('Error on deleting Keys:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
         }
     });

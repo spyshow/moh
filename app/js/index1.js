@@ -226,6 +226,93 @@ function issueBaseline(issue_id) {
 }
 
 //======================================================================================================================
+// key
+
+function getprojectKey(project_id) {
+  var name = '';
+  $('#key').empty();
+  var conn = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting on refreshing key: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn);
+      request
+        .input('project_id', project_id)
+        .query('SELECT * FROM keys' +
+          ' INNER JOIN projects_keys AS pb ON keys.id = pb.key_id ' +
+          ' WHERE  pb.project_id = @project_id')
+        .then(function (data) {
+          console.log(data[0]);
+          var html = '';
+          for (var i = 0; i < data.length; i++) {
+            html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+          }
+          $('#key').append(html).selectpicker('refresh');
+          html = '';
+        });
+      /*.catch(function (error) {
+                showNotification('Error on refreshing baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            });*/
+    }
+  });
+}
+
+function setKey(id, issue_id) {
+  var conn3 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for key: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn3);
+      request
+        .input('issue_id', sql.Int, issue_id)
+        .query('DELETE FROM [issues_keys] WHERE [issues_keys].[issue_id] = @issue_id')
+        .then(function () {
+          var conn5 = new sql.Connection(config, function (err) {
+            if (err) {
+              showNotification('error connecting for key: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+              var request2 = new sql.Request(conn5);
+              request2
+                .input('issue_id', sql.Int, issue_id)
+                .input('key_id', sql.Int, id)
+                .query('INSERT INTO [issues_keys] ([issue_id],[key_id]) VALUES (@issue_id, @key_id);')
+                .then(function (data) {}).catch(function (error) {
+                  showNotification('Error on issues_keys 1: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+
+            }
+          });
+        }).catch(function (error) {
+          showNotification('Error on deleting key:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
+  });
+
+}
+
+function issueKey(issue_id) {
+  var conn = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting on refreshing key: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn);
+      request
+        .input('issue_id', issue_id)
+        .query('SELECT * FROM keys' +
+          ' INNER JOIN issues_keys AS ib ON keys.id = ib.key_id ' +
+          ' WHERE  ib.issue_id = @issue_id')
+        .then(function (data) {
+          $('#key').val(data[0].id).selectpicker('refresh');
+        });
+      /*.catch(function (error) {
+                showNotification('Error on refreshing baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            });*/
+    }
+  });
+}
+
+//======================================================================================================================
 // load from charm and save it 
 
 function loadCharm() {
@@ -412,6 +499,7 @@ $('#project_submit').click(function () {
   document.getElementById('projectID').value = project_title;
   getCustomersList(project_ID);
   getprojectBaseline(project_ID);
+  getprojectKey(project_ID);
   var connection1 = new sql.Connection(config, function (err) {
     if (err) {
       showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -440,7 +528,7 @@ $('#project_submit').click(function () {
             document.getElementById('work').value = data[0].work;
             document.getElementById('date').value = data[0].date;
             $('#area').val(data[0].area).selectpicker('refresh');
-            document.getElementById('key').value = data[0].key;
+            $('#key').val(data[0].key).selectpicker('refresh');
             document.getElementById('defect').value = data[0].defect;
             document.getElementById('charm').value = data[0].charm;
             document.getElementById('status').value = data[0].status;
@@ -471,6 +559,7 @@ $('#project_submit').click(function () {
               $('#previous_issue').removeClass('disabled').attr("disabled", false);
             }
             issueBaseline(data[0].id);
+            issueKey(data[0].id);
             loadCharm();
           }
           // customer list
@@ -624,7 +713,9 @@ $('#submit').on('click', function (e) {
           'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
         .then(function (data) {
           var baseline_id = document.getElementById('baseline').options[document.getElementById('baseline').selectedIndex].value;
+          var key_id = document.getElementById('key').options[document.getElementById('key').selectedIndex].value;
           setBaseline(baseline_id, issueID);
+          setKey(key_id, issueID);
           showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
           $('.nav-btn').removeClass('disabled').attr("disabled", false);
           $('#cancel').addClass('disabled').attr("disabled", "disabled");
@@ -995,7 +1086,7 @@ $('#first_issue').click(function () {
         document.getElementById('vsn').value = data[0].vsn;
         document.getElementById('date').value = data[0].date;
         $('#area').val(data[0].area).selectpicker('refresh');
-        document.getElementById('key').value = data[0].key;
+        $('#key').val(data[0].key).selectpicker('refresh');
         document.getElementById('defect').value = data[0].defect;
         document.getElementById('charm').value = data[0].charm;
         document.getElementById('status').value = data[0].status;
@@ -1016,6 +1107,7 @@ $('#first_issue').click(function () {
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
+        issueKey(issueID);
         // customer list
         checkCustomers(issueID);
         // action current + history
@@ -1052,7 +1144,7 @@ $('#last_issue').click(function () {
         document.getElementById('vsn').value = data[0].vsn;
         document.getElementById('date').value = data[0].date;
         $('#area').val(data[0].area).selectpicker('refresh');
-        document.getElementById('key').value = data[0].key;
+        $('#key').val(data[0].key).selectpicker('refresh');
         document.getElementById('defect').value = data[0].defect;
         document.getElementById('charm').value = data[0].charm;
         document.getElementById('status').value = data[0].status;
@@ -1073,6 +1165,7 @@ $('#last_issue').click(function () {
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
+        issueKey(issueID);
         // customer list
         checkCustomers(issueID);
         // action current + history
@@ -1115,7 +1208,7 @@ $('#next_issue').click(function () {
           document.getElementById('vsn').value = data[0].vsn;
           document.getElementById('date').value = data[0].date;
           $('#area').val(data[0].area).selectpicker('refresh');
-          document.getElementById('key').value = data[0].key;
+          $('#key').val(data[0].key).selectpicker('refresh');
           document.getElementById('defect').value = data[0].defect;
           document.getElementById('charm').value = data[0].charm;
           document.getElementById('status').value = data[0].status;
@@ -1136,6 +1229,7 @@ $('#next_issue').click(function () {
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
+          issueKey(issueID);
           // customer list
           checkCustomers(issueID);
           // action current + history
@@ -1188,7 +1282,7 @@ $('#previous_issue').click(function () {
           document.getElementById('vsn').value = data[0].vsn;
           document.getElementById('date').value = data[0].date;
           $('#area').val(data[0].area).selectpicker('refresh');
-          document.getElementById('key').value = data[0].key;
+          $('#key').val(data[0].key).selectpicker('refresh');
           document.getElementById('defect').value = data[0].defect;
           document.getElementById('charm').value = data[0].charm;
           document.getElementById('status').value = data[0].status;
@@ -1209,6 +1303,7 @@ $('#previous_issue').click(function () {
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
+          issueKey(issueID);
           // customer list
           checkCustomers(issueID);
           // action current + history
@@ -1402,7 +1497,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
         document.getElementById('work').value = data[0].work;
         document.getElementById('date').value = data[0].date;
         $('#area').val(data[0].area).selectpicker('refresh');
-        document.getElementById('key').value = data[0].key;
+        $('#key').val(data[0].key).selectpicker('refresh');
         document.getElementById('vsn').value = data[0].vsn;
         document.getElementById('defect').value = data[0].defect;
         document.getElementById('charm').value = data[0].charm;
@@ -1427,6 +1522,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(data[0].id);
+        issueKey(issueID);
         // action current + history
         updateAction(document.getElementById('issueID').value);
         $('#delete_btn').removeClass('disabled').attr("disabled", false);
