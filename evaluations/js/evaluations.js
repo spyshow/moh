@@ -28,7 +28,16 @@ function showNotification(msg, type, icon) {
         icon: icon,
         message: msg
     }, {
-        type: type
+        type: type,
+        placement: {
+          from: "bottom",
+          align: "right"
+        },
+        delay: 3000,
+        animate: {
+          enter: 'animated fadeInUp',
+          exit: 'animated fadeOutDown'
+        }
     });
 }
 
@@ -1391,20 +1400,24 @@ function getbasedata(area, key, baselines, project_id, callback) {
                     query += ' (SELECT COUNT(*) FROM issues ' +
                         'INNER JOIN issues_baselines AS ib ON ib.issue_id = issues.id ' +
                         'INNER JOIN baselines ON ib.baseline_id = baselines.id ' +
-                        'WHERE [key] = @key AND [key] IS NOT NULL AND area = @area AND project_id = @project_id AND baselines.cd = @baseline' + s + ') AS ' + baselines[s].cd + ' ';
+                        'INNER JOIN issues_keys AS ik ON ik.issue_id = issues.id ' +
+                        'INNER JOIN keys ON ik.key_id = keys.id ' +
+                        'WHERE [keys].[name] = @key AND [keys].[name] IS NOT NULL AND area = @area AND project_id = @project_id AND baselines.cd = @baseline' + s + ') AS ' + baselines[s].cd + ' ';
                     if (s !== (baselines.length - 1)) {
-                        query += ', ';
+                        query += ' , ';
                     }
                 }
                 query += ' FROM issues';
+                console.log(query);
+                console.log(data1);
                 request
                     .input('area', area)
                     .input('project_id', sql.Int, project_id)
-                    .input('key', data1.key)
+                    .input('key', data1.name)
                     .query(query)
                     .then(function (data21) {
                         row[i] = data21;
-                        keys[i] = data1.key;
+                        keys[i] = data1.name;
                         callback2();
                     });
             }
@@ -1543,7 +1556,11 @@ function fragWord(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id AND area = @area AND [key] IS NOT NULL  ORDER BY [Key]')
+                            .query('SELECT DISTINCT [name] FROM keys '+
+                            'INNER JOIN projects_keys AS pk ON pk.key_id = keys.id '+
+                            'INNER JOIN issues_keys AS ik ON ik.key_id = [keys].[id] ' +
+                            'INNER JOIN issues ON ik.issue_id = [issues].[id] ' +
+                            ' WHERE [pk].[project_id] = @project_id AND area = @area AND [keys].[name] IS NOT NULL  ORDER BY [keys].[name]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();
@@ -1552,6 +1569,7 @@ function fragWord(project_id) {
                 });
 
             }, function () {
+                
                 async.timesSeries(keyArr.length, function (n, callback3) {
                     var rowSpan = 0;
                     if (keyArr[n].length === 0 || keyArr[n].length === 1) {
@@ -1709,7 +1727,11 @@ function fragPdf(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE project_id = @project_id  AND [key] IS NOT NULL  AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [name] FROM keys '+
+                            'INNER JOIN projects_keys AS pk ON pk.key_id = keys.id '+
+                            'INNER JOIN issues_keys AS ik ON ik.key_id = [keys].[id] ' +
+                            'INNER JOIN issues ON ik.issue_id = issues.id ' +
+                            ' WHERE [pk].[project_id] = @project_id AND area = @area AND [keys].[name] IS NOT NULL  ORDER BY [keys].[name]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();
@@ -1874,7 +1896,11 @@ function fragExcel(project_id) {
                         request
                             .input('project_id', project_id)
                             .input('area', d)
-                            .query('SELECT DISTINCT [key] FROM issues WHERE  [key] IS NOT NULL AND project_id = @project_id AND area = @area ORDER BY [Key]')
+                            .query('SELECT DISTINCT [name] FROM keys '+
+                            'INNER JOIN [projects_keys] AS pk ON pk.key_id = keys.[id] '+
+                            'INNER JOIN [issues_keys] AS ik ON ik.key_id = [keys].[id] ' +
+                            'INNER JOIN [issues] ON [ik].[issue_id] = [issues].[id] ' +
+                            ' WHERE [pk].[project_id] = @project_id AND area = @area AND [keys].[name] IS NOT NULL  ORDER BY [keys].[name]')
                             .then(function (data) {
                                 keyArr[n] = data;
                                 callback3();

@@ -19,7 +19,16 @@ function showNotification(msg, type, icon) {
         icon: icon,
         message: msg
     }, {
-        type: type
+        type: type,
+        placement: {
+          from: "bottom",
+          align: "right"
+        },
+        delay: 3000,
+        animate: {
+          enter: 'animated fadeInUp',
+          exit: 'animated fadeOutDown'
+        }
     });
 }
 

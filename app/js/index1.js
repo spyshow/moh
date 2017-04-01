@@ -15,12 +15,21 @@ $('#myTabs').find('a').click(function (e) {
 //======================================================================================================================
 //notification
 function showNotification(msg, type, icon) {
-  $.notify({
-    icon: icon,
-    message: msg
-  }, {
-    type: type
-  });
+    $.notify({
+        icon: icon,
+        message: msg
+    }, {
+        type: type,
+        placement: {
+          from: "bottom",
+          align: "right"
+        },
+        delay: 3000,
+        animate: {
+          enter: 'animated fadeInUp',
+          exit: 'animated fadeOutDown'
+        }
+    });
 }
 
 //======================================================================================================================
