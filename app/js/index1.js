@@ -348,9 +348,9 @@ function loadCharm() {
           document.getElementById('work').value = data[0].work;
           document.getElementById('status').value = data[0].status;
           document.getElementById('vsn').value = data[0].vsn;
-          
-          var issueID = document.getElementById('issueID').value;
-          var connection11 = new sql.Connection(config, function (err) {
+
+            /*var issueID = document.getElementById('issueID').value;
+           var connection11 = new sql.Connection(config, function (err) {
             if (err) {
               showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
             } else {
@@ -368,7 +368,7 @@ function loadCharm() {
 
               });
             }
-          });
+          });*/
           $('#work').attr("disabled", "disabled").addClass('disabled');
           $('#priority').attr("disabled", "disabled").addClass('disabled');
           $('#status').attr("disabled", "disabled").addClass('disabled');
