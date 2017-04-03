@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evaluations/js/evaluations.js" afterPath="$PROJECT_DIR$/evaluations/js/evaluations.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/js/index.js" afterPath="$PROJECT_DIR$/project/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/js/report5.js" afterPath="$PROJECT_DIR$/report/js/report5.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -129,6 +125,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -149,8 +147,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -234,12 +230,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00027" summary="file input ... ok">
-      <created>1478306272375</created>
-      <option name="number" value="00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1478306272375</updated>
     </task>
     <task id="LOCAL-00028" summary="add test.sql file (files table)">
       <created>1478306418365</created>
@@ -529,7 +519,13 @@
       <option name="project" value="LOCAL" />
       <updated>1491000977747</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="fix notification and frag table genration">
+      <created>1491007393107</created>
+      <option name="number" value="00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1491007393108</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TodoView">
@@ -598,8 +594,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="live edit working" />
-    <MESSAGE value="add baseline front to project page" />
     <MESSAGE value="add sql backup file" />
     <MESSAGE value="change some interface design" />
     <MESSAGE value="finalized search" />
@@ -623,7 +617,9 @@
     <MESSAGE value="UI Redesgin" />
     <MESSAGE value="UI Redesgin and report re design" />
     <MESSAGE value="adjusting Key field and adding database for it" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjusting Key field and adding database for it" />
+    <MESSAGE value="fix notification and frag table genration" />
+    <MESSAGE value="disable developer tools" />
+    <option name="LAST_COMMIT_MESSAGE" value="disable developer tools" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
