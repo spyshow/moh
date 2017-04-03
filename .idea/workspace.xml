@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="5.3759036">
-              <caret line="439" column="35" selection-start-line="439" selection-start-column="35" selection-end-line="439" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.22168675">
+              <caret line="859" column="20" selection-start-line="859" selection-start-column="20" selection-end-line="859" selection-end-column="20" />
               <folding>
                 <element signature="n#!!block;n#showNotification#0" expanded="false" />
                 <element signature="n#!!block;n#getDate#0" expanded="false" />
@@ -39,12 +38,12 @@
                 <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
                 <element signature="n#!!block;n#setBaseline#0" expanded="false" />
                 <element signature="n#!!block;n#issueBaseline#0" expanded="false" />
-                <marker date="1491247707000" expanded="false" signature="8367:8906" placeholder="{...}" />
-                <marker date="1491247707000" expanded="true" signature="8462:8906" placeholder="{...}" />
-                <marker date="1491247707000" expanded="true" signature="8477:8601" placeholder="{...}" />
-                <marker date="1491247707000" expanded="true" signature="8607:8906" placeholder="{...}" />
-                <marker date="1491247707000" expanded="true" signature="8894:8906" placeholder="{...}" />
-                <marker date="1491247707000" expanded="true" signature="37164:38298" placeholder="{...}" />
+                <element signature="e#14497#16618#0" expanded="false" />
+                <element signature="e#16657#16698#0" expanded="false" />
+                <element signature="e#16741#18031#0" expanded="false" />
+                <element signature="e#18222#18279#0" expanded="false" />
+                <element signature="e#18321#18528#0" expanded="false" />
+                <element signature="e#18731#26530#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -154,6 +153,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -206,7 +206,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -290,12 +289,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00030" summary="adding baseline">
-      <created>1478951844533</created>
-      <option name="number" value="00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1478951844533</updated>
     </task>
     <task id="LOCAL-00031" summary="project page finished (beta)">
       <created>1479085463016</created>
@@ -585,7 +578,13 @@
       <option name="project" value="LOCAL" />
       <updated>1491242003240</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="turn off automatic charm saving">
+      <created>1491247922129</created>
+      <option name="number" value="00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1491247922129</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TodoView">
@@ -601,11 +600,11 @@
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17124394" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17124394" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23089172" sideWeight="0.51130855" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29570746" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29570746" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22893482" sideWeight="0.48869145" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="2" side_tool="true" content_ui="tabs" />
@@ -683,7 +682,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="35" />
+      <option name="time" value="37" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1040,8 +1039,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/index1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="5.3759036">
-          <caret line="439" column="35" selection-start-line="439" selection-start-column="35" selection-end-line="439" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.22168675">
+          <caret line="859" column="20" selection-start-line="859" selection-start-column="20" selection-end-line="859" selection-end-column="20" />
           <folding>
             <element signature="n#!!block;n#showNotification#0" expanded="false" />
             <element signature="n#!!block;n#getDate#0" expanded="false" />
@@ -1052,12 +1051,12 @@
             <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
             <element signature="n#!!block;n#setBaseline#0" expanded="false" />
             <element signature="n#!!block;n#issueBaseline#0" expanded="false" />
-            <marker date="1491247707000" expanded="false" signature="8367:8906" placeholder="{...}" />
-            <marker date="1491247707000" expanded="true" signature="8462:8906" placeholder="{...}" />
-            <marker date="1491247707000" expanded="true" signature="8477:8601" placeholder="{...}" />
-            <marker date="1491247707000" expanded="true" signature="8607:8906" placeholder="{...}" />
-            <marker date="1491247707000" expanded="true" signature="8894:8906" placeholder="{...}" />
-            <marker date="1491247707000" expanded="true" signature="37164:38298" placeholder="{...}" />
+            <element signature="e#14497#16618#0" expanded="false" />
+            <element signature="e#16657#16698#0" expanded="false" />
+            <element signature="e#16741#18031#0" expanded="false" />
+            <element signature="e#18222#18279#0" expanded="false" />
+            <element signature="e#18321#18528#0" expanded="false" />
+            <element signature="e#18731#26530#0" expanded="false" />
           </folding>
         </state>
       </provider>
