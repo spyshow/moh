@@ -23,12 +23,12 @@
     <favorites_list name="moh" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.1038648">
-              <caret line="351" column="14" selection-start-line="351" selection-start-column="14" selection-end-line="351" selection-end-column="14" />
+            <state vertical-scroll-proportion="5.3759036">
+              <caret line="439" column="35" selection-start-line="439" selection-start-column="35" selection-end-line="439" selection-end-column="35" />
               <folding>
                 <element signature="n#!!block;n#showNotification#0" expanded="false" />
                 <element signature="n#!!block;n#getDate#0" expanded="false" />
@@ -39,15 +39,12 @@
                 <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
                 <element signature="n#!!block;n#setBaseline#0" expanded="false" />
                 <element signature="n#!!block;n#issueBaseline#0" expanded="false" />
-                <element signature="n#!!block;n#getprojectKey#0" expanded="false" />
-                <element signature="n#!!block;n#setKey#0" expanded="false" />
-                <element signature="n#!!block;n#issueKey#0" expanded="false" />
-                <element signature="e#14354#14474#0" expanded="false" />
-                <element signature="e#14529#16650#0" expanded="false" />
-                <element signature="e#16689#16730#0" expanded="false" />
-                <element signature="e#16773#18063#0" expanded="false" />
-                <element signature="e#18254#18311#0" expanded="false" />
-                <element signature="e#18353#18560#0" expanded="false" />
+                <marker date="1491247707000" expanded="false" signature="8367:8906" placeholder="{...}" />
+                <marker date="1491247707000" expanded="true" signature="8462:8906" placeholder="{...}" />
+                <marker date="1491247707000" expanded="true" signature="8477:8601" placeholder="{...}" />
+                <marker date="1491247707000" expanded="true" signature="8607:8906" placeholder="{...}" />
+                <marker date="1491247707000" expanded="true" signature="8894:8906" placeholder="{...}" />
+                <marker date="1491247707000" expanded="true" signature="37164:38298" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -156,7 +153,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -210,6 +206,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -293,12 +290,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00029" summary="adding baseline">
-      <created>1478825191850</created>
-      <option name="number" value="00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1478825191850</updated>
     </task>
     <task id="LOCAL-00030" summary="adding baseline">
       <created>1478951844533</created>
@@ -588,7 +579,13 @@
       <option name="project" value="LOCAL" />
       <updated>1491241147197</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="turn off automatic charm saving">
+      <created>1491242003210</created>
+      <option name="number" value="00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1491242003240</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TodoView">
@@ -602,18 +599,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17124394" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23089172" sideWeight="0.51130855" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29617834" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29570746" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22893482" sideWeight="0.48869145" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -657,7 +654,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="add sql backup file" />
     <MESSAGE value="change some interface design" />
     <MESSAGE value="finalized search" />
     <MESSAGE value="update sql file for files table" />
@@ -682,7 +678,8 @@
     <MESSAGE value="adjusting Key field and adding database for it" />
     <MESSAGE value="fix notification and frag table genration" />
     <MESSAGE value="disable developer tools" />
-    <option name="LAST_COMMIT_MESSAGE" value="disable developer tools" />
+    <MESSAGE value="turn off automatic charm saving" />
+    <option name="LAST_COMMIT_MESSAGE" value="turn off automatic charm saving" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1043,8 +1040,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/index1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.1038648">
-          <caret line="351" column="14" selection-start-line="351" selection-start-column="14" selection-end-line="351" selection-end-column="14" />
+        <state vertical-scroll-proportion="5.3759036">
+          <caret line="439" column="35" selection-start-line="439" selection-start-column="35" selection-end-line="439" selection-end-column="35" />
           <folding>
             <element signature="n#!!block;n#showNotification#0" expanded="false" />
             <element signature="n#!!block;n#getDate#0" expanded="false" />
@@ -1055,15 +1052,12 @@
             <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
             <element signature="n#!!block;n#setBaseline#0" expanded="false" />
             <element signature="n#!!block;n#issueBaseline#0" expanded="false" />
-            <element signature="n#!!block;n#getprojectKey#0" expanded="false" />
-            <element signature="n#!!block;n#setKey#0" expanded="false" />
-            <element signature="n#!!block;n#issueKey#0" expanded="false" />
-            <element signature="e#14354#14474#0" expanded="false" />
-            <element signature="e#14529#16650#0" expanded="false" />
-            <element signature="e#16689#16730#0" expanded="false" />
-            <element signature="e#16773#18063#0" expanded="false" />
-            <element signature="e#18254#18311#0" expanded="false" />
-            <element signature="e#18353#18560#0" expanded="false" />
+            <marker date="1491247707000" expanded="false" signature="8367:8906" placeholder="{...}" />
+            <marker date="1491247707000" expanded="true" signature="8462:8906" placeholder="{...}" />
+            <marker date="1491247707000" expanded="true" signature="8477:8601" placeholder="{...}" />
+            <marker date="1491247707000" expanded="true" signature="8607:8906" placeholder="{...}" />
+            <marker date="1491247707000" expanded="true" signature="8894:8906" placeholder="{...}" />
+            <marker date="1491247707000" expanded="true" signature="37164:38298" placeholder="{...}" />
           </folding>
         </state>
       </provider>

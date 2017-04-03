@@ -251,7 +251,6 @@ function getprojectKey(project_id) {
           ' INNER JOIN projects_keys AS pb ON keys.id = pb.key_id ' +
           ' WHERE  pb.project_id = @project_id')
         .then(function (data) {
-          console.log(data[0]);
           var html = '';
           for (var i = 0; i < data.length; i++) {
             html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
@@ -671,11 +670,6 @@ $('#submit').on('click', function (e) {
     var work = (document.getElementById('work').value ? document.getElementById('work').value : '');
     var date = document.getElementById('date').value;
     var area = $('#area').find("option:selected").val();
-    var key = (document.getElementById('key').value ? document.getElementById('key').value : null);
-    if (key) {
-      key = key.toLowerCase();
-      key = key.charAt(0).toUpperCase() + key.slice(1);
-    }
     var defect = (document.getElementById('defect').value ? document.getElementById('defect').value : null);
     var charm = (document.getElementById('charm').value ? document.getElementById('charm').value : null);
     var status = (document.getElementById('status').value ? document.getElementById('status').value : null);
@@ -699,7 +693,6 @@ $('#submit').on('click', function (e) {
       new sql.Request()
         .input('work', work)
         .input('area', area)
-        .input('key', key)
         .input('dbid', dbid)
         .input('vsn', vsn)
         .input('defect', defect)
@@ -716,7 +709,7 @@ $('#submit').on('click', function (e) {
         .input('solution_de', solution_de)
         .input('c2c', c2c)
         .input('id', issueID)
-        .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, [key] = @key, defect= @defect,charm =@charm,' +
+        .query('UPDATE issues SET work = @work ,dbid = @dbid, area = @area, defect= @defect,charm =@charm,' +
           'status = @status,no_further_action = @no_further_action,reproducible = @reproducible,priority = @priority,' +
           'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
           'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
@@ -863,7 +856,8 @@ $('#new_issue').click(function (e) {
   document.getElementById('date').value = getDate();
   $('#area').val(0).selectpicker('refresh');
   $('#baseline').val(1).selectpicker('refresh');
-  document.getElementById('key').value = '';
+  $('#baseline :first').click();
+  $('#key :first').click();
   document.getElementById('vsn').value = '';
   document.getElementById('defect').value = '';
   document.getElementById('charm').value = '';
