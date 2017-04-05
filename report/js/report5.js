@@ -236,7 +236,7 @@ function allIssues(project_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -448,7 +448,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -655,7 +655,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -865,7 +865,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -1102,7 +1102,7 @@ function allIssuespdf(project_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -1325,7 +1325,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -1545,7 +1545,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
@@ -1767,7 +1767,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                             case 5:
                                                 area = 'Wish';
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 area = 'Training';
                                                 break;
                                         }
