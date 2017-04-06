@@ -244,11 +244,13 @@ textarea {
 }
 
 #type {
-    width: 20%;
+    width: 100px;
 }
-
+#copy {
+    width: 50px;
+}
 #delete {
-    width: 10%;
+    width: 50px;
 }
 
 #submit {

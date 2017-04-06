@@ -227,9 +227,6 @@ function issueBaseline(issue_id) {
           $('#baseline').val(data[0].id).selectpicker('refresh');
           $('#cd').val(data[0].cd);
         });
-      /*.catch(function (error) {
-                showNotification('Error on refreshing baseline:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            });*/
     }
   });
 }
@@ -323,7 +320,33 @@ function issueKey(issue_id) {
 //======================================================================================================================
 // load from charm and save it 
 
-function loadCharm() {
+function changCharm() {
+  var project_name = document.getElementById('project_name');
+  var project_ID = project_name.options[project_name.selectedIndex].value;
+  if ($('#charm').val() !== "") {
+    var connection11 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(connection11);
+        request
+        .input('project_id', project_ID)
+        .input('charm', document.getElementById('charm').value)
+        .query('SELECT charm FROM issues WHERE charm = @charm AND project_id = @project_id')
+        .then(function (data) {
+          if(data[0] !== undefined){
+            showNotification('Another issue have the same Charm number', 'danger', 'glyphicon glyphicon-tasks');
+            $('#charm').val('');
+          } else {
+            loadCharm();
+          }
+        });
+      }
+    });
+    
+  }
+}
+function loadCharm(){
   if ($('#charm').val() !== "") {
     sql.connect(charm).then(function () {
       new sql.Request()
@@ -347,32 +370,10 @@ function loadCharm() {
           document.getElementById('work').value = data[0].work;
           document.getElementById('status').value = data[0].status;
           document.getElementById('vsn').value = data[0].vsn;
-
-            /*var issueID = document.getElementById('issueID').value;
-           var connection11 = new sql.Connection(config, function (err) {
-            if (err) {
-              showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            } else {
-              var request = new sql.Request(connection1);
-              request
-              .input('work', data[0].work)
-              .input('vsn', data[0].vsn)
-              .input('status', data[0].status)
-              .input('summary', data[0].summary)
-              .input('description', data[0].details)
-              .input('priority', data[0].priority)
-              .input('id', issueID)
-              .query('UPDATE issues SET work = @work , status = @status,summary = @summary, vsn = @vsn , description = @description WHERE id = @id')
-              .then(function (data) {
-
-              });
-            }
-          });*/
           $('#work').attr("disabled", "disabled").addClass('disabled');
           $('#priority').attr("disabled", "disabled").addClass('disabled');
           $('#status').attr("disabled", "disabled").addClass('disabled');
           $('#vsn').attr("disabled", "disabled").addClass('disabled');
-
         }).catch(function (error) {
           showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
           $('#charm').val('');
@@ -395,7 +396,8 @@ $(document).ready(function () {
     show: true,
     backdrop: "static",
     keyboard: false
-  }); // show modal which cannot escape
+  }); // show modal which cannot escape\
+
   //load projects names 
   sql.connect(config).then(function () {
     new sql.Request()
@@ -417,14 +419,14 @@ $(document).ready(function () {
     showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
   });
 
-  //to submit issue when pressing center
+  //to submit issue when pressing enter
   $('form#issue :input').on('keydown', function (e) {
     if (e.keyCode === 13) {
       e.preventDefault();
       $('#submit').click();
     }
   });
-
+ 
   //change status , work and vsn when charm field changes.
   $('#charm').on('blur', function (e) {
     if ($('#charm').val() === "") {
@@ -438,7 +440,7 @@ $(document).ready(function () {
   });
 
   $('#charm').on('change', function () {
-    loadCharm();
+    changCharm();
   });
 });
 
@@ -1002,8 +1004,9 @@ function refreshFiles(issueID) {
           let html = '';
           $('#files-table-body').empty();
           data.forEach(function (data) {
-            html += '<tr><td>' + data.type + '</td>' +
-              '<td><a tabindex="-1" target="_blank" href="file:///' + data.path + '">' + data.path + '</a></td>' +
+            html += '<tr class="tablerow"><td>' + data.type + '</td>' +
+              '<td class="path"><a tabindex="-1" target="_blank" href="file:///' + data.path + '">' + data.path + '</a></td>' +
+              '<td class="copy-td text-center"><button tabindex="-1" type="button" class="btn btn-warning file-copy btn-xs" aria-label="copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button></td>'+
               '<td class="delete-td text-center"><button tabindex="-1" type="button" class="btn btn-danger file-delete btn-xs" data-id="' + data.id + '" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>';
           });
           $('#files-table-body').append(html);
@@ -1032,6 +1035,22 @@ $('#files-table').delegate('.file-delete', 'click', function (e) {
     showNotification('error connecting for deleting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
   });
 });
+
+
+//copy file path to clipboard
+$('#files-table').delegate('.file-copy', 'click', function (e) {
+  e.preventDefault();
+  var link = $(this).parent().parent().find('.path').text();
+  var copy = new Clipboard('.btn',{
+    text: function(trigger) {
+        return link;
+    }
+  });
+  showNotification('Link has been copied', 'success', 'glyphicon glyphicon-ok');
+  
+});
+
+
 
 //======================================================================================================================
 //delete button
