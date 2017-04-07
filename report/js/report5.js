@@ -822,7 +822,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                 .input('project_id', sql.Int, project_id)
                 .input('customer_id', sql.Int, customer_id)
                 .input('baseline_id', sql.Int, baseline_id)
-                .query('SELECT [id],[dbid],[date], [charm] , [defect] , [status], [summary], [description],[area],[c2c],[description_de] from [issues] ' +
+                .query('SELECT [id],[dbid],[date],[charm],[defect],[status],[summary],[description],[area],[c2c],[description_de] from [issues] ' +
                     'INNER JOIN [issues_customers] as ic ON [issues].[id] = ic.[issue_id] ' +
                     'INNER JOIN [issues_baselines] as ib ON [issues].[id] = ib.[issue_id] ' +
                     'WHERE ic.[customer_id] = @customer_id AND ib.[baseline_id] = @baseline_id and [issues].[project_id] = @project_id ORDER BY [id] ;')
@@ -879,6 +879,10 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                             '<tr>' +
                                             '<td class="bold">Date:</td>' +
                                             '<td>' + data1.date + '</td>' +
+                                            '</tr>' +
+                                            '<tr>' +
+                                            '<td class="bold">Area:</td>' +
+                                            '<td>' + area + '</td>' +
                                             '</tr>' +
                                             '<tr>' +
                                             '<td class="bold">Customers:</td><td>';
