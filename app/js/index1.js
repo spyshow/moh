@@ -15,21 +15,21 @@ $('#myTabs').find('a').click(function (e) {
 //======================================================================================================================
 //notification
 function showNotification(msg, type, icon) {
-    $.notify({
-        icon: icon,
-        message: msg
-    }, {
-        type: type,
-        placement: {
-          from: "bottom",
-          align: "right"
-        },
-        delay: 3000,
-        animate: {
-          enter: 'animated fadeInUp',
-          exit: 'animated fadeOutDown'
-        }
-    });
+  $.notify({
+    icon: icon,
+    message: msg
+  }, {
+    type: type,
+    placement: {
+      from: "bottom",
+      align: "right"
+    },
+    delay: 3000,
+    animate: {
+      enter: 'animated fadeInUp',
+      exit: 'animated fadeOutDown'
+    }
+  });
 }
 
 //======================================================================================================================
@@ -54,7 +54,7 @@ function getDate() {
 var config = {
   user: 'test',
   password: '123456',
-  server: 'ENG3',
+  server: 'ENG-03',
   port: 1433,
   database: 'test',
   pool: {
@@ -70,7 +70,7 @@ var config = {
 var charm = {
   user: 'test',
   password: '123456',
-  server: 'ENG3',
+  server: 'ENG-03',
   port: 1433,
   database: 'CharmNT_MR_User',
   pool: {
@@ -254,6 +254,8 @@ function getprojectKey(project_id) {
 
           }
           $('#key').append(html).selectpicker('refresh');
+          $('#s_key').append('<option value="none">None</option>').selectpicker('refresh');
+          $('#s_key').append(html).selectpicker('refresh');
           html = '';
         });
       /*.catch(function (error) {
@@ -330,23 +332,24 @@ function changCharm() {
       } else {
         var request = new sql.Request(connection11);
         request
-        .input('project_id', project_ID)
-        .input('charm', document.getElementById('charm').value)
-        .query('SELECT charm FROM issues WHERE charm = @charm AND project_id = @project_id')
-        .then(function (data) {
-          if(data[0] !== undefined){
-            showNotification('Another issue have the same Charm number', 'danger', 'glyphicon glyphicon-tasks');
-            $('#charm').val('');
-          } else {
-            loadCharm();
-          }
-        });
+          .input('project_id', project_ID)
+          .input('charm', document.getElementById('charm').value)
+          .query('SELECT charm FROM issues WHERE charm = @charm AND project_id = @project_id')
+          .then(function (data) {
+            if (data[0] !== undefined) {
+              showNotification('Another issue have the same Charm number', 'danger', 'glyphicon glyphicon-tasks');
+              $('#charm').val('');
+            } else {
+              loadCharm();
+            }
+          });
       }
     });
-    
+
   }
 }
-function loadCharm(){
+
+function loadCharm() {
   if ($('#charm').val() !== "") {
     sql.connect(charm).then(function () {
       new sql.Request()
@@ -426,7 +429,7 @@ $(document).ready(function () {
       $('#submit').click();
     }
   });
- 
+
   //change status , work and vsn when charm field changes.
   $('#charm').on('blur', function (e) {
     if ($('#charm').val() === "") {
@@ -1006,7 +1009,7 @@ function refreshFiles(issueID) {
           data.forEach(function (data) {
             html += '<tr class="tablerow"><td>' + data.type + '</td>' +
               '<td class="path"><a tabindex="-1" target="_blank" href="file:///' + data.path + '">' + data.path + '</a></td>' +
-              '<td class="copy-td text-center"><button tabindex="-1" type="button" class="btn btn-warning file-copy btn-xs" aria-label="copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button></td>'+
+              '<td class="copy-td text-center"><button tabindex="-1" type="button" class="btn btn-warning file-copy btn-xs" aria-label="copy"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button></td>' +
               '<td class="delete-td text-center"><button tabindex="-1" type="button" class="btn btn-danger file-delete btn-xs" data-id="' + data.id + '" aria-label="Delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td></tr>';
           });
           $('#files-table-body').append(html);
@@ -1041,13 +1044,13 @@ $('#files-table').delegate('.file-delete', 'click', function (e) {
 $('#files-table').delegate('.file-copy', 'click', function (e) {
   e.preventDefault();
   var link = $(this).parent().parent().find('.path').text();
-  var copy = new Clipboard('.btn',{
-    text: function(trigger) {
-        return link;
+  var copy = new Clipboard('.btn', {
+    text: function (trigger) {
+      return link;
     }
   });
   showNotification('Link has been copied', 'success', 'glyphicon glyphicon-ok');
-  
+
 });
 
 
@@ -1377,6 +1380,12 @@ $('.search-btn').click(function (e) {
   } else {
     customer = document.getElementById('s_customer').value;
   }
+  var key;
+  if (document.getElementById('s_key').options[document.getElementById('s_key').selectedIndex].textContent === 'none') {
+    key = null;
+  } else {
+    key = document.getElementById('s_key').options[document.getElementById('s_key').selectedIndex].textContent;
+  }
   var summary = document.getElementById('s_summary').value;
   var status = document.getElementById('s_status').value;
   var open_issue = 0;
@@ -1390,13 +1399,25 @@ $('.search-btn').click(function (e) {
     var req = new sql.Request();
     //making the sql statment
 
-    var final_sql = 'SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues]';
+    var final_sql = 'SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues] ';
     if (customer) {
-      final_sql += ' JOIN [issues_customers] ON [issues].[id]= [issues_customers].[issue_id] JOIN [customers] on [customers].[id] = [issues_customers].[customer_id] WHERE [customers].[name] LIKE @customer AND ';
-      req.input('customer', sql.VarChar(50), '%' + customer + '%');
+      final_sql += ' JOIN [issues_customers] ON [issues].[id]= [issues_customers].[issue_id] JOIN [customers] on [customers].[id] = [issues_customers].[customer_id]  ';
+      if (key) {
+        final_sql += ' JOIN [issues_keys] ON [issues].[id]= [issues_keys].[issue_id] JOIN [keys] on [keys].[id] = [issues_keys].[key_id] WHERE [keys].[name] = @key AND [customers].[name] = @customer AND ';
+        req.input('key', key);
+      } else {
+        final_sql += ' WHERE [customers].[name] = @customer AND ';
+      }
+      req.input('customer', customer);
     } else {
-      final_sql += ' WHERE ';
+      if (key) {
+        final_sql += ' JOIN [issues_keys] ON [issues].[id]= [issues_keys].[issue_id] JOIN [keys] on [keys].[id] = [issues_keys].[key_id] WHERE [keys].[name] = @key AND ';
+        req.input('key', key);
+      } else {
+        final_sql += ' WHERE ';
+      }
     }
+     
     if (dbid) {
       final_sql += ' [issues].[dbid] = @dbid AND ';
       req.input('dbid', dbid);
@@ -1435,11 +1456,11 @@ $('.search-btn').click(function (e) {
     final_sql += ' project_id = @project_id ';
     req.input('project_id', sql.Int, project_ID);
 
-    if (!dbid && !status && !summary && !defect && !charm && !customer && !desc && !desc_de) {
+    if (!dbid && !status && !summary && !defect && !charm && !customer && !key && !desc && !desc_de) {
       $('.search-ph').removeClass('hidden').addClass('show');
 
     } else {
-
+      console.log(final_sql , key);
       req.query(final_sql)
         .then(function (data) {
 
@@ -1800,7 +1821,7 @@ function updateAction(issue_id) {
     } else {
       var request = new sql.Request(connection3);
       request.input('issue_id', issue_id)
-        .query('SELECT description,date FROM actions WHERE issue_id = @issue_id ORDER BY id DESC')
+        .query('SELECT id,description,date FROM actions WHERE issue_id = @issue_id ORDER BY id DESC')
         .then(function (data) {
           $('#action-current').empty();
           if (data.length > 0) {
@@ -1811,7 +1832,7 @@ function updateAction(issue_id) {
           let list = '';
           $('#action-history').empty();
           data.forEach(function (data) {
-            list += '<li class="list-group-item"><span class="badge">' + data.date + '</span>' + data.description + '</li>';
+            list += '<li class="list-group-item"><span class="badge">' + data.date + '</span>' + data.description + '<button class="btn btn-danger btn-xs pull-right" id="delete-action" data-id='+data.id+'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></li>';
           });
           $('#action-history').append(list);
         }).catch(function (error) {
@@ -1820,3 +1841,25 @@ function updateAction(issue_id) {
     }
   });
 }
+
+$('#action-history').delegate('#delete-action', 'click', function (e) {
+  e.preventDefault();
+  let id = this.dataset.id;
+  var that = $(this);
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('action_id', id)
+        .query('DELETE FROM actions WHERE id = @action_id')
+        .then(function (data) {
+          showNotification('Action Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
+          that.parent().hide();
+        }).catch(function (error) {
+          showNotification('can\'t Delete action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
+  });
+});
