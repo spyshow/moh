@@ -26,7 +26,7 @@ const sql = require('mssql');
 var config = {
   user: 'test',
   password: '123456',
-  server: 'ENG3',
+  server: 'ENG-03',
   port: 1433,
   database: 'test',
   pool: {
@@ -42,7 +42,7 @@ var config = {
 var charm = {
   user: 'test',
   password: '123456',
-  server: 'ENG3',
+  server: 'ENG-03',
   port: 1433,
   database: 'CharmNT_MR_User',
   pool: {
@@ -87,7 +87,7 @@ app.on('window-all-closed', function () {
     app.quit();
   }
 });
-
+ 
 app.on('ready', function () {
 
   //Main window

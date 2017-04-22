@@ -157,7 +157,7 @@ ipc.on('show-evaluation', function (event, project_id) {
 var config = {
     user: 'test',
     password: '123456',
-    server: 'ENG3',
+  server: 'ENG-03',
     port: 1433,
     database: 'test',
     pool: {

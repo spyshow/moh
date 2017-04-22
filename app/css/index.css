@@ -35,7 +35,7 @@ body {
 */
 
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #666  !important
+    color:    #5a5a5a  !important
 }
 
 .form-group {
@@ -167,14 +167,14 @@ fieldset {
 }
 
 #description {
-    resize: vertical;
+    resize: none;
     max-height: 120px;
     width: 42%;
     margin: 10px 0 0 39px;
 }
 
 #description_de {
-    resize: vertical;
+    resize: none;
     max-height: 120px;
     width: 41%;
     margin: 10px 0 0 4px;
@@ -182,6 +182,10 @@ fieldset {
 
 #action {
     margin-left: 122px;
+}
+#delete-action {
+    margin-right: -113px; 
+    margin-top: -1px;
 }
 
 textarea {
@@ -193,7 +197,7 @@ textarea {
     margin: 0 0 0 122px;
     padding: 10px;
     width: 84%;
-    height: 75px;
+    height: 85px;
     border: solid 1px #CCCCCC;
     border-top-style: hidden;
     overflow-y: auto;
@@ -210,13 +214,20 @@ textarea {
     top: 28%;
     left: 86%;
 }
+.badge {
+    margin-right: 30px;
+}
 
 #solution {
+    resize: none;
+    height: 60px;
     margin: 10px 0 0 60px;
     width: 42%;
 }
 
 #solution_de {
+    resize: none;
+    height: 60px;
     width: 41%;
     margin: 10px 0 0 4px;
 }
@@ -270,7 +281,7 @@ textarea {
 
 .s_list {
     margin: 10px 0 0 0;
-    height: 535px;
+    height: 500px;
 }
 
 .search-ph {
@@ -305,6 +316,10 @@ textarea {
 
 .s_customer {
     margin: 15px 15px 0 0;
+}
+
+.s_key {
+    margin: 15px 55px 0 0;
 }
 
 #s_desc {
