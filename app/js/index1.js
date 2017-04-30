@@ -1381,7 +1381,7 @@ $('.search-btn').click(function (e) {
     customer = document.getElementById('s_customer').value;
   }
   var key;
-  if (document.getElementById('s_key').options[document.getElementById('s_key').selectedIndex].textContent === 'none') {
+  if (document.getElementById('s_key').options[document.getElementById('s_key').selectedIndex].textContent === 'None') {
     key = null;
   } else {
     key = document.getElementById('s_key').options[document.getElementById('s_key').selectedIndex].textContent;
@@ -1648,6 +1648,7 @@ $('.search-reset-btn').click(function (e) {
   document.getElementById('s_desc').value = '';
   document.getElementById('s_desc_de').value = '';
   $('#s_customer').val('none').selectpicker('refresh');
+  $('#s_key').val('none').selectpicker('refresh');
   document.getElementById('s_summary').value = '';
   document.getElementById('s_status').value = '';
   $('.search-ph').removeClass('hidden').addClass('show');
@@ -1791,8 +1792,8 @@ $('#new-action-btn').on('click', function (e) {
   let desc = document.getElementById('new-action').value;
   let date = getDate();
 
-
-  sql.connect(config).then(function () {
+  if(desc){
+    sql.connect(config).then(function () {
     new sql.Request()
       .input('desc', sql.NVarChar(sql.MAX), desc)
       .input('issue_id', sql.Int, issueID)
@@ -1805,13 +1806,14 @@ $('#new-action-btn').on('click', function (e) {
         showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       });
 
-    $('#new-action').val(' ');
-
-
-
-  }).catch(function (error) {
-    showNotification('error connecting for creating new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-  });
+      $('#new-action').val(' ');
+    }).catch(function (error) {
+      showNotification('error connecting for creating new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+   });
+  } else {
+      showNotification('Action field is empty', 'danger', 'glyphicon glyphicon-tasks');
+  }
+  
 });
 
 function updateAction(issue_id) {
@@ -1843,6 +1845,7 @@ function updateAction(issue_id) {
 }
 
 $('#action-history').delegate('#delete-action', 'click', function (e) {
+  let issueID = document.getElementById('issueID').value;
   e.preventDefault();
   let id = this.dataset.id;
   var that = $(this);
@@ -1856,7 +1859,8 @@ $('#action-history').delegate('#delete-action', 'click', function (e) {
         .query('DELETE FROM actions WHERE id = @action_id')
         .then(function (data) {
           showNotification('Action Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
-          that.parent().hide();
+          //that.parent().hide();
+          updateAction(issueID);
         }).catch(function (error) {
           showNotification('can\'t Delete action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });

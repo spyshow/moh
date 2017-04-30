@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/index.css" afterPath="$PROJECT_DIR$/app/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evaluations/js/evaluations.js" afterPath="$PROJECT_DIR$/evaluations/js/evaluations.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project/js/index.js" afterPath="$PROJECT_DIR$/project/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/js/report5.js" afterPath="$PROJECT_DIR$/report/js/report5.js" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,8 +26,8 @@
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2900232">
-              <caret line="1779" column="27" selection-start-line="1779" selection-start-column="27" selection-end-line="1779" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.34510434">
+              <caret line="1773" column="70" selection-start-line="1773" selection-start-column="70" selection-end-line="1773" selection-end-column="70" />
               <folding>
                 <element signature="n#!!block;n#showNotification#0" expanded="false" />
                 <element signature="n#!!block;n#getDate#0" expanded="false" />
@@ -465,12 +459,6 @@
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
     </task>
-    <task id="LOCAL-00037" summary="adjust baseline submit div">
-      <created>1484258222134</created>
-      <option name="number" value="00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1484258222134</updated>
-    </task>
     <task id="LOCAL-00038" summary="dbid start from 1 for each project">
       <created>1484496657788</created>
       <option name="number" value="00038" />
@@ -759,7 +747,13 @@
       <option name="project" value="LOCAL" />
       <updated>1492834688386</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="add key to search&#10;make solution fields larger &#10;add delete button to action history">
+      <created>1492835223987</created>
+      <option name="number" value="00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1492835223987</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TodoView">
@@ -780,7 +774,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23089172" sideWeight="0.51130855" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29493088" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29493088" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22893482" sideWeight="0.48869145" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="2" side_tool="true" content_ui="tabs" />
@@ -1379,8 +1373,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/index1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2900232">
-          <caret line="1779" column="27" selection-start-line="1779" selection-start-column="27" selection-end-line="1779" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.34510434">
+          <caret line="1773" column="70" selection-start-line="1773" selection-start-column="70" selection-end-line="1773" selection-end-column="70" />
           <folding>
             <element signature="n#!!block;n#showNotification#0" expanded="false" />
             <element signature="n#!!block;n#getDate#0" expanded="false" />
