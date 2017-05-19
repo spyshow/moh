@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.js" afterPath="$PROJECT_DIR$/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="moh.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,19 +29,9 @@
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34510434">
-              <caret line="1773" column="70" selection-start-line="1773" selection-start-column="70" selection-end-line="1773" selection-end-column="70" />
-              <folding>
-                <element signature="n#!!block;n#showNotification#0" expanded="false" />
-                <element signature="n#!!block;n#getDate#0" expanded="false" />
-                <element signature="n#!!block;n#getCustomersList#0" expanded="false" />
-                <element signature="n#!!block;n#checkCustomers#0" expanded="false" />
-                <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
-                <element signature="n#!!block;n#setBaseline#0" expanded="false" />
-                <element signature="e#82016#82985#0" expanded="false" />
-                <element signature="n#!!block;n#updateAction#0" expanded="false" />
-                <element signature="e#84434#85200#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.5634029">
+              <caret line="1639" column="15" selection-start-line="1639" selection-start-column="15" selection-end-line="1639" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -263,8 +256,8 @@
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/js/index.js" />
         <option value="$PROJECT_DIR$/main.js" />
-        <option value="$PROJECT_DIR$/app/js/index1.js" />
         <option value="$PROJECT_DIR$/report/js/report5.js" />
+        <option value="$PROJECT_DIR$/app/js/index1.js" />
       </list>
     </option>
   </component>
@@ -322,7 +315,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -375,6 +367,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -458,12 +451,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00038" summary="dbid start from 1 for each project">
-      <created>1484496657788</created>
-      <option name="number" value="00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1484496657788</updated>
     </task>
     <task id="LOCAL-00039" summary="add project id  for reports">
       <created>1484511433858</created>
@@ -753,7 +740,13 @@
       <option name="project" value="LOCAL" />
       <updated>1492835223987</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="add modal from switching from a new issue&#10;">
+      <created>1495024986059</created>
+      <option name="number" value="00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1495024986080</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TodoView">
@@ -767,11 +760,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17063493" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17063493" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23089172" sideWeight="0.51130855" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29493088" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
@@ -779,6 +771,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22893482" sideWeight="0.48869145" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -822,8 +815,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="file input ... ok" />
-    <MESSAGE value="add test.sql file (files table)" />
     <MESSAGE value="adding baseline" />
     <MESSAGE value="project page finished (beta)" />
     <MESSAGE value="charm add" />
@@ -847,7 +838,9 @@
     <MESSAGE value="charm updated" />
     <MESSAGE value="correct reports&#10;" />
     <MESSAGE value="add key to search&#10;make solution fields larger &#10;add delete button to action history" />
-    <option name="LAST_COMMIT_MESSAGE" value="add key to search&#10;make solution fields larger &#10;add delete button to action history" />
+    <MESSAGE value="add modal from switching from a new issue&#10;" />
+    <MESSAGE value="add TFS functionality to main page and add update TFS report" />
+    <option name="LAST_COMMIT_MESSAGE" value="add TFS functionality to main page and add update TFS report" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1199,6 +1192,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/index1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5634029">
+          <caret line="1639" column="15" selection-start-line="1639" selection-start-column="15" selection-end-line="1639" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/report/js/report5.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1367,24 +1368,6 @@
             <marker date="1492808918540" expanded="true" signature="112618:112668" placeholder="..." />
             <marker date="1492808918540" expanded="true" signature="112758:112796" placeholder="..." />
             <marker date="1492808918540" expanded="true" signature="113279:113303" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/index1.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34510434">
-          <caret line="1773" column="70" selection-start-line="1773" selection-start-column="70" selection-end-line="1773" selection-end-column="70" />
-          <folding>
-            <element signature="n#!!block;n#showNotification#0" expanded="false" />
-            <element signature="n#!!block;n#getDate#0" expanded="false" />
-            <element signature="n#!!block;n#getCustomersList#0" expanded="false" />
-            <element signature="n#!!block;n#checkCustomers#0" expanded="false" />
-            <element signature="n#!!block;n#getprojectBaseline#0" expanded="false" />
-            <element signature="n#!!block;n#setBaseline#0" expanded="false" />
-            <element signature="e#82016#82985#0" expanded="false" />
-            <element signature="n#!!block;n#updateAction#0" expanded="false" />
-            <element signature="e#84434#85200#0" expanded="false" />
           </folding>
         </state>
       </provider>

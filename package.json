@@ -1,12 +1,12 @@
 {
-  "name": "cpfid",
-  "productName": "CPF-ID",
+  "name": "cpfdb",
+  "productName": "CPF-DB",
   "version": "1.0.0",
-  "description": "cpf id",
+  "description": "cpf db",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --overwrite --platform=win32 --arch=x64"
+    "build": "electron-packager . --icon=img/icons/cpf-db.ico --overwrite --platform=win32 --arch=x64"
   },
   "author": "",
   "license": "ISC",

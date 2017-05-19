@@ -389,6 +389,66 @@ function loadCharm() {
 }
 
 //======================================================================================================================
+// load from TFS and save it 
+
+function changTFS() {
+  var project_name = document.getElementById('project_name');
+  var project_ID = project_name.options[project_name.selectedIndex].value;
+  if ($('#defect').val() !== "") {
+    var connection11 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(connection11);
+        request
+          .input('project_id', project_ID)
+          .input('defect', document.getElementById('defect').value)
+          .query('SELECT defect FROM issues WHERE defect = @defect AND project_id = @project_id')
+          .then(function (data) {
+            if (data[0] !== undefined) {
+              showNotification('Another issue have the same defect number', 'danger', 'glyphicon glyphicon-tasks');
+              $('#defect').val('');
+            } else {
+              loadTFS();
+            }
+          });
+      }
+    });
+
+  }
+}
+
+function loadTFS() {
+  if ($('#defect').val() !== "") {
+    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    $.ajax({
+      url: url,
+      type: 'GET',
+      crossDomain: false,
+      dataType: 'json',
+      username: 'Ad005\\z003psst',
+      password: 'Ml998877665544332211',
+      xhrFields: {
+        withCredentials: true
+      }
+    }).done(function (data) {
+      document.getElementById('description').value = data.fields["System.Description"]
+      document.getElementById('summary').value = data.fields["System.Title"]
+      document.getElementById('status').value = data.fields["System.State"]
+      document.getElementById('work').value = data.fields["System.AssignedTo"]
+      document.getElementById('vsn').value = data.fields["Siemens.IKM.Common.ProductRelease"]
+      $('#status').attr("disabled", "disabled").addClass('disabled');
+      $('#work').attr("disabled", "disabled").addClass('disabled');
+      $('#vsn').attr("disabled", "disabled").addClass('disabled');
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      showNotification('defect Number Error: Wrong defect Number', 'danger', 'glyphicon glyphicon-tasks');
+      $('#defect').val('');
+    });
+  }
+}
+
+
+//======================================================================================================================
 //when page ready [ok]
 
 $(document).ready(function () {
@@ -434,7 +494,7 @@ $(document).ready(function () {
   //change status , work and vsn when charm field changes.
   $('#charm').on('blur', function (e) {
     if ($('#charm').val() === "") {
-      $('#desc').attr("disabled", false).removeClass('disabled');
+      $('#description').attr("disabled", false).removeClass('disabled');
       $('#summary').attr("disabled", false).removeClass('disabled');
       $('#work').attr("disabled", false).removeClass('disabled');
       $('#priority').attr("disabled", false).removeClass('disabled');
@@ -445,6 +505,20 @@ $(document).ready(function () {
 
   $('#charm').on('change', function () {
     changCharm();
+  });
+
+  //change status , work and vsn when defect (tfs) field changes.
+  $('#defect').on('blur', function (e) {
+    if ($('#defect').val() === "") {
+      $('#description').attr("disabled", false).removeClass('disabled');
+      $('#summary').attr("disabled", false).removeClass('disabled');
+      $('#work').attr("disabled", false).removeClass('disabled');
+      $('#status').attr("disabled", false).removeClass('disabled');
+    }
+  });
+
+  $('#defect').on('change', function () {
+    changTFS();
   });
 });
 
@@ -562,6 +636,11 @@ $('#project_submit').click(function () {
             } else {
               $('#work,#vsn,#status,#priority').prop('disabled', false);
             }
+            if ($('#defect').val() !== "") {
+              $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+            } else {
+              $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+            }
             $('#priority').selectpicker('refresh');
             $('#delete_btn').removeClass('disabled').attr("disabled", false);
             if (data[1] === undefined) {
@@ -576,6 +655,7 @@ $('#project_submit').click(function () {
             issueBaseline(data[0].id);
             issueKey(data[0].id);
             loadCharm();
+            loadTFS();
           }
           // customer list
         }).then(function () {
@@ -670,14 +750,13 @@ $('#submit').on('click', function (e) {
   }, 1000);
   e.preventDefault();
   var checkedCustomers = 0;
-  $(".customers").each(function(){
-        if($(this).is(':checked')){
-           checkedCustomers++
-        }
+  $(".customers").each(function () {
+    if ($(this).is(':checked')) {
+      checkedCustomers++
+    }
   });
-  if (checkedCustomers === 0)
-  {
-      showNotification('No Customer selected !', 'danger', 'glyphicon glyphicon-tasks');
+  if (checkedCustomers === 0) {
+    showNotification('No Customer selected !', 'danger', 'glyphicon glyphicon-tasks');
   } else {
     if ($('#reproducible').val() === '0' || $('#messenger').val() === '0' || $('#area').val() === '0') {
       showNotification('Reproducible , Messenger or Area can\'t be none', 'danger', 'glyphicon glyphicon-tasks');
@@ -796,7 +875,7 @@ $('#submit').on('click', function (e) {
       });
     }
   }
-  
+
 });
 
 //======================================================================================================================
@@ -806,7 +885,7 @@ $('#new_issue').click(function (e) {
   setTimeout(function () {
     $(this).prop('disabled', false);
   }, 1000);
-  newIssue = true ;
+  newIssue = true;
   e.preventDefault();
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
@@ -1157,6 +1236,11 @@ $('#first_issue').click(function () {
         } else {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
+        if ($('#defect').val() !== "") {
+          $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+        } else {
+          $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+        }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
         issueKey(issueID);
@@ -1169,6 +1253,7 @@ $('#first_issue').click(function () {
         $('#delete_btn').removeClass('disabled').attr("disabled", false);
         refreshFiles(document.getElementById('issueID').value);
         loadCharm();
+        loadTFS();
       });
   });
 
@@ -1215,6 +1300,11 @@ $('#last_issue').click(function () {
         } else {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
+        if ($('#defect').val() !== "") {
+          $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+        } else {
+          $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+        }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
         issueKey(issueID);
@@ -1226,6 +1316,7 @@ $('#last_issue').click(function () {
         $('#files-table-body').empty();
         refreshFiles(document.getElementById('issueID').value);
         loadCharm();
+        loadTFS();
       });
   });
   $('#files-table-body').empty();
@@ -1279,6 +1370,11 @@ $('#next_issue').click(function () {
           } else {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
+          if ($('#defect').val() !== "") {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+          } else {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+          }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
           issueKey(issueID);
@@ -1290,6 +1386,7 @@ $('#next_issue').click(function () {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
+          loadTFS();
         });
     }
     // check if issue is the last issue
@@ -1353,6 +1450,11 @@ $('#previous_issue').click(function () {
           } else {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
+          if ($('#defect').val() !== "") {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+          } else {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+          }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
           issueKey(issueID);
@@ -1363,6 +1465,7 @@ $('#previous_issue').click(function () {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
+          loadTFS();
         });
       // check if issue is the last issue
       var request1 = new sql.Request(connect1);
@@ -1444,7 +1547,7 @@ $('.search-btn').click(function (e) {
         final_sql += ' WHERE ';
       }
     }
-     
+
     if (dbid) {
       final_sql += ' [issues].[dbid] = @dbid AND ';
       req.input('dbid', dbid);
@@ -1487,7 +1590,6 @@ $('.search-btn').click(function (e) {
       $('.search-ph').removeClass('hidden').addClass('show');
 
     } else {
-      console.log(final_sql , key);
       req.query(final_sql)
         .then(function (data) {
 
@@ -1553,7 +1655,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
   var id = parseInt($(this).attr('href'));
   var project_name = document.getElementById('project_name');
   var project_ID = parseInt(project_name.options[project_name.selectedIndex].value);
-  if(newIssue === true){
+  if (newIssue === true) {
     $('#go-on').modal({
       show: true,
       backdrop: 'static',
@@ -1597,6 +1699,11 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           } else {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
+          if ($('#defect').val() !== "") {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+          } else {
+            $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+          }
           $('#priority').selectpicker('refresh');
           issueBaseline(data[0].id);
           issueKey(issueID);
@@ -1606,6 +1713,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
+          loadTFS();
         }).catch(function (error) {
           showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
@@ -1640,10 +1748,10 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
     });
 
   }
-  $('#go-on-btn').click(function(e){
-      e.preventDefault();
-      issueid = document.getElementById('issueID').value;
-      var conn1 = new sql.Connection(config, function (err) {
+  $('#go-on-btn').click(function (e) {
+    e.preventDefault();
+    issueid = document.getElementById('issueID').value;
+    var conn1 = new sql.Connection(config, function (err) {
       if (err) {
         showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
       } else {
@@ -1652,8 +1760,8 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           .input('issue_id', issueid)
           .query('DELETE FROM issues WHERE id = @issue_id')
           .then(function (data) {
-              getCustomersList(project_ID);
-              var conn1 = new sql.Connection(config, function (err) {
+            getCustomersList(project_ID);
+            var conn1 = new sql.Connection(config, function (err) {
               if (err) {
                 showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
               } else {
@@ -1693,6 +1801,11 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
                     } else {
                       $('#work,#vsn,#status,#priority').prop('disabled', false);
                     }
+                    if ($('#defect').val() !== "") {
+                      $('#work,#description,#status,#summary,#vsn').prop('disabled', true);
+                    } else {
+                      $('#work,#description,#status,#summary,#vsn').prop('disabled', false);
+                    }
                     $('#priority').selectpicker('refresh');
                     issueBaseline(data[0].id);
                     issueKey(issueID);
@@ -1702,6 +1815,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
                     $('#files-table-body').empty();
                     refreshFiles(document.getElementById('issueID').value);
                     loadCharm();
+                    loadTFS();
                   }).catch(function (error) {
                     showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                   });
@@ -1731,16 +1845,16 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
                   }).catch(function (error) {
                     showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                   });
-                  $('#submit').removeClass('disabled').attr("disabled", false);
-                  $('#cancel').addClass('disabled').attr("disabled", true);
-                  $('#delete').removeClass('disabled').attr("disabled", false);
-                  $('#new_issue').removeClass('disabled').attr("disabled", false);
-                  newIssue = false;
+                $('#submit').removeClass('disabled').attr("disabled", false);
+                $('#cancel').addClass('disabled').attr("disabled", true);
+                $('#delete').removeClass('disabled').attr("disabled", false);
+                $('#new_issue').removeClass('disabled').attr("disabled", false);
+                newIssue = false;
               }
             }).catch(function (error) {
               showNotification('Error connecting for getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
             });
-            
+
           })
       }
     });
@@ -1931,28 +2045,28 @@ $('#new-action-btn').on('click', function (e) {
   let desc = document.getElementById('new-action').value;
   let date = getDate();
 
-  if(desc){
+  if (desc) {
     sql.connect(config).then(function () {
-    new sql.Request()
-      .input('desc', sql.NVarChar(sql.MAX), desc)
-      .input('issue_id', sql.Int, issueID)
-      .input('date', sql.NVarChar(10), date)
-      .query('INSERT INTO actions (issue_id,description,date) VALUES (@issue_id ,@desc,@date)')
-      .then(function (data) {
-        showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
-        updateAction(issueID);
-      }).catch(function (error) {
-        showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
+      new sql.Request()
+        .input('desc', sql.NVarChar(sql.MAX), desc)
+        .input('issue_id', sql.Int, issueID)
+        .input('date', sql.NVarChar(10), date)
+        .query('INSERT INTO actions (issue_id,description,date) VALUES (@issue_id ,@desc,@date)')
+        .then(function (data) {
+          showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
+          updateAction(issueID);
+        }).catch(function (error) {
+          showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
 
       $('#new-action').val(' ');
     }).catch(function (error) {
       showNotification('error connecting for creating new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-   });
+    });
   } else {
-      showNotification('Action field is empty', 'danger', 'glyphicon glyphicon-tasks');
+    showNotification('Action field is empty', 'danger', 'glyphicon glyphicon-tasks');
   }
-  
+
 });
 
 function updateAction(issue_id) {
@@ -1973,7 +2087,7 @@ function updateAction(issue_id) {
           let list = '';
           $('#action-history').empty();
           data.forEach(function (data) {
-            list += '<li class="list-group-item"><span class="badge">' + data.date + '</span>' + data.description + '<button class="btn btn-danger btn-xs pull-right" id="delete-action" data-id='+data.id+'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></li>';
+            list += '<li class="list-group-item"><span class="badge">' + data.date + '</span>' + data.description + '<button class="btn btn-danger btn-xs pull-right" id="delete-action" data-id=' + data.id + '><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></li>';
           });
           $('#action-history').append(list);
         }).catch(function (error) {
