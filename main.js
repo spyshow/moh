@@ -24,6 +24,10 @@ const {
 } = require('electron');
 const async = require('async');
 const sql = require('mssql');
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM(`<!DOCTYPE html>`);
+const $ = require('jQuery')(window);
 
 
 //======================================================================================================================
@@ -105,7 +109,7 @@ app.on('ready', function () {
     minHeight: 700,
     maximizable: true,
     icon: path.join(__dirname, 'img/icons/png/128x128.png')
-    
+
   });
   mainWindow.loadURL(mainWindowPath);
   mainWindow.center();
@@ -635,88 +639,9 @@ ipc.on('updateDatabase', function (event, project_ID, project_title) {
 //============================================================================================================================
 // Update TFS
 
-ipc.on('updateDatabase', function (event, project_ID, project_title) {
-  var connection1 = new sql.Connection(config, function (err) {
-    if (err) {
-      //showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    } else {
-      let docx = '<!DOCTYPE html>' +
-        '<html>' +
-        '<head>' +
-        '<style>' +
-        'body {' +
-        'padding: 0 20px;' +
-        '}' +
-        '.bold {' +
-        'text-align: left;' +
-        'font-weight: bold;' +
-        'width: 20%;' +
-        '}' +
-        '</style>' +
-        '</head>' +
-        '<body>' +
-        '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
-      var request = new sql.Request(connection1);
-      request
-        .input('project_id', sql.Int, project_ID)
-        .query('SELECT [issues].[id],[issues].[defect],[issues].[status],[issues].[vsn]' +
-          ' FROM [issues] ' +
-          ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
-        .then(function (data) {
-          async.timesSeries(data.length, function (n, callback) {
-            var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
-            $.ajax({
-              url: url,
-              type: 'GET',
-              crossDomain: false,
-              dataType: 'json',
-              username: 'Ad005\\z003psst',
-              password: 'Ml998877665544332211',
-              xhrFields: {
-                withCredentials: true
-              }
-            }).done(function (data) {
-              if (data[n].status != data.fields["System.State"]) {
-                docx += '<p>in Charm number  MR_00' + data[n].defect + ' the status  changed from "' + data[n].status + '" to "' + data.fields["System.State"] + '"</p>';
-              }
-              if (data[n].vsn != data.fields["Siemens.IKM.Common.ProductRelease"]) {
-                docx += '<p>in Charm number  MR_00' + data[n].defect + ' the vsn changed from "' + data[n].vsn + '" to "' + data.fields["Siemens.IKM.Common.ProductRelease"] + '"</p>';
-              }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-              console.log('failed with tfs id = '+ data[n].defect);
-            });
-            callback();
-
-
-          });
-        }, function () {
-          setTimeout(function () {
-            var conf = {
-              "format": "A4",
-              "header": {
-                "height": "20mm"
-              }
-            };
-            var date = getDate();
-            dialog.showSaveDialog({
-              filters: [{
-                name: 'PDFs',
-                extensions: ['pdf']
-              }],
-              title: 'Save the Update TFS as PDF',
-              defaultPath: path.join(app.getPath('desktop'), 'Update TFS -' + project_title + '-' + date + '.pdf')
-            }, function (filename) {
-              pdf.create(docx, conf).toFile(filename, function (err, res) {
-                if (err) return console.log(err);
-              });
-
-            });
-          }, 100);
-        });
-    }
-  });
+ipc.on('updateTFS', function (event, project_ID, project_title) {
+  mainWindow.webContents.send('updateTFSprocess');
 });
-
 
 
 //============================================================================================================================
