@@ -425,8 +425,8 @@ function changTFS() {
 
 function loadTFS() {
   if ($('#defect').val() !== "") {
-    //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
-    var url = __dirname+'/test.json';
+    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    //var url = __dirname+'/test.json';
     $.ajax({
       url: url,
       type: 'GET',
@@ -610,8 +610,8 @@ ipc.on('updateTFSprocess', function () {
           .then(function (data) {
             console.log(data)
             async.timesSeries(data.length, function (n, callback) {
-              //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
-              var url = __dirname + '\\test.json';
+              var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
+              //var url = __dirname + '\\test.json';
               $.ajax({
                 url: url,
                 type: 'GET',
