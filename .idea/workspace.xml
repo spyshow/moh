@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
     </list>
     <ignored path="moh.iws" />
@@ -27,12 +28,9 @@
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39666668">
-              <caret line="428" column="6" selection-start-line="428" selection-start-column="6" selection-end-line="428" selection-end-column="6" />
-              <folding>
-                <element signature="n#!!block;n#changTFS#0" expanded="false" />
-                <element signature="e#21929#25447#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.028286189">
+              <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -193,8 +191,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -278,12 +276,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00044" summary="bug crash">
-      <created>1484788264264</created>
-      <option name="number" value="00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1484788264264</updated>
     </task>
     <task id="LOCAL-00045" summary="fix chart for each project&#10;">
       <created>1484918675757</created>
@@ -573,7 +565,13 @@
       <option name="project" value="LOCAL" />
       <updated>1495387193922</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="fix description and summary disable problem&#10;">
+      <created>1495388042671</created>
+      <option name="number" value="00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1495388042753</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TodoView">
@@ -587,9 +585,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1736672" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1736672" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22770701" sideWeight="0.12358643" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
@@ -671,7 +669,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="41" />
+      <option name="time" value="42" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1023,48 +1021,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.69">
           <caret line="58" column="19" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
-          <folding>
-            <element signature="e#679#891#0" expanded="false" />
-            <element signature="e#906#1129#0" expanded="false" />
-            <element signature="n#!!block;n#getDate#0" expanded="false" />
-            <element signature="e#1858#1919#0" expanded="false" />
-            <element signature="e#1951#4550#0" expanded="false" />
-            <element signature="e#4592#4646#0" expanded="false" />
-            <element signature="e#4689#4787#0" expanded="false" />
-            <marker date="1495385792233" expanded="true" signature="7314:7347" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="12824:12844" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="12988:13004" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13092:13112" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13156:13194" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13312:13332" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13380:13418" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13540:13560" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13617:13655" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13780:13800" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="13845:13883" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14002:14022" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14076:14114" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14236:14256" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14319:14357" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14458:14478" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14557:14590" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14697:14748" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="14804:14842" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="15106:15139" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="15245:15296" placeholder="..." />
-            <marker date="1495385792233" expanded="true" signature="15352:15390" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/index1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39666668">
-          <caret line="428" column="6" selection-start-line="428" selection-start-column="6" selection-end-line="428" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!block;n#changTFS#0" expanded="false" />
-            <element signature="e#21929#25447#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.028286189">
+          <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>

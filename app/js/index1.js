@@ -425,8 +425,8 @@ function changTFS() {
 
 function loadTFS() {
   if ($('#defect').val() !== "") {
-    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
-    //var url = __dirname+'/test.json';
+    //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    var url = __dirname+'/test.json';
     $.ajax({
       url: url,
       type: 'GET',
@@ -504,11 +504,11 @@ $(document).ready(function () {
   });
 
   //to submit issue when pressing enter
-  $('form#issue :input').on('keydown', function (e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      $('#submit').click();
-    }
+  $('form#issue :text').on('keydown', function (e) { 
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        $('#submit').click();
+      }
   });
 
   //change status , work and vsn when charm field changes.
