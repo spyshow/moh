@@ -220,7 +220,7 @@ $(document).ready(function () {
         edit_data(id, type, newValue, 'baselines', el);
     });
 
-    //baseline table 
+    //key table 
     $(document).on('focus', '.editablekeys', function () {
         currentValue = $(this).text();
     });
@@ -284,6 +284,7 @@ ipc.on('show-new-project', function (event) {
     document.getElementById('type').value = '';
     $('#customerTable-body').empty();
     $('#baselineTable-body').empty();
+    $('#keyTable-body').empty();
 });
 
 $('#projectSubmit').on('click', function (e) {
@@ -359,10 +360,10 @@ $('#projectSubmit').on('click', function (e) {
                   } else {
                       document.getElementById('TFS').checked = true;
                   }
+                  showNotification('There is another Project with the same values, Project Loaded', 'warning', 'glyphicon glyphicon-tasks');
                   refreshCustomer(data1[0].id);
                   refreshBaseline(data1[0].id);
                   refreshKey(data[0].id);
-                  showNotification('There is another Project with the same values, Project Loaded', 'warning', 'glyphicon glyphicon-tasks');
                 } else {
                   var conn2 = new sql.Connection(config, function (err) {
                     if (err) {

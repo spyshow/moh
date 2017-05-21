@@ -116,7 +116,7 @@ legend{
     width: 5%;
 }
 
-#customerTable , #baselineTable{
+#customerTable , #baselineTable , #keyTable{
     margin: 30px 0;
 }
 

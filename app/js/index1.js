@@ -425,8 +425,8 @@ function changTFS() {
 
 function loadTFS() {
   if ($('#defect').val() !== "") {
-    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
-    //var url = __dirname+'/test.json';
+    //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    var url = __dirname+'/test.json';
     $.ajax({
       url: url,
       type: 'GET',
@@ -513,7 +513,7 @@ $(document).ready(function () {
 
   //change status , work and vsn when charm field changes.
   $('#charm').on('blur', function (e) {
-    if ($('#charm').val() === "") {
+    if ($('#charm').val() === "" && $('#defect').val() === "") {
       $('#description').attr("disabled", false).removeClass('disabled');
       $('#summary').attr("disabled", false).removeClass('disabled');
       $('#work').attr("disabled", false).removeClass('disabled');
@@ -529,12 +529,13 @@ $(document).ready(function () {
 
   //change status , work and vsn when defect (tfs) field changes.
   $('#defect').on('blur', function (e) {
-    if ($('#defect').val() === "") {
+    if ($('#defect').val() === "" && $('#charm').val() === "") {
       $('#description').attr("disabled", false).removeClass('disabled');
       $('#summary').attr("disabled", false).removeClass('disabled');
       $('#work').attr("disabled", false).removeClass('disabled');
       $('#status').attr("disabled", false).removeClass('disabled');
       $('#priority').attr("disabled", false).removeClass('disabled');
+      $('#vsn').attr("disabled", false).removeClass('disabled');
     }
   });
 
@@ -743,9 +744,9 @@ $('#project_submit').click(function () {
               $('#work,#vsn,#status,#priority').prop('disabled', false);
             }
             if ($('#defect').val() !== "") {
-              $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+              $('#work,#status,#vsn,#priority').prop('disabled', true);
             } else {
-              $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+              $('#work,#status,#vsn,#priority').prop('disabled', false);
             }
             $('#priority').selectpicker('refresh');
             $('#delete_btn').removeClass('disabled').attr("disabled", false);
@@ -1345,9 +1346,9 @@ $('#first_issue').click(function () {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
         if ($('#defect').val() !== "") {
-          $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+          $('#work,#status,#vsn,#priority').prop('disabled', true);
         } else {
-          $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+          $('#work,#status,#vsn,#priority').prop('disabled', false);
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
@@ -1409,9 +1410,9 @@ $('#last_issue').click(function () {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
         if ($('#defect').val() !== "") {
-          $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+          $('#work,#status,#vsn,#priority').prop('disabled', true);
         } else {
-          $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+          $('#work,#status,#vsn,#priority').prop('disabled', false);
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
@@ -1479,9 +1480,9 @@ $('#next_issue').click(function () {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn,#priority').prop('disabled', true);
           } else {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn,#priority').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
@@ -1559,9 +1560,9 @@ $('#previous_issue').click(function () {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn,#priority').prop('disabled', true);
           } else {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn,#priority').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
@@ -1808,9 +1809,9 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn,#priority').prop('disabled', true);
           } else {
-            $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn,#priority').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(data[0].id);
@@ -1910,9 +1911,9 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
                       $('#work,#vsn,#status,#priority').prop('disabled', false);
                     }
                     if ($('#defect').val() !== "") {
-                      $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', true);
+                      $('#work,#status,#vsn,#priority').prop('disabled', true);
                     } else {
-                      $('#work,#description,#status,#summary,#vsn,#priority').prop('disabled', false);
+                      $('#work,#status,#vsn,#priority').prop('disabled', false);
                     }
                     $('#priority').selectpicker('refresh');
                     issueBaseline(data[0].id);

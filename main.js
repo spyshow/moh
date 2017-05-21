@@ -9,19 +9,13 @@
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
-const {
-  dialog
-} = require('electron');
+const {dialog} = require('electron');
 const ipc = electron.ipcMain;
 const path = require('path');
-const {
-  shell
-} = require('electron');
+const {shell} = require('electron');
 const pdf = require('html-pdf');
 const fs = require('fs');
-const {
-  Menu
-} = require('electron');
+const {Menu} = require('electron');
 const async = require('async');
 const sql = require('mssql');
 
