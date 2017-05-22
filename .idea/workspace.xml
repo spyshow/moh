@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b195e3b7-ee01-4157-843e-72740de3cb4f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/index1.js" afterPath="$PROJECT_DIR$/app/js/index1.js" />
     </list>
     <ignored path="moh.iws" />
@@ -28,9 +27,34 @@
       <file leaf-file-name="index1.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/index1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.028286189">
-              <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
-              <folding />
+            <state vertical-scroll-proportion="0.6433735">
+              <caret line="430" column="15" selection-start-line="430" selection-start-column="15" selection-end-line="430" selection-end-column="15" />
+              <folding>
+                <element signature="e#17652#20480#0" expanded="false" />
+                <element signature="e#20519#20560#0" expanded="false" />
+                <element signature="e#20603#21893#0" expanded="false" />
+                <element signature="e#21937#25455#0" expanded="false" />
+                <element signature="e#25646#25703#0" expanded="false" />
+                <element signature="e#25745#25952#0" expanded="false" />
+                <element signature="e#26155#34361#0" expanded="false" />
+                <element signature="e#34562#41962#0" expanded="false" />
+                <element signature="e#42147#47287#0" expanded="false" />
+                <element signature="e#47469#48686#0" expanded="false" />
+                <element signature="e#48917#50698#0" expanded="false" />
+                <element signature="e#50883#51952#0" expanded="false" />
+                <element signature="n#!!block;n#refreshFiles#0" expanded="false" />
+                <element signature="e#53496#54178#0" expanded="false" />
+                <element signature="e#77125#88777#0" expanded="false" />
+                <element signature="e#88825#90661#0" expanded="false" />
+                <element signature="e#90726#91389#0" expanded="false" />
+                <element signature="e#91434#93093#0" expanded="false" />
+                <element signature="e#93137#94879#0" expanded="false" />
+                <element signature="e#94921#96923#0" expanded="false" />
+                <element signature="e#96968#98962#0" expanded="false" />
+                <element signature="e#99148#100261#0" expanded="false" />
+                <element signature="n#!!block;n#updateAction#0" expanded="false" />
+                <element signature="e#101714#102573#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -139,6 +163,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -191,8 +217,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -276,12 +300,6 @@
       <created>1475171485485</created>
       <option name="number" value="Default" />
       <updated>1475171485485</updated>
-    </task>
-    <task id="LOCAL-00045" summary="fix chart for each project&#10;">
-      <created>1484918675757</created>
-      <option name="number" value="00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1484918675757</updated>
     </task>
     <task id="LOCAL-00046" summary="bug crash">
       <created>1484918720575</created>
@@ -571,7 +589,13 @@
       <option name="project" value="LOCAL" />
       <updated>1495388042753</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="fix description and summary disable problem&#10;">
+      <created>1495403995165</created>
+      <option name="number" value="00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1495403995167</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TodoView">
@@ -587,11 +611,11 @@
     <frame x="1" y="0" width="1276" height="760" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1736672" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1736672" sideWeight="0.48267898" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281493" sideWeight="0.49682036" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22770701" sideWeight="0.12358643" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11954766" sideWeight="0.517321" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29493088" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29458597" sideWeight="0.48869145" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22770701" sideWeight="0.8764136" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24960254" sideWeight="0.5085537" order="2" side_tool="true" content_ui="tabs" />
@@ -640,7 +664,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="charm add" />
     <MESSAGE value="adjust baseline submit div" />
     <MESSAGE value="dbid start from 1 for each project" />
     <MESSAGE value="add project id  for reports" />
@@ -665,11 +688,12 @@
     <MESSAGE value="add TFS functionality to main page and add update TFS report" />
     <MESSAGE value="fixed update TFS report" />
     <MESSAGE value="fix description and summary disable problem&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix description and summary disable problem&#10;" />
+    <MESSAGE value="fix TFS ajax call" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix TFS ajax call" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="42" />
+      <option name="time" value="44" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1026,9 +1050,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/index1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.028286189">
-          <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
-          <folding />
+        <state vertical-scroll-proportion="0.6433735">
+          <caret line="430" column="15" selection-start-line="430" selection-start-column="15" selection-end-line="430" selection-end-column="15" />
+          <folding>
+            <element signature="e#17652#20480#0" expanded="false" />
+            <element signature="e#20519#20560#0" expanded="false" />
+            <element signature="e#20603#21893#0" expanded="false" />
+            <element signature="e#21937#25455#0" expanded="false" />
+            <element signature="e#25646#25703#0" expanded="false" />
+            <element signature="e#25745#25952#0" expanded="false" />
+            <element signature="e#26155#34361#0" expanded="false" />
+            <element signature="e#34562#41962#0" expanded="false" />
+            <element signature="e#42147#47287#0" expanded="false" />
+            <element signature="e#47469#48686#0" expanded="false" />
+            <element signature="e#48917#50698#0" expanded="false" />
+            <element signature="e#50883#51952#0" expanded="false" />
+            <element signature="n#!!block;n#refreshFiles#0" expanded="false" />
+            <element signature="e#53496#54178#0" expanded="false" />
+            <element signature="e#77125#88777#0" expanded="false" />
+            <element signature="e#88825#90661#0" expanded="false" />
+            <element signature="e#90726#91389#0" expanded="false" />
+            <element signature="e#91434#93093#0" expanded="false" />
+            <element signature="e#93137#94879#0" expanded="false" />
+            <element signature="e#94921#96923#0" expanded="false" />
+            <element signature="e#96968#98962#0" expanded="false" />
+            <element signature="e#99148#100261#0" expanded="false" />
+            <element signature="n#!!block;n#updateAction#0" expanded="false" />
+            <element signature="e#101714#102573#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
