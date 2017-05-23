@@ -33,6 +33,7 @@
     "mailparser": "^0.6.1",
     "mssql": "^3.3.0",
     "path": "^0.12.7",
-    "pdfkit": "^0.8.0"
+    "pdfkit": "^0.8.0",
+    "striptags": "^3.0.1"
   }
 }

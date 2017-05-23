@@ -92,6 +92,7 @@ div.input-group.date {
     margin-bottom: 10px;
 }
 
+
 .select {
     width: 119% !important;
     position: relative;
@@ -268,6 +269,9 @@ textarea {
     margin-left: 20px;
 }
 
+
+
+
 /* =====================================================================================================================
    Search panel
 */
@@ -340,6 +344,11 @@ textarea {
 #s_status {
     width: 65%;
     margin: 10px 0 0 38px;
+}
+
+#s_vsn {
+    width: 65%;
+    margin: 10px 0 0 14px;
 }
 
 #s_open_issues {

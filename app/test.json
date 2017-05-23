@@ -1,0 +1,107 @@
+{
+    "id": 2182774,
+    "rev": 19,
+    "fields": {
+        "System.AreaPath": "MR\\Ext\\SYN\\CCB SY",
+        "System.TeamProject": "MR",
+        "System.IterationPath": "MR",
+        "System.WorkItemType": "Defect",
+        "System.State": "In Sleeps",
+        "System.Reason": "Created_In Sleep",
+        "System.AssignedTo": "CCsB_extern",
+        "System.CreatedDate": "2017-04-06T11:48:35.797Z",
+        "System.CreatedBy": "Deepa, S. (HC SI DC IN DI2 MR) <AD005\\IC002352>",
+        "System.ChangedDate": "2017-05-16T02:57:58.01Z",
+        "System.ChangedBy": "Siemens Healthineers HITTFSDEX <WW005\\z003btnt>",
+        "System.Title": "CUTs IM04042525 Gliwice MR L-Spine User: Easy Reading Layout: no yellow slice possition line visible for all orientations.",
+        "Microsoft.VSTS.Common.StateChangeDate": "2017-04-06T11:50:54.34Z",
+        "Microsoft.VSTS.Common.ActivatedDate": "2017-04-06T12:14:01.577Z",
+        "Microsoft.VSTS.Common.ActivatedBy": "Siemens Healthineers HIT.SMD.TFS.TECH.USER <WW005\\z003585m>",
+        "Microsoft.VSTS.Common.ClosedDate": "2017-04-06T11:47:47.887Z",
+        "Microsoft.VSTS.Common.ClosedBy": "Deepa, S. (HC SI DC IN DI2 MR) <AD005\\IC002352>",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "Microsoft.VSTS.Common.StackRank": 1999707622,
+        "Microsoft.VSTS.Scheduling.RemainingWork": 0,
+        "Siemens.IKM.Impeded": "No",
+        "Siemens.IKM.Category": "SW - Software",
+        "Siemens.IKM.Common.ProductRelease": "SMRB2s0A_HF02",
+        "Siemens.IKM.Common.MinimumViableProduct": "No",
+        "Siemens.IKM.BacklogItem.IsLeaf": "Yes",
+        "Siemens.IKM.BacklogItem.IsTop": "No",
+        "Microsoft.VSTS.Common.Severity": "3 - Operation problem",
+        "Microsoft.VSTS.Build.FoundIn": "n.a.",
+        "Siemens.Defect.Reproducible": "Yes",
+        "Siemens.Defect.ExternalID": "SYN.2183336",
+        "Siemens.Defect.ExternalProductRelease": "via_VB20A_HF02",
+        "Siemens.Defect.FoundInPhase": "CPF",
+        "Siemens.Defect.Type": "Error",
+        "Siemens.Defect.SystemType": "n.a.",
+        "Siemens.Defect.Keyword": "Infrastructure",
+        "Siemens.Defect.ExternalState": "Qualified",
+        "Siemens.Development.RiskClass": "n.a.",
+        "Siemens.Defect.ExternalFlag": "Exported",
+        "Siemens.Defect.FoundInVersion": "SMRB20A",
+        "Siemens.Defect.ImpactLocked": "No",
+        "Siemens.Defect.Documents": "n.a. Not Applicable",
+        "Siemens.Defect.DecidedBy": "Deepa, S. (HC SI DC IN DI2 MR) <AD005\\IC002352>",
+        "Siemens.Defect.Keyword2": "undefined",
+        "Siemens.Defect.Frequency": "n.a.",
+        "Siemens.Defect.Product": "syngo.via MR",
+        "Siemens.Defect.ProductNr": "10093238",
+        "Siemens.Defect.AssignedDate": "2017-04-06T11:49:24Z",
+        "Siemens.Defect.CustomerName": "Gliwice",
+        "Siemens.Defect.ImpactHazard": "No",
+        "Siemens.LastChangedBy.RequestCCB": "Deepa, S. (HC SI DC IN DI2 MR)",
+        "Siemens.LastChangedBy.AdditionalInfo": "Deepa, S. (HC SI DC IN DI2 MR)",
+        "Siemens.LastChangedDate.AdditionalInfo": "2017-04-06T11:49:00Z",
+        "Siemens.LastChangedBy.CustomerImpact": "Deepa, S. (HC SI DC IN DI2 MR)",
+        "Siemens.LastChangedDate.CustomerImpact": "2017-04-06T11:48:03Z",
+        "Siemens.Defect.SolvedLocally": "No",
+        "Siemens.Defect.TypeOfComplaintReportable": "No",
+        "Siemens.Defect.TypeOfComplaintTrend": "No",
+        "Siemens.Defect.TypeOfComplaintPerformance": "No",
+        "Siemens.Defect.TypeOfComplaintSafety": "No",
+        "Siemens.Defect.AllAttachmentsToken": "4xLCpEi_QrvpkyK2oGQBVbggvaABRaIEam87ke3wx82",
+        "Siemens.Collection": "IKM.TPC.Projects",
+        "Siemens.BusinessUnit": "MR",
+        "Siemens.Defect.InValidation": "No",
+        "Siemens.LastChangedBy.Justification": "Deepa, S. (HC SI DC IN DI2 MR)",
+        "Siemens.LastChangedDate.Justification": "2017-04-06T11:48:03Z",
+        "System.Description": "<p>What sis the Problem:</p>\n<p>CUT: MR L-Spine User<br>for example pat id 14404 - study from 18..11.16<br>customer is opening WF MR L-Spine User: and drag and drop the needed series inside the easy reading layout.</p>\n<p>--&gt; with the button &quot;show hide line&quot; from the tool selection the reference line can be done visible and this function is selected in our case.</p>\n<p>--&gt; inside the Tra view and the Cor view - the system is showing the slice position as a yellow line when you scroll through the images.<br>--&gt; but this is not working for the Sag view.<br>Customer would expect to see the position on the cor images when scrolling on the sag view<br>--&gt; but this line never shows up.</p>\n<p>see screenshots attached.</p>\n<p>&nbsp;</p>\n<p>When does it occur:</p>\n<p>WF MR L-Spine USer<br>Easy reading layout.</p>\n<p>&nbsp;</p>\n<p>What has been done so far:</p>\n<p>see screenshot attached..</p>\n<p>reproducible on the server every time<br>- with the public and siemens default easy reading layout.</p>\n<p>&nbsp;</p>\n<p>Journal Updates:</p>\n<p>2016/12/02 11:22:50 - MANKUT, MATTHIAS - StR: NO - Vte: YES # Accept Routing: <br>Accepting Ticket by Z001T8ER.<br>_______________________________________________________________________________________________________<br>2016/12/02 10:53:40 - BRONOWICKI, BEATA - StR: NO - Vte: YES # Routing: <br>CUT: MR L-Spine User<br>for example pat id 14404 - study from 18..11.16<br>customer is opening WF MR L-Spine User: and drag and drop the needed series inside the easy reading layout.</p>\n<p>--&gt; with the button &quot;show hide line&quot; from the tool selection the reference line can be done visible and this function is selected in our case.</p>\n<p>--&gt; inside the Tra view and the Cor view - the system is showing the slice position as a yellow line when you scroll through the images.<br>--&gt; but this is not working for the Sag view.<br>Customer would expect to see the position on the cor images when scrolling on the sag view<br>--&gt; but this line never shows up.</p>\n<p>see screenshots attached.<br>_______________________________________________________________________________________________________<br>2016/12/02 10:52:50 - BRONOWICKI, BEATA - StR: YES - Vte: YES # Status Change -&gt; Cause Determined/ Possible Solution Found: <br>CUT: MR L-Spine User<br>for example pat id 14404 - study from 18..11.16<br>customer is opening WF MR L-Spine User: and drag and drop the needed series inside the easy reading layout.</p>\n<p>--&gt; with the button &quot;show hide line&quot; from the tool selection the reference line can be done visible and this function is selected in our case.</p>\n<p>--&gt; inside the Tra view and the Cor view - the system is showing the slice position as a yellow line when you scroll through the images.<br>--&gt; but this is not working for the Sag view.<br>Customer would expect to see the position on the cor images when scrolling on the sag view<br>--&gt; but this line never shows up.</p>\n<p>see screenshots attached.<br>_______________________________________________________________________________________________________<br>2016/12/02 10:47:47 - BRONOWICKI, BEATA - StR: YES - Vte: YES # Inform country about ongoing RSC action: <br>Inform country about ongoing RSC action:<br>_______________________________________________________________________________________________________</p>",
+        "System.History": "<p>DefectExchange: External Defect SYN.2183336 from DB SYN was set to state Qualified.</p>",
+        "Siemens.IKM.AdditionalInfo": "This Defect is duplicated from 2032765, due to the following reason: To track the issue at MR..\n\nReason the attribute was added:\nThe attribute “FramesPerpendicularityEnsuredByApplication” was added to the MR DRSplugin with CS:221346 as a fix for the defect: 640591.\n\nHere the “scrolling configuration \"\"SortingbyCategory ALONG_AXIS\"\" is not working in MR workflows for default layouts.”\n\nThe issue in the above defect was that the FrameSorter from SY Imaging has an assumption that ALONG_AXIS sorting/scrolling is only allowed for volume related data,\nas a consequence the DIP configured ALONG_AXIS sorting is not applied for the default layouts.\n\nTo fix the above issue:\nA new attribute “FramesPerpendicularityEnsuredByApplication” was introduced , so that sorting would be made ,even if the volume is not available.\n\nAlso I have attached the mail communication which has defect discussion with SY and MR.",
+        "Microsoft.VSTS.TCM.SystemInfo": "<p>Build/package:<br>Variant (debug / release):<br>Deployment:AppServer/RTC/Scanner<br>Hostname:<br>HW: CPU, memory, graphic card or PCInventory<br>SW: OS, service pack, hot fixes, virus scanner or PCInventory<br>Afctd Customer(s)[Name,City,Country,SiteNr]:</p>",
+        "Microsoft.VSTS.TCM.ReproSteps": "<p>Actual vs. expected behavior<br>Test steps: Steps to reproduce<br>Test data: List of test data, e.g. used image material<br>Test spec/Test case<br>ID: n.a. or full path or eDoc ID<br>Hazard/Safety<br>Test case: y/n</p>",
+        "Siemens.Defect.ExternalClarification": "------------- General Info-------------------------------------\nProduct: n.a.\nPriority: 2\nGlobalKeyword: CODE - Software Element\nFound In Build/Version: \nRealization Version: via_VB20A_HF02\nDue / Realization Date: \nIntegration Build: \nValidation Version: \n------------- Content Fields-----------------------------------\n### Assigned To: Shetty, Pratheeksha (HC SI DC IN DI1 DEV PCP 3)\n### Tags:\nRiskLevel_NoRisk\n### Request CCB:\n[CCB_VIB_PCP, 10-Apr-2017], Please assess.\n----------------------\n[Latif, 07-Apr-2017: Since the issue is reported on SMRVB20A, please set the Release as via_VB20A_HF02 and assign this defect to \n\"Ravi, C\" for assessment.\n--------------------\n\nplease assess if this is an via or Modules issue. Set to veriong for VB20A_HF02\n\n\n\nCCB_syngo.net_VIB_PCP: CCB Action on 2017-04-07. Values changed:\nProduct release - Modules_VA30_PCP, Prio -2.\n---------------------\n### Affected_Documents: CODE - Software Element\n### System Info:\nBuild/package:\nVariant (debug / release):\nDeployment:AppServer/RTC/Scanner\nHostname:\nHW: CPU, memory, graphic card or PCInventory\nSW: OS, service pack, hot fixes, virus scanner or PCInventory\nAfctd Customer(s)[Name,City,Country,SiteNr]:\n\n### CustomerName: Gliwice\n### ConsequenceOfError:\n[CCB_SAFETY 2017-05-05]  \nNo risk as no wrong reference line information is displayed, but the refline is only missing. In this case the user could use e.g. a different layout.\n### TestToBePerformed:\nReference test case from a formal test specification or define test steps (with pass/fail criteria) to be performed; define specific deployments/configurations to be tested\n### Iteration Path: syngo.net\n### Iteration Forecast: PCP_Build2\n### Value: 3555\n### Component: syngo.via\n### CustomerName: Gliwice",
+        "Siemens.Defect.CustomerImpact": "2D reference lines are not shown in certain circumstances after creating a layout with easy reading D&D.",
+        "Siemens.Defect.Justification": "Deepak Srinivasan: Kindly export the defect to Imaging team :HC SI DC SVK IMG(already discussed with SY imaging team)",
+        "Siemens.Defect.ProposedSolution": "DESCRIPTION OF SOLUTION: The attribute is misleading to be considered for the scout evaluation.\nHence the attribute from the IsScout method needs to be removed.\n\nRESOURCE/UI/ADOC Change:NA\n\nELH/EPH/EDS/EUT/EIT/ESR Change:NA\n\nAFFECTED REQUIRMENT KEYS / EGA KEYS:NA",
+        "Siemens.Defect.RequestCCB": "MR_CCB_syngo.via_SMRB20A_HFxx, 2017-04-06:Duplicate for 2032765 to track the issue at MR. Please provide the solution for VB20A HF02",
+        "Siemens.Defect.RootCause": "The source document and target document are considered as Scout images, since in MR DRSPlugin we are adding the “FramesPerpendicularityEnsuredByApplication” attribute for documents which has volume.\n\nThe bouding box calculation returns vector3d which is not satisfying the overlapping condition for 2D ref lines, the bounding box calculation depends on the IsScout Method.",
+        "Siemens.Defect.TestingConcerns": "Are new tests recommended?\nAre new regression tests needed?"
+    },
+    "_links": {
+        "self": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workItems/2182774"
+        },
+        "workItemUpdates": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workItems/2182774/updates"
+        },
+        "workItemRevisions": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workItems/2182774/revisions"
+        },
+        "workItemHistory": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workItems/2182774/history"
+        },
+        "html": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/web/wi.aspx?pcguid=129ceb29-67bf-48dd-9ab7-98e89e40b0b2&id=2182774"
+        },
+        "workItemType": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/5efca8fe-a11b-4c15-948c-c1f59bb0605f/_apis/wit/workItemTypes/Defect"
+        },
+        "fields": {
+            "href": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/fields"
+        }
+    },
+    "url": "https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workItems/2182774"
+}

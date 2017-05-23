@@ -2,7 +2,8 @@ var electron = require('electron');
 var ipc = electron.ipcRenderer;
 var sql = require('mssql');
 const async = require('async');
-const {dialog , app} = require('electron').remote;
+const {dialog,app} = require('electron').remote;
+const striptags = require('striptags');
 const path = require('path');
 const pdf = require('html-pdf');
 var newIssue = false;
@@ -408,13 +409,13 @@ function changTFS() {
         request
           .input('project_id', project_ID)
           .input('defect', document.getElementById('defect').value)
-          .query('SELECT defect FROM issues WHERE defect = @defect AND project_id = @project_id')
+          .query('SELECT * FROM issues WHERE defect = @defect AND project_id = @project_id')
           .then(function (data) {
             if (data[0] !== undefined) {
               showNotification('Another issue have the same defect number', 'danger', 'glyphicon glyphicon-tasks');
               $('#defect').val('');
             } else {
-              loadTFS();
+              loadTFS(data.columns.vsn,data.columns.description,data.columns.summary,data.columns.status,data.columns.work,data.columns.priority);
             }
           });
       }
@@ -423,10 +424,10 @@ function changTFS() {
   }
 }
 
-function loadTFS() {
+function loadTFS(vsn,description,summary,status,work,priority) {
   if ($('#defect').val() !== "") {
-    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
-    //var url = __dirname+'/test.json';
+    //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    var url = __dirname + '/test.json';
     $.ajax({
       url: url,
       type: 'GET',
@@ -438,9 +439,7 @@ function loadTFS() {
         withCredentials: true
       }
     }).done(function (data) {
-      var priority = data.fields["Microsoft.VSTS.Common.Priority"];
-      console.log(priority);
-      switch (priority) {
+      switch (data.fields["Microsoft.VSTS.Common.Priority"]) {
         case 1:
           $('#priority').val(1).selectpicker('refresh');
           break;
@@ -451,12 +450,51 @@ function loadTFS() {
           $('#priority').val(3).selectpicker('refresh');
           break;
       }
-      document.getElementById('description').value = data.fields["System.Description"]
-      document.getElementById('summary').value = data.fields["System.Title"]
+
+      //highlight the field that there is a difference between database and TFS 
+      if(priority !== data.fields["Microsoft.VSTS.Common.Priority"]){
+        $('#priority').selectpicker('setStyle', 'btn-warning');
+        setTimeout(function () {
+            $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+            $('#priority').selectpicker('setStyle', 'btn-default');
+        }, 3000);
+      }
+      if(vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]){
+        $('#vsn').css('background-color','#f0ad4e');
+        setTimeout(function () {
+            $('#vsn').css('background-color','white');
+        }, 3000);
+      }
+      if(description !== striptags(data.fields["System.Description"])){
+        $('#description').css('background-color','#f0ad4e');
+        setTimeout(function () {
+            $('#description').css('background-color','white');
+        }, 3000);
+      }
+      if(summary !== striptags(data.fields["System.Title"])){
+        $('#summary').css('background-color','#f0ad4e');
+        setTimeout(function () {
+            $('#summary').css('background-color','white');
+        }, 3000);
+      }
+      if(status !== data.fields["System.State"]){
+        $('#status').css('background-color','#f0ad4e');
+        setTimeout(function () {
+            $('#status').css('background-color','white');
+        }, 3000);
+      }
+      if(work !== data.fields["System.AssignedTo"]){
+        $('#work').css('background-color','#f0ad4e');
+        setTimeout(function () {
+            $('#work').css('background-color','white');
+        }, 3000);
+      }
+  
+      document.getElementById('description').value = striptags(data.fields["System.Description"]);
+      document.getElementById('summary').value = striptags(data.fields["System.Title"])
       document.getElementById('status').value = data.fields["System.State"]
       document.getElementById('work').value = data.fields["System.AssignedTo"]
       document.getElementById('vsn').value = data.fields["Siemens.IKM.Common.ProductRelease"]
-      $('#priority').attr("disabled", "disabled").addClass('disabled');
       $('#status').attr("disabled", "disabled").addClass('disabled');
       $('#work').attr("disabled", "disabled").addClass('disabled');
       $('#vsn').attr("disabled", "disabled").addClass('disabled');
@@ -504,11 +542,11 @@ $(document).ready(function () {
   });
 
   //to submit issue when pressing enter
-  $('form#issue :text').on('keydown', function (e) { 
-      if (e.keyCode === 13) {
-        e.preventDefault();
-        $('#submit').click();
-      }
+  $('form#issue :text').on('keydown', function (e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      $('#submit').click();
+    }
   });
 
   //change status , work and vsn when charm field changes.
@@ -530,11 +568,8 @@ $(document).ready(function () {
   //change status , work and vsn when defect (tfs) field changes.
   $('#defect').on('blur', function (e) {
     if ($('#defect').val() === "" && $('#charm').val() === "") {
-      $('#description').attr("disabled", false).removeClass('disabled');
-      $('#summary').attr("disabled", false).removeClass('disabled');
       $('#work').attr("disabled", false).removeClass('disabled');
       $('#status').attr("disabled", false).removeClass('disabled');
-      $('#priority').attr("disabled", false).removeClass('disabled');
       $('#vsn').attr("disabled", false).removeClass('disabled');
     }
   });
@@ -583,86 +618,84 @@ ipc.on('refresh-projects', function () {
 
 ipc.on('updateTFSprocess', function () {
   var connection1 = new sql.Connection(config, function (err) {
-      if (err) {
-        //showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      } else {
-        let docx = '<!DOCTYPE html>' +
-          '<html>' +
-          '<head>' +
-          '<style>' +
-          'body {' +
-          'padding: 0 20px;' +
-          '}' +
-          '.bold {' +
-          'text-align: left;' +
-          'font-weight: bold;' +
-          'width: 20%;' +
-          '}' +
-          '</style>' +
-          '</head>' +
-          '<body>' +
-          '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
-        var request = new sql.Request(connection1);
-        request
-          .input('project_id', sql.Int, project_ID)
-          .query('SELECT [issues].[id],[issues].[defect],[issues].[status],[issues].[vsn]' +
-            ' FROM [issues] ' +
-            ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
-          .then(function (data) {
-            console.log(data)
-            async.timesSeries(data.length, function (n, callback) {
-              var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
-              //var url = __dirname + '\\test.json';
-              $.ajax({
-                url: url,
-                type: 'GET',
-                crossDomain: false,
-                dataType: 'json',
-                username: 'Ad005\\z003psst',
-                password: 'Ml998877665544332211',
-                xhrFields: {
-                  withCredentials: true
-                }
-              }).done(function (data1) {
-                if (data[n].status != data1.fields["System.State"]) {
-                  docx += '<p>in Defect number ' + data[n].defect + ' the status  changed from "' + data[n].status + '" to "' + data1.fields["System.State"] + '"</p>';
-                }
-                if (data[n].vsn != data1.fields["Siemens.IKM.Common.ProductRelease"]) {
-                  docx += '<p>in Defect number ' + data[n].defect + ' the vsn changed from "' + data[n].vsn + '" to "' + data1.fields["Siemens.IKM.Common.ProductRelease"] + '"</p>';
-                }
-                console.log(docx);
-              }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('failed with tfs id = ' + data[n].defect);
-                console.log(textStatus);
-              });
-              callback();
-            }, function () {
-              setTimeout(function () {
-                var conf = {
-                  "format": "A4",
-                  "header": {
-                    "height": "20mm"
-                  }
-                };
-                var date = getDate();
-                dialog.showSaveDialog({
-                  filters: [{
-                    name: 'PDFs',
-                    extensions: ['pdf']
-                  }],
-                  title: 'Save the Update TFS as PDF',
-                  defaultPath: path.join(app.getPath('desktop'), 'Update TFS-' + project_title + '-' + date + '.pdf')
-                }, function (filename) {
-                  pdf.create(docx, conf).toFile(filename, function (err, res) {
-                    if (err) return console.log(err);
-                  });
-
-                });
-              }, 100);
+    if (err) {
+      //showNotification('error connecting: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      let docx = '<!DOCTYPE html>' +
+        '<html>' +
+        '<head>' +
+        '<style>' +
+        'body {' +
+        'padding: 0 20px;' +
+        '}' +
+        '.bold {' +
+        'text-align: left;' +
+        'font-weight: bold;' +
+        'width: 20%;' +
+        '}' +
+        '</style>' +
+        '</head>' +
+        '<body>' +
+        '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
+      var request = new sql.Request(connection1);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[defect],[issues].[status],[issues].[vsn]' +
+          ' FROM [issues] ' +
+          ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
+        .then(function (data) {
+          async.timesSeries(data.length, function (n, callback) {
+            var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
+            //var url = __dirname + '\\test.json';
+            $.ajax({
+              url: url,
+              type: 'GET',
+              crossDomain: false,
+              dataType: 'json',
+              username: 'Ad005\\z003psst',
+              password: 'Ml998877665544332211',
+              xhrFields: {
+                withCredentials: true
+              }
+            }).done(function (data1) {
+              if (data[n].status != data1.fields["System.State"]) {
+                docx += '<p>in Defect number ' + data[n].defect + ' the status  changed from "' + data[n].status + '" to "' + data1.fields["System.State"] + '"</p>';
+              }
+              if (data[n].vsn != data1.fields["Siemens.IKM.Common.ProductRelease"]) {
+                docx += '<p>in Defect number ' + data[n].defect + ' the vsn changed from "' + data[n].vsn + '" to "' + data1.fields["Siemens.IKM.Common.ProductRelease"] + '"</p>';
+              }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+              console.log('failed with tfs id = ' + data[n].defect);
+              console.log(textStatus);
             });
+            callback();
+          }, function () {
+            setTimeout(function () {
+              var conf = {
+                "format": "A4",
+                "header": {
+                  "height": "20mm"
+                }
+              };
+              var date = getDate();
+              dialog.showSaveDialog({
+                filters: [{
+                  name: 'PDFs',
+                  extensions: ['pdf']
+                }],
+                title: 'Save the Update TFS as PDF',
+                defaultPath: path.join(app.getPath('desktop'), 'Update TFS-' + project_title + '-' + date + '.pdf')
+              }, function (filename) {
+                pdf.create(docx, conf).toFile(filename, function (err, res) {
+                  if (err) return console.log(err);
+                });
+
+              });
+            }, 100);
           });
-      }
-    });
+        });
+    }
+  });
 });
 
 //======================================================================================================================
@@ -744,9 +777,9 @@ $('#project_submit').click(function () {
               $('#work,#vsn,#status,#priority').prop('disabled', false);
             }
             if ($('#defect').val() !== "") {
-              $('#work,#status,#vsn,#priority').prop('disabled', true);
+              $('#work,#status,#vsn').prop('disabled', true);
             } else {
-              $('#work,#status,#vsn,#priority').prop('disabled', false);
+              $('#work,#status,#vsn').prop('disabled', false);
             }
             $('#priority').selectpicker('refresh');
             $('#delete_btn').removeClass('disabled').attr("disabled", false);
@@ -762,7 +795,7 @@ $('#project_submit').click(function () {
             issueBaseline(data[0].id);
             issueKey(data[0].id);
             loadCharm();
-            loadTFS();
+            loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
           }
           // customer list
         }).then(function () {
@@ -919,11 +952,10 @@ $('#submit').on('click', function (e) {
             'messenger = @messenger,summary = @summary, vsn = @vsn , description = @description, description_de = @description_de,' +
             'solution = @solution , solution_de = @solution_de, c2c = @c2c WHERE id = @id')
           .then(function (data) {
-            console.log(data);
             newIssue = false;
             var baseline_id = document.getElementById('baseline').options[document.getElementById('baseline').selectedIndex].value;
             var key_id = document.getElementById('key').options[document.getElementById('key').selectedIndex].value;
-            
+
             setKey(key_id, issueID);
             setBaseline(baseline_id, issueID);
             showNotification('Data updated in the database', 'success', 'glyphicon glyphicon-tasks');
@@ -931,10 +963,37 @@ $('#submit').on('click', function (e) {
             $('#cancel').addClass('disabled').attr("disabled", "disabled");
             $('#new_issue').removeClass('disabled').attr("disabled", false);
             $('#delete_btn').removeClass('disabled').attr("disabled", false);
-            $('#last_issue').addClass('disabled').attr("disabled", true);
-            $('#next_issue').addClass('disabled').attr("disabled", true);
-            $('#first_issue').removeClass('disabled').attr("disabled", false);
-            $('#previous_issue').removeClass('disabled').attr("disabled", false);
+            //for disable and enable navigation buttons
+            var conn2 = new sql.Connection(config, function (error) {
+              if (error) {
+                showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
+                var request = new sql.Request(conn2);
+                request
+                  .input('project_id', sql.Int, project_ID)
+                  .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
+                  .then(function (data) {
+                    if (document.getElementById('issueID').value == data[0].max_id) {
+
+                      $('#last_issue').addClass('disabled').attr("disabled", "disabled");
+                      $('#next_issue').addClass('disabled').attr("disabled", "disabled");
+                      $('#first_issue').removeClass('disabled').attr("disabled", false);
+                      $('#previous_issue').removeClass('disabled').attr("disabled", false);
+                    } else if (document.getElementById('issueID').value == data[0].min_id) {
+                      $('#last_issue').removeClass('disabled').attr("disabled", false);
+                      $('#next_issue').removeClass('disabled').attr("disabled", false);
+                      $('#first_issue').addClass('disabled').attr("disabled", "disabled");
+                      $('#previous_issue').addClass('disabled').attr("disabled", "disabled");
+                    } else {
+                      $('#last_issue').removeClass('disabled').attr("disabled", false);
+                      $('#next_issue').removeClass('disabled').attr("disabled", false);
+                      $('#first_issue').removeClass('disabled').attr("disabled", false);
+                      $('#previous_issue').removeClass('disabled').attr("disabled", false);
+                    }
+                  });
+              }
+            });
+            //for cpf all
             var conn2 = new sql.Connection(config, function (error) {
               if (error) {
                 showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -975,7 +1034,7 @@ $('#submit').on('click', function (e) {
             });
 
           }).catch(function (error) {
-            showNotification('No baseline selected '+ error, 'danger', 'glyphicon glyphicon-tasks');
+            showNotification('No baseline selected ' + error, 'danger', 'glyphicon glyphicon-tasks');
           });
 
 
@@ -1346,9 +1405,9 @@ $('#first_issue').click(function () {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
         if ($('#defect').val() !== "") {
-          $('#work,#status,#vsn,#priority').prop('disabled', true);
+          $('#work,#status,#vsn').prop('disabled', true);
         } else {
-          $('#work,#status,#vsn,#priority').prop('disabled', false);
+          $('#work,#status,#vsn').prop('disabled', false);
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
@@ -1362,7 +1421,7 @@ $('#first_issue').click(function () {
         $('#delete_btn').removeClass('disabled').attr("disabled", false);
         refreshFiles(document.getElementById('issueID').value);
         loadCharm();
-        loadTFS();
+        loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
       });
   });
 
@@ -1410,9 +1469,9 @@ $('#last_issue').click(function () {
           $('#work,#vsn,#status,#priority').prop('disabled', false);
         }
         if ($('#defect').val() !== "") {
-          $('#work,#status,#vsn,#priority').prop('disabled', true);
+          $('#work,#status,#vsn').prop('disabled', true);
         } else {
-          $('#work,#status,#vsn,#priority').prop('disabled', false);
+          $('#work,#status,#vsn').prop('disabled', false);
         }
         $('#priority').selectpicker('refresh');
         issueBaseline(issueID);
@@ -1425,7 +1484,7 @@ $('#last_issue').click(function () {
         $('#files-table-body').empty();
         refreshFiles(document.getElementById('issueID').value);
         loadCharm();
-        loadTFS();
+        loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
       });
   });
   $('#files-table-body').empty();
@@ -1480,9 +1539,9 @@ $('#next_issue').click(function () {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#status,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn').prop('disabled', true);
           } else {
-            $('#work,#status,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
@@ -1495,7 +1554,7 @@ $('#next_issue').click(function () {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
-          loadTFS();
+          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
         });
     }
     // check if issue is the last issue
@@ -1560,9 +1619,9 @@ $('#previous_issue').click(function () {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#status,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn').prop('disabled', true);
           } else {
-            $('#work,#status,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(issueID);
@@ -1574,7 +1633,7 @@ $('#previous_issue').click(function () {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
-          loadTFS();
+          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
         });
       // check if issue is the last issue
       var request1 = new sql.Request(connect1);
@@ -1613,6 +1672,7 @@ $('.search-btn').click(function (e) {
   var charm = document.getElementById('s_charm').value;
   var desc = document.getElementById('s_desc').value;
   var desc_de = document.getElementById('s_desc_de').value;
+  var vsn = document.getElementById('s_vsn').value;
   var customer;
   if (document.getElementById('s_customer').value === 'none') {
     customer = null;
@@ -1674,6 +1734,10 @@ $('.search-btn').click(function (e) {
       final_sql += '  [issues].[description] LIKE @desc AND ';
       req.input('desc', sql.NVarChar(sql.MAX), '%' + desc + '%');
     }
+    if (vsn) {
+      final_sql += '  [issues].[vsn] =  @vsn AND ';
+      req.input('vsn', vsn);
+    }
     if (desc_de) {
       final_sql += '  [issues].[description_de] LIKE @desc_de AND ';
       req.input('desc_de', sql.NVarChar(sql.MAX), '%' + desc_de + '%');
@@ -1695,7 +1759,7 @@ $('.search-btn').click(function (e) {
     final_sql += ' project_id = @project_id ';
     req.input('project_id', sql.Int, project_ID);
 
-    if (!dbid && !status && !summary && !defect && !charm && !customer && !key && !desc && !desc_de) {
+    if (!dbid && !status && !summary && !defect && !charm && !customer && !key && !desc && !desc_de && !vsn) {
       $('.search-ph').removeClass('hidden').addClass('show');
 
     } else {
@@ -1762,6 +1826,7 @@ $('.search-btn').click(function (e) {
 $('.s_list').delegate('.search-result', 'click', function (e) {
   e.preventDefault();
   var id = parseInt($(this).attr('href'));
+  $('#go-on-btn').data('id',id);
   var project_name = document.getElementById('project_name');
   var project_ID = parseInt(project_name.options[project_name.selectedIndex].value);
   if (newIssue === true) {
@@ -1809,9 +1874,9 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
             $('#work,#vsn,#status,#priority').prop('disabled', false);
           }
           if ($('#defect').val() !== "") {
-            $('#work,#status,#vsn,#priority').prop('disabled', true);
+            $('#work,#status,#vsn').prop('disabled', true);
           } else {
-            $('#work,#status,#vsn,#priority').prop('disabled', false);
+            $('#work,#status,#vsn').prop('disabled', false);
           }
           $('#priority').selectpicker('refresh');
           issueBaseline(data[0].id);
@@ -1822,7 +1887,7 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
           loadCharm();
-          loadTFS();
+          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
         }).catch(function (error) {
           showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
@@ -1857,118 +1922,123 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
     });
 
   }
-  $('#go-on-btn').click(function (e) {
-    e.preventDefault();
-    issueid = document.getElementById('issueID').value;
-    var conn1 = new sql.Connection(config, function (err) {
-      if (err) {
-        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      } else {
-        var request = new sql.Request(conn1);
-        request
-          .input('issue_id', issueid)
-          .query('DELETE FROM issues WHERE id = @issue_id')
-          .then(function (data) {
-            getCustomersList(project_ID);
-            var conn1 = new sql.Connection(config, function (err) {
-              if (err) {
-                showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-              } else {
-                var request = new sql.Request(conn1);
-                request
-                  .input('id', sql.Int, id)
-                  .input('project_id', sql.Int, project_ID)
-                  .query('SELECT * FROM issues WHERE id = @id; ')
-                  .then(function (data) {
-                    var issueID = data[0].id;
-                    document.getElementById('issueID').value = data[0].id;
-                    document.getElementById('form_type').value = 'update';
-                    document.getElementById('dbid').value = data[0].dbid;
-                    document.getElementById('work').value = data[0].work;
-                    document.getElementById('date').value = data[0].date;
-                    $('#area').val(data[0].area).selectpicker('refresh');
-                    $('#key').val(data[0].key).selectpicker('refresh');
-                    document.getElementById('vsn').value = data[0].vsn;
-                    document.getElementById('defect').value = data[0].defect;
-                    document.getElementById('charm').value = data[0].charm;
-                    document.getElementById('status').value = data[0].status;
-                    document.getElementById('no_further_action').checked = data[0].no_further_action;
 
-                    $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
-                    $('#priority').val(data[0].priority).selectpicker('refresh');
-                    $('#messenger').val(data[0].messenger).selectpicker('refresh');
-                    document.getElementById('summary').value = data[0].summary;
-                    document.getElementById('description').value = data[0].description;
-                    document.getElementById('description_de').value = data[0].description_de;
-                    document.getElementById('solution').value = data[0].solution;
-                    document.getElementById('solution_de').value = data[0].solution_de;
-                    document.getElementById('c2c').value = data[0].c2c;
-                    // customer list
-                    checkCustomers(issueID);
-                    if ($('#charm').val() !== "") {
-                      $('#work,#vsn,#status,#priority').prop('disabled', true);
-                    } else {
-                      $('#work,#vsn,#status,#priority').prop('disabled', false);
-                    }
-                    if ($('#defect').val() !== "") {
-                      $('#work,#status,#vsn,#priority').prop('disabled', true);
-                    } else {
-                      $('#work,#status,#vsn,#priority').prop('disabled', false);
-                    }
-                    $('#priority').selectpicker('refresh');
-                    issueBaseline(data[0].id);
-                    issueKey(issueID);
-                    // action current + history
-                    updateAction(document.getElementById('issueID').value);
-                    $('#delete_btn').removeClass('disabled').attr("disabled", false);
-                    $('#files-table-body').empty();
-                    refreshFiles(document.getElementById('issueID').value);
-                    loadCharm();
-                    loadTFS();
-                  }).catch(function (error) {
-                    showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                  });
-                // check if issue is the last issue
-                var request2 = new sql.Request(conn1);
-                request2
-                  .input('project_id', sql.Int, project_ID)
-                  .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
-                  .then(function (data) {
-                    if (document.getElementById('issueID').value == data[0].max_id) {
+});
 
-                      $('#last_issue').addClass('disabled').attr("disabled", "disabled");
-                      $('#next_issue').addClass('disabled').attr("disabled", "disabled");
-                      $('#first_issue').removeClass('disabled').attr("disabled", false);
-                      $('#previous_issue').removeClass('disabled').attr("disabled", false);
-                    } else if (document.getElementById('issueID').value == data[0].min_id) {
-                      $('#last_issue').removeClass('disabled').attr("disabled", false);
-                      $('#next_issue').removeClass('disabled').attr("disabled", false);
-                      $('#first_issue').addClass('disabled').attr("disabled", "disabled");
-                      $('#previous_issue').addClass('disabled').attr("disabled", "disabled");
-                    } else {
-                      $('#last_issue').removeClass('disabled').attr("disabled", false);
-                      $('#next_issue').removeClass('disabled').attr("disabled", false);
-                      $('#first_issue').removeClass('disabled').attr("disabled", false);
-                      $('#previous_issue').removeClass('disabled').attr("disabled", false);
-                    }
-                  }).catch(function (error) {
-                    showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-                  });
-                $('#submit').removeClass('disabled').attr("disabled", false);
-                $('#cancel').addClass('disabled').attr("disabled", true);
-                $('#delete').removeClass('disabled').attr("disabled", false);
-                $('#new_issue').removeClass('disabled').attr("disabled", false);
-                newIssue = false;
-              }
-            }).catch(function (error) {
-              showNotification('Error connecting for getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-            });
 
+$('#go-on').delegate('#go-on-btn', 'click', function (e) {
+  e.preventDefault();
+  issueid = document.getElementById('issueID').value;
+  var id = $('#go-on-btn').data(id).id;
+  var project_name = document.getElementById('project_name');
+  var project_ID = parseInt(project_name.options[project_name.selectedIndex].value);
+  var conn1 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn1);
+      request
+        .input('issue_id', issueid)
+        .query('DELETE FROM issues WHERE id = @issue_id')
+        .then(function (data) {
+          getCustomersList(project_ID);
+          var conn2 = new sql.Connection(config, function (err) {
+            if (err) {
+              showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+            } else {
+              var request = new sql.Request(conn2);
+              request
+                .input('id',  id)
+                .input('project_id',  project_ID)
+                .query('SELECT * FROM issues WHERE id = @id; ')
+                .then(function (data) {
+                  var issueID = data[0].id;
+                  document.getElementById('issueID').value = data[0].id;
+                  document.getElementById('form_type').value = 'update';
+                  document.getElementById('dbid').value = data[0].dbid;
+                  document.getElementById('work').value = data[0].work;
+                  document.getElementById('date').value = data[0].date;
+                  $('#area').val(data[0].area).selectpicker('refresh');
+                  $('#key').val(data[0].key).selectpicker('refresh');
+                  document.getElementById('vsn').value = data[0].vsn;
+                  document.getElementById('defect').value = data[0].defect;
+                  document.getElementById('charm').value = data[0].charm;
+                  document.getElementById('status').value = data[0].status;
+                  document.getElementById('no_further_action').checked = data[0].no_further_action;
+
+                  $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+                  $('#priority').val(data[0].priority).selectpicker('refresh');
+                  $('#messenger').val(data[0].messenger).selectpicker('refresh');
+                  document.getElementById('summary').value = data[0].summary;
+                  document.getElementById('description').value = data[0].description;
+                  document.getElementById('description_de').value = data[0].description_de;
+                  document.getElementById('solution').value = data[0].solution;
+                  document.getElementById('solution_de').value = data[0].solution_de;
+                  document.getElementById('c2c').value = data[0].c2c;
+                  // customer list
+                  checkCustomers(issueID);
+                  if ($('#charm').val() !== "") {
+                    $('#work,#vsn,#status,#priority').prop('disabled', true);
+                  } else {
+                    $('#work,#vsn,#status,#priority').prop('disabled', false);
+                  }
+                  if ($('#defect').val() !== "") {
+                    $('#work,#status,#vsn').prop('disabled', true);
+                  } else {
+                    $('#work,#status,#vsn').prop('disabled', false);
+                  }
+                  $('#priority').selectpicker('refresh');
+                  issueBaseline(data[0].id);
+                  issueKey(issueID);
+                  // action current + history
+                  updateAction(document.getElementById('issueID').value);
+                  $('#delete_btn').removeClass('disabled').attr("disabled", false);
+                  $('#files-table-body').empty();
+                  refreshFiles(document.getElementById('issueID').value);
+                  loadCharm();
+                  loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+                }).catch(function (error) {
+                  showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+              // check if issue is the last issue
+              var request2 = new sql.Request(conn2);
+              request2
+                .input('project_id', sql.Int, project_ID)
+                .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
+                .then(function (data) {
+                  if (document.getElementById('issueID').value == data[0].max_id) {
+
+                    $('#last_issue').addClass('disabled').attr("disabled", "disabled");
+                    $('#next_issue').addClass('disabled').attr("disabled", "disabled");
+                    $('#first_issue').removeClass('disabled').attr("disabled", false);
+                    $('#previous_issue').removeClass('disabled').attr("disabled", false);
+                  } else if (document.getElementById('issueID').value == data[0].min_id) {
+                    $('#last_issue').removeClass('disabled').attr("disabled", false);
+                    $('#next_issue').removeClass('disabled').attr("disabled", false);
+                    $('#first_issue').addClass('disabled').attr("disabled", "disabled");
+                    $('#previous_issue').addClass('disabled').attr("disabled", "disabled");
+                  } else {
+                    $('#last_issue').removeClass('disabled').attr("disabled", false);
+                    $('#next_issue').removeClass('disabled').attr("disabled", false);
+                    $('#first_issue').removeClass('disabled').attr("disabled", false);
+                    $('#previous_issue').removeClass('disabled').attr("disabled", false);
+                  }
+                }).catch(function (error) {
+                  showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+                });
+              $('#submit').removeClass('disabled').attr("disabled", false);
+              $('#cancel').addClass('disabled').attr("disabled", true);
+              $('#delete').removeClass('disabled').attr("disabled", false);
+              $('#new_issue').removeClass('disabled').attr("disabled", false);
+              newIssue = false;
+            }
           })
-      }
-    });
+        })
+    }
   });
 });
+
+
 
 $('.search-without-btn').click(function (e) {
   e.preventDefault();
