@@ -425,6 +425,15 @@ function changTFS() {
 }
 
 function loadTFS(vsn,description,summary,status,work,priority) {
+  //reset fields background color to white
+  $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+  $('#priority').selectpicker('setStyle', 'btn-default');
+  $('#summary').css('background-color','white');
+  $('#description').css('background-color','white');
+  $('#vsn').css('background-color','white');
+  $('#status').css('background-color','white');
+  $('#work').css('background-color','white');
+
   if ($('#defect').val() !== "") {
     //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
     var url = __dirname + '/test.json';
@@ -459,30 +468,37 @@ function loadTFS(vsn,description,summary,status,work,priority) {
             $('#priority').selectpicker('setStyle', 'btn-default');
         }, 3000);
       }
+
       if(vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]){
         $('#vsn').css('background-color','#f0ad4e');
         setTimeout(function () {
             $('#vsn').css('background-color','white');
         }, 3000);
       }
+
       if(description !== striptags(data.fields["System.Description"])){
         $('#description').css('background-color','#f0ad4e');
         setTimeout(function () {
             $('#description').css('background-color','white');
         }, 3000);
       }
+
+
       if(summary !== striptags(data.fields["System.Title"])){
         $('#summary').css('background-color','#f0ad4e');
         setTimeout(function () {
             $('#summary').css('background-color','white');
         }, 3000);
       }
+
+
       if(status !== data.fields["System.State"]){
         $('#status').css('background-color','#f0ad4e');
         setTimeout(function () {
             $('#status').css('background-color','white');
         }, 3000);
       }
+      
       if(work !== data.fields["System.AssignedTo"]){
         $('#work').css('background-color','#f0ad4e');
         setTimeout(function () {
@@ -2076,6 +2092,7 @@ $('.search-reset-btn').click(function (e) {
   e.preventDefault();
   document.getElementById('s_defect').value = '';
   document.getElementById('s_dbid').value = '';
+  document.getElementById('s_vsn').value = '';
   document.getElementById('s_charm').value = '';
   document.getElementById('s_desc').value = '';
   document.getElementById('s_desc_de').value = '';

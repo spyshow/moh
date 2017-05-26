@@ -158,7 +158,7 @@ app.on('ready', function () {
     show: false,
     icon: path.join(__dirname, 'img/icons/png/64x64.png')
   });
-  //newEvaluation.openDevTools();
+  newEvaluation.openDevTools();
   newEvaluation.setMenu(null);
   newEvaluation.loadURL(newEvaluationPath);
   newEvaluation.on('close', function (event) {
