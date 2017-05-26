@@ -342,7 +342,7 @@ $('#area').on('click', function (e) {
             var request = new sql.Request(conn1);
             request
             .input('project_id', sql.Int, project_id)
-            .query('SELECT [area] from [issues] WHERE [project_id] = @project_id GROUP BY [area] ORDER BY [area] ')
+            .query('SELECT [area] from [issues] WHERE [project_id] = @project_id AND [area] IS NOT NULL GROUP BY [area] ORDER BY [area] ')
             .then(function (data) {
                 async.eachOfSeries(data, function (data1, i, callback) {
                     var conn2 = new sql.Connection(config, function (err) {
@@ -362,22 +362,23 @@ $('#area').on('click', function (e) {
                                         break;
                                     case 2:
                                         chartData.data.labels.push('Software');
-                                    break;
+                                        break;
                                     case 3:
                                         chartData.data.labels.push('Hardware');
-                                    break;
+                                        break;
                                     case 4:
                                         chartData.data.labels.push('Documentation');
-                                    break;
+                                        break;
                                     case 5:
                                         chartData.data.labels.push('Wish');
-                                    break;
+                                        break;
                                     case 6:
                                         chartData.data.labels.push('Training');
-                                    break;
+                                        break;
                                 }
                                 chartData.data.datasets[0].data.push(data2[0][0]['']);
-
+                                console.log(chartData.data)
+                                console.log(data1.area)
                             }).catch(function (error) {
                                 showNotification('Error on selecting area for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                             });
