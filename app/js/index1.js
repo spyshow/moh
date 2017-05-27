@@ -2,10 +2,7 @@ var electron = require('electron');
 var ipc = electron.ipcRenderer;
 var sql = require('mssql');
 const async = require('async');
-const {
-  dialog,
-  app
-} = require('electron').remote;
+const {dialog,app} = require('electron').remote;
 const striptags = require('striptags');
 const path = require('path');
 const pdf = require('html-pdf');
@@ -1134,11 +1131,19 @@ $('#submit').on('click', function (e) {
 //new issue button [ok]
 
 $('#new_issue').click(function (e) {
+  e.preventDefault();
   setTimeout(function () {
     $(this).prop('disabled', false);
   }, 1000);
   newIssue = true;
-  e.preventDefault();
+  //reset fields background color to white
+  $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+  $('#priority').selectpicker('setStyle', 'btn-default');
+  $('#summary').css('background-color', 'white');
+  $('#description').css('background-color', 'white');
+  $('#vsn').css('background-color', 'white');
+  $('#status').css('background-color', 'white');
+  $('#work').css('background-color', 'white');
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
 
