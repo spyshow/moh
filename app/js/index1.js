@@ -2,7 +2,10 @@ var electron = require('electron');
 var ipc = electron.ipcRenderer;
 var sql = require('mssql');
 const async = require('async');
-const {dialog,app} = require('electron').remote;
+const {
+  dialog,
+  app
+} = require('electron').remote;
 const striptags = require('striptags');
 const path = require('path');
 const pdf = require('html-pdf');
@@ -341,8 +344,9 @@ function changCharm() {
         request
           .input('project_id', project_ID)
           .input('charm', document.getElementById('charm').value)
-          .query('SELECT charm FROM issues WHERE charm = @charm AND project_id = @project_id')
+          .query('SELECT * FROM issues WHERE charm = @charm AND project_id = @project_id')
           .then(function (data) {
+            console.log(data[0])
             if (data[0] !== undefined) {
               showNotification('Another issue have the same Charm number', 'danger', 'glyphicon glyphicon-tasks');
               $('#charm').val('');
@@ -356,34 +360,98 @@ function changCharm() {
   }
 }
 
-function loadCharm() {
+function loadCharm(vsn, description, summary, status, work, priority) {
+  console.log(vsn, description, summary, status, work, priority);
+  //reset fields background color to white
+  $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+  $('#priority').selectpicker('setStyle', 'btn-default');
+  $('#summary').css('background-color', 'white');
+  $('#description').css('background-color', 'white');
+  $('#vsn').css('background-color', 'white');
+  $('#status').css('background-color', 'white');
+  $('#work').css('background-color', 'white');
   if ($('#charm').val() !== "") {
     sql.connect(charm).then(function () {
       new sql.Request()
         .input('id', 'MR_00' + document.getElementById('charm').value)
         .query('SELECT priority ,state_num as status,summary ,details,remain_name as work,real_version as vsn FROM Defect where id=@id')
         .then(function (data) {
-          var priority = data[0].priority;
-          switch (priority.trim()) {
-            case '1-high':
-              $('#priority').val(1).selectpicker('refresh');
-              break;
-            case '2-medium':
-              $('#priority').val(2).selectpicker('refresh');
-              break;
-            case '3-low':
-              $('#priority').val(3).selectpicker('refresh');
-              break;
+          console.log(data);
+          if(data[0] === undefined){
+            showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
+            $('#charm').val('');
+          } else {
+            var priority = data[0].priority;
+            switch (priority.trim()) {
+              case '1-high':
+                $('#priority').val(1).selectpicker('refresh');
+                break;
+              case '2-medium':
+                $('#priority').val(2).selectpicker('refresh');
+                break;
+              case '3-low':
+                $('#priority').val(3).selectpicker('refresh');
+                break;
+            }
+            if (priority !== data[0].priority) {
+              $('#priority').selectpicker('setStyle', 'btn-warning');
+              setTimeout(function () {
+                $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+                $('#priority').selectpicker('setStyle', 'btn-default');
+              }, 3000);
+            }
+
+            if (vsn !== data[0].vsn) {
+              $('#vsn').css('background-color', '#f0ad4e');
+              setTimeout(function () {
+                $('#vsn').css('background-color', 'white');
+              }, 3000);
+            }
+            if(description === ""){
+              description = null
+            }
+            if (description !== data[0].details) {
+              $('#description').css('background-color', '#f0ad4e');
+              setTimeout(function () {
+                $('#description').css('background-color', 'white');
+              }, 3000);
+            }
+
+            if(summary === ""){
+              summary = null
+            }
+            if (summary !== data[0].summary) {
+              $('#summary').css('background-color', '#f0ad4e');
+              setTimeout(function () {
+                $('#summary').css('background-color', 'white');
+              }, 3000);
+            }
+
+
+            if (status != data[0].status) {
+              $('#status').css('background-color', '#f0ad4e');
+              setTimeout(function () {
+                $('#status').css('background-color', 'white');
+              }, 3000);
+            }
+
+            if (work !== data[0].work) {
+              $('#work').css('background-color', '#f0ad4e');
+              setTimeout(function () {
+                $('#work').css('background-color', 'white');
+              }, 3000);
+            }
+            document.getElementById('summary').value = data[0].summary;
+            document.getElementById('description').value = data[0].details;
+            document.getElementById('work').value = data[0].work;
+            document.getElementById('status').value = data[0].status;
+            document.getElementById('vsn').value = data[0].vsn;
+            $('#work').attr("disabled", "disabled").addClass('disabled');
+            $('#priority').attr("disabled", "disabled").addClass('disabled');
+            $('#status').attr("disabled", "disabled").addClass('disabled');
+            $('#vsn').attr("disabled", "disabled").addClass('disabled');
           }
-          document.getElementById('summary').value = data[0].summary;
-          document.getElementById('description').value = data[0].details;
-          document.getElementById('work').value = data[0].work;
-          document.getElementById('status').value = data[0].status;
-          document.getElementById('vsn').value = data[0].vsn;
-          $('#work').attr("disabled", "disabled").addClass('disabled');
-          $('#priority').attr("disabled", "disabled").addClass('disabled');
-          $('#status').attr("disabled", "disabled").addClass('disabled');
-          $('#vsn').attr("disabled", "disabled").addClass('disabled');
+          
         }).catch(function (error) {
           showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
           $('#charm').val('');
@@ -415,7 +483,7 @@ function changTFS() {
               showNotification('Another issue have the same defect number', 'danger', 'glyphicon glyphicon-tasks');
               $('#defect').val('');
             } else {
-              loadTFS(data.columns.vsn,data.columns.description,data.columns.summary,data.columns.status,data.columns.work,data.columns.priority);
+              loadTFS(data.columns.vsn, data.columns.description, data.columns.summary, data.columns.status, data.columns.work, data.columns.priority);
             }
           });
       }
@@ -424,19 +492,19 @@ function changTFS() {
   }
 }
 
-function loadTFS(vsn,description,summary,status,work,priority) {
+function loadTFS(vsn, description, summary, status, work, priority) {
   //reset fields background color to white
   $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
   $('#priority').selectpicker('setStyle', 'btn-default');
-  $('#summary').css('background-color','white');
-  $('#description').css('background-color','white');
-  $('#vsn').css('background-color','white');
-  $('#status').css('background-color','white');
-  $('#work').css('background-color','white');
+  $('#summary').css('background-color', 'white');
+  $('#description').css('background-color', 'white');
+  $('#vsn').css('background-color', 'white');
+  $('#status').css('background-color', 'white');
+  $('#work').css('background-color', 'white');
 
   if ($('#defect').val() !== "") {
-    //var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
-    var url = __dirname + '/test.json';
+    var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + document.getElementById('defect').value + "?api-version=3.0-preview";
+    //var url = __dirname + '/test.json';
     $.ajax({
       url: url,
       type: 'GET',
@@ -461,51 +529,51 @@ function loadTFS(vsn,description,summary,status,work,priority) {
       }
 
       //highlight the field that there is a difference between database and TFS 
-      if(priority !== data.fields["Microsoft.VSTS.Common.Priority"]){
+      if (priority !== data.fields["Microsoft.VSTS.Common.Priority"]) {
         $('#priority').selectpicker('setStyle', 'btn-warning');
         setTimeout(function () {
-            $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
-            $('#priority').selectpicker('setStyle', 'btn-default');
+          $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
+          $('#priority').selectpicker('setStyle', 'btn-default');
         }, 3000);
       }
 
-      if(vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]){
-        $('#vsn').css('background-color','#f0ad4e');
+      if (vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]) {
+        $('#vsn').css('background-color', '#f0ad4e');
         setTimeout(function () {
-            $('#vsn').css('background-color','white');
+          $('#vsn').css('background-color', 'white');
         }, 3000);
       }
 
-      if(description !== striptags(data.fields["System.Description"])){
-        $('#description').css('background-color','#f0ad4e');
+      if (description !== striptags(data.fields["System.Description"])) {
+        $('#description').css('background-color', '#f0ad4e');
         setTimeout(function () {
-            $('#description').css('background-color','white');
+          $('#description').css('background-color', 'white');
         }, 3000);
       }
 
 
-      if(summary !== striptags(data.fields["System.Title"])){
-        $('#summary').css('background-color','#f0ad4e');
+      if (summary !== striptags(data.fields["System.Title"])) {
+        $('#summary').css('background-color', '#f0ad4e');
         setTimeout(function () {
-            $('#summary').css('background-color','white');
+          $('#summary').css('background-color', 'white');
         }, 3000);
       }
 
 
-      if(status !== data.fields["System.State"]){
-        $('#status').css('background-color','#f0ad4e');
+      if (status !== data.fields["System.State"]) {
+        $('#status').css('background-color', '#f0ad4e');
         setTimeout(function () {
-            $('#status').css('background-color','white');
+          $('#status').css('background-color', 'white');
         }, 3000);
       }
-      
-      if(work !== data.fields["System.AssignedTo"]){
-        $('#work').css('background-color','#f0ad4e');
+
+      if (work !== data.fields["System.AssignedTo"]) {
+        $('#work').css('background-color', '#f0ad4e');
         setTimeout(function () {
-            $('#work').css('background-color','white');
+          $('#work').css('background-color', 'white');
         }, 3000);
       }
-  
+
       document.getElementById('description').value = striptags(data.fields["System.Description"]);
       document.getElementById('summary').value = striptags(data.fields["System.Title"])
       document.getElementById('status').value = data.fields["System.State"]
@@ -810,8 +878,8 @@ $('#project_submit').click(function () {
             }
             issueBaseline(data[0].id);
             issueKey(data[0].id);
-            loadCharm();
-            loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+            loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+            loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
           }
           // customer list
         }).then(function () {
@@ -1436,8 +1504,8 @@ $('#first_issue').click(function () {
         $('#files-table-body').empty();
         $('#delete_btn').removeClass('disabled').attr("disabled", false);
         refreshFiles(document.getElementById('issueID').value);
-        loadCharm();
-        loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+        loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+        loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
       });
   });
 
@@ -1499,8 +1567,8 @@ $('#last_issue').click(function () {
         // update file list 
         $('#files-table-body').empty();
         refreshFiles(document.getElementById('issueID').value);
-        loadCharm();
-        loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+        loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+        loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
       });
   });
   $('#files-table-body').empty();
@@ -1569,8 +1637,8 @@ $('#next_issue').click(function () {
           // update file list 
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
-          loadCharm();
-          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
         });
     }
     // check if issue is the last issue
@@ -1648,8 +1716,8 @@ $('#previous_issue').click(function () {
           updateAction(document.getElementById('issueID').value);
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
-          loadCharm();
-          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
         });
       // check if issue is the last issue
       var request1 = new sql.Request(connect1);
@@ -1842,7 +1910,7 @@ $('.search-btn').click(function (e) {
 $('.s_list').delegate('.search-result', 'click', function (e) {
   e.preventDefault();
   var id = parseInt($(this).attr('href'));
-  $('#go-on-btn').data('id',id);
+  $('#go-on-btn').data('id', id);
   var project_name = document.getElementById('project_name');
   var project_ID = parseInt(project_name.options[project_name.selectedIndex].value);
   if (newIssue === true) {
@@ -1902,8 +1970,8 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           $('#delete_btn').removeClass('disabled').attr("disabled", false);
           $('#files-table-body').empty();
           refreshFiles(document.getElementById('issueID').value);
-          loadCharm();
-          loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
         }).catch(function (error) {
           showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
@@ -1964,8 +2032,8 @@ $('#go-on').delegate('#go-on-btn', 'click', function (e) {
             } else {
               var request = new sql.Request(conn2);
               request
-                .input('id',  id)
-                .input('project_id',  project_ID)
+                .input('id', id)
+                .input('project_id', project_ID)
                 .query('SELECT * FROM issues WHERE id = @id; ')
                 .then(function (data) {
                   var issueID = data[0].id;
@@ -2011,8 +2079,8 @@ $('#go-on').delegate('#go-on-btn', 'click', function (e) {
                   $('#delete_btn').removeClass('disabled').attr("disabled", false);
                   $('#files-table-body').empty();
                   refreshFiles(document.getElementById('issueID').value);
-                  loadCharm();
-                  loadTFS(data[0].vsn,data[0].description,data[0].summary,data[0].status,data[0].work,data[0].priority);
+                  loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+                  loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
                 }).catch(function (error) {
                   showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                 });
