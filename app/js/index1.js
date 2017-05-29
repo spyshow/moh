@@ -7,6 +7,12 @@ const striptags = require('striptags');
 const path = require('path');
 const pdf = require('html-pdf');
 var newIssue = false;
+var descriptionTimer;
+var workTimer
+var vsnTimer
+var statusTimer
+var priorityTimer
+var summaryTimer
 //======================================================================================================================
 //Tooltips
 $('[data-toggle="tooltip"]').tooltip();
@@ -392,7 +398,8 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             }
             if (priority !== data[0].priority) {
               $('#priority').selectpicker('setStyle', 'btn-warning');
-              setTimeout(function () {
+              if(priorityTimer) clearTimeout(priorityTimer);
+              priorityTimer = setTimeout(function () {
                 $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
                 $('#priority').selectpicker('setStyle', 'btn-default');
               }, 3000);
@@ -400,7 +407,8 @@ function loadCharm(vsn, description, summary, status, work, priority) {
 
             if (vsn !== data[0].vsn) {
               $('#vsn').css('background-color', '#f0ad4e');
-              setTimeout(function () {
+              if(vsnTimer) clearTimeout(vsnTimer);
+              vsnTimer = setTimeout(function () {
                 $('#vsn').css('background-color', 'white');
               }, 3000);
             }
@@ -409,7 +417,8 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             }
             if (description !== data[0].details) {
               $('#description').css('background-color', '#f0ad4e');
-              setTimeout(function () {
+              if(descriptionTimer) clearTimeout(descriptionTimer); 
+               descriptionTimer = setTimeout(function () {
                 $('#description').css('background-color', 'white');
               }, 3000);
             }
@@ -419,7 +428,8 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             }
             if (summary !== data[0].summary) {
               $('#summary').css('background-color', '#f0ad4e');
-              setTimeout(function () {
+              if(summaryTimer) clearTimeout(summaryTimer);
+              summaryTimer = setTimeout(function () {
                 $('#summary').css('background-color', 'white');
               }, 3000);
             }
@@ -427,14 +437,16 @@ function loadCharm(vsn, description, summary, status, work, priority) {
 
             if (status != data[0].status) {
               $('#status').css('background-color', '#f0ad4e');
-              setTimeout(function () {
+              if(statusTimer) clearTimeout(summaryTimer);
+              statusTimer = setTimeout(function () {
                 $('#status').css('background-color', 'white');
               }, 3000);
             }
 
             if (work !== data[0].work) {
               $('#work').css('background-color', '#f0ad4e');
-              setTimeout(function () {
+              if(workTimer) clearTimeout(workTimer);
+              workTimer = setTimeout(function () {
                 $('#work').css('background-color', 'white');
               }, 3000);
             }
@@ -528,7 +540,8 @@ function loadTFS(vsn, description, summary, status, work, priority) {
       //highlight the field that there is a difference between database and TFS 
       if (priority !== data.fields["Microsoft.VSTS.Common.Priority"]) {
         $('#priority').selectpicker('setStyle', 'btn-warning');
-        setTimeout(function () {
+        if(priorityTimer) clearTimeout(priorityTimer);
+        priorityTimer = setTimeout(function () {
           $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
           $('#priority').selectpicker('setStyle', 'btn-default');
         }, 3000);
@@ -536,14 +549,16 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]) {
         $('#vsn').css('background-color', '#f0ad4e');
-        setTimeout(function () {
+        if(vsnTimer) clearTimeout(vsnTimer);
+        vsnTimer = setTimeout(function () {
           $('#vsn').css('background-color', 'white');
         }, 3000);
       }
 
       if (description !== striptags(data.fields["System.Description"])) {
         $('#description').css('background-color', '#f0ad4e');
-        setTimeout(function () {
+        if(descriptionTimer) clearTimeout(descriptionTimer);
+        descriptionTimer = setTimeout(function () {
           $('#description').css('background-color', 'white');
         }, 3000);
       }
@@ -551,7 +566,8 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (summary !== striptags(data.fields["System.Title"])) {
         $('#summary').css('background-color', '#f0ad4e');
-        setTimeout(function () {
+        if(summaryTimer) clearTimeout(summaryTimer);
+        summaryTimer = setTimeout(function () {
           $('#summary').css('background-color', 'white');
         }, 3000);
       }
@@ -559,14 +575,16 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (status !== data.fields["System.State"]) {
         $('#status').css('background-color', '#f0ad4e');
-        setTimeout(function () {
+        if(statusTimer) clearTimeout(statusTimer);
+        statusTimer = setTimeout(function () {
           $('#status').css('background-color', 'white');
         }, 3000);
       }
 
       if (work !== data.fields["System.AssignedTo"]) {
         $('#work').css('background-color', '#f0ad4e');
-        setTimeout(function () {
+        if(workTimer) clearTimeout(workTimer);
+        workTimer = setTimeout(function () {
           $('#work').css('background-color', 'white');
         }, 3000);
       }
