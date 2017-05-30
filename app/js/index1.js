@@ -834,7 +834,7 @@ $('#project_submit').click(function () {
       var request = new sql.Request(connection1);
       request
         .input('project_id', sql.Int, project_ID)
-        .query('SELECT TOP 2 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area],[issues].[key], ' +
+        .query('SELECT TOP 2 [issues].[id],[issues].[dbid],[issues].[vsn],[issues].[project_id],[issues].[date],[issues].[work],[issues].[area], ' +
           '[issues].[defect],[issues].[charm],[issues].[status],[issues].[no_further_action],' +
           '[issues].[reproducible],[issues].[priority],[issues].[messenger],[issues].[summary],' +
           '[issues].[description],[issues].[description_de],[issues].[solution],[issues].[solution_de],[issues].[c2c],[projects].[cpf_doc_id]' +
@@ -856,7 +856,6 @@ $('#project_submit').click(function () {
             document.getElementById('work').value = data[0].work;
             document.getElementById('date').value = data[0].date;
             $('#area').val(data[0].area).selectpicker('refresh');
-            $('#key').val(data[0].key).selectpicker('refresh');
             document.getElementById('defect').value = data[0].defect;
             document.getElementById('charm').value = data[0].charm;
             document.getElementById('status').value = data[0].status;
@@ -1877,6 +1876,7 @@ $('.search-btn').click(function (e) {
             $('.search-ph').removeClass('hidden').addClass('show');
             $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
           } else {
+            showNotification('Search returned '+data.length+' issues', 'success', 'glyphicon glyphicon-tasks');
             $('.search-ph').removeClass('show').addClass('hidden');
             for (let i = 0; i < data.length; i++) {
               var charm = (data[i].charm) ? data[i].charm : 'null';

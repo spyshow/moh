@@ -259,11 +259,12 @@ function sendMail(issue_id, project_title) {
         '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project ID: ' + project_title + '</p><div style="page-break-after:always;"></div>';
       var request = new sql.Request(conn2);
       request.multiple = true;
-      request
+      request 
         .input('issue_id', issue_id)
         .query('SELECT * FROM [issues] WHERE id = @issue_id; ' +
           'SELECT [date], [description] FROM [actions] WHERE [issue_id] = @issue_id; ' +
           'SELECT [name] FROM [customers] INNER JOIN [issues_customers] as ic ON [customers].[id] = ic.[customer_id] WHERE [issue_id] = @issue_id; ' +
+          'SELECT * FROM keys INNER JOIN issues_keys AS ik ON keys.id = ik.key_id  WHERE  ik.issue_id = @issue_id;  ' +
           'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id; ' +
           'SELECT type,path FROM files WHERE issue_id = @issue_id;')
         .then(function (data2) {
@@ -313,7 +314,7 @@ function sendMail(issue_id, project_title) {
           arr += '</tr>' +
             '<tr>' +
             '<td class="bold">Key:</td>' +
-            '<td class="td">' + data2[0][0].key + '</td>' +
+            '<td class="td">' + data2[3][0].name + '</td>' +
             '</tr>' +
             '<tr>';
           switch (data2[0][0].priority) {
