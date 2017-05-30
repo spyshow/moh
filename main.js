@@ -268,7 +268,7 @@ function sendMail(issue_id, project_title) {
           'SELECT [name],[cd] FROM [baselines] INNER JOIN [issues_baselines] as ib ON [baselines].[id] = ib.[baseline_id] WHERE [issue_id] = @issue_id; ' +
           'SELECT type,path FROM files WHERE issue_id = @issue_id;')
         .then(function (data2) {
-          var baseline = (data2[3][0]) ? data2[3][0].name : 'No Baseline';
+          var baseline = (data2[4][0]) ? data2[4][0].name : 'No Baseline';
           var arr = '';
           arr += '<table style="table-layout: fixed; width: 100%;">' +
             '<tbody>' +
@@ -477,7 +477,7 @@ function sendMail(issue_id, project_title) {
             '<td  class="bold">Files:</td>' +
             '<td>' +
             '<table style="table-layout: fixed; width: 100%;">';
-          data2[4].forEach(function (data22) {
+          data2[5].forEach(function (data22) {
             arr += '<tr>' +
               '<td style="vertical-align: top;width: 100px; padding-top:10px;">' + data22.type + '</td>' +
               '<td style="vertical-align: top; padding-top:10px;"><a href="file:///' + data22.path + '">' + data22.path + '</a></td>' +
