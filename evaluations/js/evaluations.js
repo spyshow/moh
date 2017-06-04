@@ -1766,6 +1766,7 @@ function fragPdf(project_id) {
                                 "height": "20mm"
                             }
                         };
+                        console.log(docx);
                         dialog.showSaveDialog({
                             filters: [{
                                 name: 'PDFs',

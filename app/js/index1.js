@@ -349,7 +349,6 @@ function changCharm() {
           .input('charm', document.getElementById('charm').value)
           .query('SELECT * FROM issues WHERE charm = @charm AND project_id = @project_id')
           .then(function (data) {
-            console.log(data[0])
             if (data[0] !== undefined) {
               showNotification('Another issue have the same Charm number', 'danger', 'glyphicon glyphicon-tasks');
               $('#charm').val('');
@@ -364,7 +363,6 @@ function changCharm() {
 }
 
 function loadCharm(vsn, description, summary, status, work, priority) {
-  console.log(vsn, description, summary, status, work, priority);
   //reset fields background color to white
   $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
   $('#priority').selectpicker('setStyle', 'btn-default');
@@ -379,8 +377,9 @@ function loadCharm(vsn, description, summary, status, work, priority) {
         .input('id', 'MR_00' + document.getElementById('charm').value)
         .query('SELECT priority ,state_num as status,summary ,details,remain_name as work,real_version as vsn FROM Defect where id=@id')
         .then(function (data) {
-          console.log(data);
-          if(data[0] === undefined){
+          console.log(data[0].details)
+          console.log(description)
+          if (data[0] === undefined) {
             showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
             $('#charm').val('');
           } else {
@@ -398,7 +397,7 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             }
             if (priority !== data[0].priority) {
               $('#priority').selectpicker('setStyle', 'btn-warning');
-              if(priorityTimer) clearTimeout(priorityTimer);
+              if (priorityTimer) clearTimeout(priorityTimer);
               priorityTimer = setTimeout(function () {
                 $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
                 $('#priority').selectpicker('setStyle', 'btn-default');
@@ -407,28 +406,29 @@ function loadCharm(vsn, description, summary, status, work, priority) {
 
             if (vsn !== data[0].vsn) {
               $('#vsn').css('background-color', '#f0ad4e');
-              if(vsnTimer) clearTimeout(vsnTimer);
+              if (vsnTimer) clearTimeout(vsnTimer);
               vsnTimer = setTimeout(function () {
                 $('#vsn').css('background-color', 'white');
               }, 3000);
             }
-            if(description === ""){
+            if (description === "") {
               description = null
             }
-            if (description !== data[0].details) {
+            console.log(description.trim().replace(/\s+/g," ") , data[0].details.trim().replace(/\s+/g," "));
+            if (description.trim().replace(/\s+/g," ") != data[0].details.trim().replace(/\s+/g," ")) {
               $('#description').css('background-color', '#f0ad4e');
-              if(descriptionTimer) clearTimeout(descriptionTimer); 
-               descriptionTimer = setTimeout(function () {
+              if (descriptionTimer) clearTimeout(descriptionTimer);
+              descriptionTimer = setTimeout(function () {
                 $('#description').css('background-color', 'white');
               }, 3000);
             }
 
-            if(summary === ""){
+            if (summary === "") {
               summary = null
             }
             if (summary !== data[0].summary) {
               $('#summary').css('background-color', '#f0ad4e');
-              if(summaryTimer) clearTimeout(summaryTimer);
+              if (summaryTimer) clearTimeout(summaryTimer);
               summaryTimer = setTimeout(function () {
                 $('#summary').css('background-color', 'white');
               }, 3000);
@@ -437,7 +437,7 @@ function loadCharm(vsn, description, summary, status, work, priority) {
 
             if (status != data[0].status) {
               $('#status').css('background-color', '#f0ad4e');
-              if(statusTimer) clearTimeout(summaryTimer);
+              if (statusTimer) clearTimeout(summaryTimer);
               statusTimer = setTimeout(function () {
                 $('#status').css('background-color', 'white');
               }, 3000);
@@ -445,7 +445,7 @@ function loadCharm(vsn, description, summary, status, work, priority) {
 
             if (work !== data[0].work) {
               $('#work').css('background-color', '#f0ad4e');
-              if(workTimer) clearTimeout(workTimer);
+              if (workTimer) clearTimeout(workTimer);
               workTimer = setTimeout(function () {
                 $('#work').css('background-color', 'white');
               }, 3000);
@@ -460,7 +460,7 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             $('#status').attr("disabled", "disabled").addClass('disabled');
             $('#vsn').attr("disabled", "disabled").addClass('disabled');
           }
-          
+
         }).catch(function (error) {
           showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
           $('#charm').val('');
@@ -540,7 +540,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
       //highlight the field that there is a difference between database and TFS 
       if (priority !== data.fields["Microsoft.VSTS.Common.Priority"]) {
         $('#priority').selectpicker('setStyle', 'btn-warning');
-        if(priorityTimer) clearTimeout(priorityTimer);
+        if (priorityTimer) clearTimeout(priorityTimer);
         priorityTimer = setTimeout(function () {
           $('#priority').selectpicker('setStyle', 'btn-warning', 'remove');
           $('#priority').selectpicker('setStyle', 'btn-default');
@@ -549,7 +549,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (vsn !== data.fields["Siemens.IKM.Common.ProductRelease"]) {
         $('#vsn').css('background-color', '#f0ad4e');
-        if(vsnTimer) clearTimeout(vsnTimer);
+        if (vsnTimer) clearTimeout(vsnTimer);
         vsnTimer = setTimeout(function () {
           $('#vsn').css('background-color', 'white');
         }, 3000);
@@ -557,7 +557,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (description !== striptags(data.fields["System.Description"])) {
         $('#description').css('background-color', '#f0ad4e');
-        if(descriptionTimer) clearTimeout(descriptionTimer);
+        if (descriptionTimer) clearTimeout(descriptionTimer);
         descriptionTimer = setTimeout(function () {
           $('#description').css('background-color', 'white');
         }, 3000);
@@ -566,7 +566,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (summary !== striptags(data.fields["System.Title"])) {
         $('#summary').css('background-color', '#f0ad4e');
-        if(summaryTimer) clearTimeout(summaryTimer);
+        if (summaryTimer) clearTimeout(summaryTimer);
         summaryTimer = setTimeout(function () {
           $('#summary').css('background-color', 'white');
         }, 3000);
@@ -575,7 +575,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (status !== data.fields["System.State"]) {
         $('#status').css('background-color', '#f0ad4e');
-        if(statusTimer) clearTimeout(statusTimer);
+        if (statusTimer) clearTimeout(statusTimer);
         statusTimer = setTimeout(function () {
           $('#status').css('background-color', 'white');
         }, 3000);
@@ -583,7 +583,7 @@ function loadTFS(vsn, description, summary, status, work, priority) {
 
       if (work !== data.fields["System.AssignedTo"]) {
         $('#work').css('background-color', '#f0ad4e');
-        if(workTimer) clearTimeout(workTimer);
+        if (workTimer) clearTimeout(workTimer);
         workTimer = setTimeout(function () {
           $('#work').css('background-color', 'white');
         }, 3000);
@@ -1025,8 +1025,12 @@ $('#submit').on('click', function (e) {
       var solution_de = (document.getElementById('solution_de').value ? document.getElementById('solution_de').value : '');
       var c2c = (document.getElementById('c2c').value ? document.getElementById('c2c').value : '');
       var vsn = (document.getElementById('vsn').value ? document.getElementById('vsn').value : '');
-      sql.connect(config).then(function () {
-        new sql.Request()
+      var conn2 = new sql.Connection(config, function (error) {
+        if (error) {
+          showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        } else {
+          var request = new sql.Request(conn2);
+          request
           .input('work', work)
           .input('area', area)
           .input('dbid', dbid)
@@ -1092,11 +1096,11 @@ $('#submit').on('click', function (e) {
               }
             });
             //for cpf all
-            var conn2 = new sql.Connection(config, function (error) {
+            var conn3 = new sql.Connection(config, function (error) {
               if (error) {
                 showNotification('error connecting for selecting ALL issues:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
               } else {
-                var request = new sql.Request(conn2);
+                var request = new sql.Request(conn3);
                 request
                   .input('project_id', sql.Int, project_ID)
                   .query('SELECT COUNT(issues.id) AS issues_all FROM issues ' +
@@ -1132,12 +1136,9 @@ $('#submit').on('click', function (e) {
             });
 
           }).catch(function (error) {
-            showNotification('No baseline selected ' + error, 'danger', 'glyphicon glyphicon-tasks');
+            showNotification('No baseline selected ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
           });
-
-
-      }).catch(function (error) {
-        showNotification('error connecting for update: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }
       });
     }
   }
@@ -1285,18 +1286,21 @@ $('#cancel').on('click', function (e) {
     $('#delete_btn').removeClass('disabled').attr("disabled", false);
     $('.customer_list').empty();
     $('.add-file').prop('disabled', false);
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('issue_id', sql.Int, issueID)
-        .query('DELETE FROM issues WHERE id = @issue_id')
-        .then(function () {
-          newIssue = false;
-          $('#project_submit').click();
-        }).catch(function (error) {
-          showNotification('Error on deleting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-    }).catch(function (error) {
-      showNotification('error connecting for deleting issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    var conn4 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn4);
+        request
+          .input('issue_id', sql.Int, issueID)
+          .query('DELETE FROM issues WHERE id = @issue_id')
+          .then(function () {
+            newIssue = false;
+            $('#project_submit').click();
+          }).catch(function (error) {
+            showNotification('Error on deleting issue:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+      }
     });
   }
 });
@@ -1310,18 +1314,21 @@ $('.customer_list').delegate('.customers', 'click', function () {
     let id = this.dataset.id;
     let checkbox = this;
 
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('issue_id', sql.Int, document.getElementById('issueID').value)
-        .input('customer_id', sql.Int, checkbox.dataset.id)
-        .query('INSERT INTO [issues_customers] ([issue_id], [customer_id]) VALUES (@issue_id , @customer_id)')
-        .then(function () {
-          showNotification('customer ' + checkbox.value + ' has the issue', 'info', 'glyphicon glyphicon-tasks');
-        }).catch(function (error) {
-          showNotification('can\'t link the customer to the issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-    }).catch(function (error) {
-      showNotification('error connecting for customer update: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    var conn4 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn4);
+        request
+          .input('issue_id', sql.Int, document.getElementById('issueID').value)
+          .input('customer_id', sql.Int, checkbox.dataset.id)
+          .query('INSERT INTO [issues_customers] ([issue_id], [customer_id]) VALUES (@issue_id , @customer_id)')
+          .then(function () {
+            showNotification('customer ' + checkbox.value + ' has the issue', 'info', 'glyphicon glyphicon-tasks');
+          }).catch(function (error) {
+            showNotification('can\'t link the customer to the issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+      }
     });
 
   } else if ($(this).is(":checked") === false) {
@@ -1352,20 +1359,23 @@ $('.add-file').on('click', function (e) {
   let type = document.getElementById('file-type').options[document.getElementById('file-type').selectedIndex].value;
   let path = document.getElementById('file-path').value;
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('issue_id', sql.Int, document.getElementById('issueID').value)
-      .input('type', type)
-      .input('path', path)
-      .query('INSERT INTO files ([issue_id],[type],[path] ) VALUES (@issue_id,@type,@path)')
-      .then(function (data) {
-        showNotification('File has been Added', 'info', 'glyphicon glyphicon-tasks');
-        refreshFiles(document.getElementById('issueID').value);
-      }).catch(function (error) {
-        showNotification('can\'t add file: ' + error, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for inserting issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('issue_id', sql.Int, document.getElementById('issueID').value)
+        .input('type', type)
+        .input('path', path)
+        .query('INSERT INTO files ([issue_id],[type],[path] ) VALUES (@issue_id,@type,@path)')
+        .then(function (data) {
+          showNotification('File has been Added', 'info', 'glyphicon glyphicon-tasks');
+          refreshFiles(document.getElementById('issueID').value);
+        }).catch(function (error) {
+          showNotification('can\'t add file: ' + error, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 
   document.getElementById('file-path').value = '';
@@ -1404,18 +1414,21 @@ $('#files-table').delegate('.file-delete', 'click', function (e) {
   e.preventDefault();
   let id = this.dataset.id;
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('id', sql.Int, id)
-      .query('DELETE FROM [files] WHERE [id] = @id')
-      .then(function (data) {
-        showNotification('File deleted ', 'success', 'glyphicon glyphicon-tasks');
-        refreshFiles(document.getElementById('issueID').value);
-      }).catch(function (error) {
-        showNotification('can\'t delete file: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for deleting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('id', sql.Int, id)
+        .query('DELETE FROM [files] WHERE [id] = @id')
+        .then(function (data) {
+          showNotification('File deleted ', 'success', 'glyphicon glyphicon-tasks');
+          refreshFiles(document.getElementById('issueID').value);
+        }).catch(function (error) {
+          showNotification('can\'t delete file: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 });
 
@@ -1453,19 +1466,22 @@ $('#delete_issue').click(function (e) {
 
   if (issueID) {
 
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('issue_id', sql.Int, issueID)
-        .query('DELETE FROM issues WHERE id = @issue_id')
-        .then(function (data) {
-          showNotification('Issue Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
-          $('#project_submit').click();
-        }).catch(function (error) {
-          showNotification('can\'t delete the issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-    }).catch(function (error) {
-      showNotification('error connecting for delete issue : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-    });
+    var conn4 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn4);
+        request
+          .input('issue_id', sql.Int, issueID)
+          .query('DELETE FROM issues WHERE id = @issue_id')
+          .then(function (data) {
+            showNotification('Issue Deleted from the database', 'success', 'glyphicon glyphicon-tasks');
+            $('#project_submit').click();
+          }).catch(function (error) {
+            showNotification('can\'t delete the issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+      }
+    })
   }
 });
 
@@ -1478,57 +1494,62 @@ $('#first_issue').click(function () {
   var project_ID = project_name.options[project_name.selectedIndex].value;
 
   getCustomersList(project_ID);
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT TOP 1 * FROM [issues] WHERE project_id = @project_id ORDER BY id ASC')
-      .then(function (data) {
-        issueID = data[0].id;
-        document.getElementById('issueID').value = data[0].id;
-        document.getElementById('form_type').value = 'update';
-        document.getElementById('dbid').value = data[0].dbid;
-        document.getElementById('work').value = data[0].work;
-        document.getElementById('vsn').value = data[0].vsn;
-        document.getElementById('date').value = data[0].date;
-        $('#area').val(data[0].area).selectpicker('refresh');
-        $('#key').val(data[0].key).selectpicker('refresh');
-        document.getElementById('defect').value = data[0].defect;
-        document.getElementById('charm').value = data[0].charm;
-        document.getElementById('status').value = data[0].status;
-        document.getElementById('no_further_action').checked = data[0].no_further_action;
-        $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
-        $('#priority').val(data[0].priority).selectpicker('refresh');
-        $('#messenger').val(data[0].messenger).selectpicker('refresh');
-        document.getElementById('summary').value = data[0].summary;
-        document.getElementById('description').value = data[0].description;
-        document.getElementById('description_de').value = data[0].description_de;
-        document.getElementById('solution').value = data[0].solution;
-        document.getElementById('solution_de').value = data[0].solution_de;
-        document.getElementById('c2c').value = data[0].c2c;
-        if ($('#charm').val() !== "") {
-          $('#work,#vsn,#status,#priority').prop('disabled', true);
-        } else {
-          $('#work,#vsn,#status,#priority').prop('disabled', false);
-        }
-        if ($('#defect').val() !== "") {
-          $('#work,#status,#vsn').prop('disabled', true);
-        } else {
-          $('#work,#status,#vsn').prop('disabled', false);
-        }
-        $('#priority').selectpicker('refresh');
-        issueBaseline(issueID);
-        issueKey(issueID);
-        // customer list
-        checkCustomers(issueID);
-        // action current + history
-        updateAction(document.getElementById('issueID').value);
-        // update file list 
-        $('#files-table-body').empty();
-        $('#delete_btn').removeClass('disabled').attr("disabled", false);
-        refreshFiles(document.getElementById('issueID').value);
-        loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-        loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-      });
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT TOP 1 * FROM [issues] WHERE project_id = @project_id ORDER BY id ASC')
+        .then(function (data) {
+          issueID = data[0].id;
+          document.getElementById('issueID').value = data[0].id;
+          document.getElementById('form_type').value = 'update';
+          document.getElementById('dbid').value = data[0].dbid;
+          document.getElementById('work').value = data[0].work;
+          document.getElementById('vsn').value = data[0].vsn;
+          document.getElementById('date').value = data[0].date;
+          $('#area').val(data[0].area).selectpicker('refresh');
+          $('#key').val(data[0].key).selectpicker('refresh');
+          document.getElementById('defect').value = data[0].defect;
+          document.getElementById('charm').value = data[0].charm;
+          document.getElementById('status').value = data[0].status;
+          document.getElementById('no_further_action').checked = data[0].no_further_action;
+          $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+          $('#priority').val(data[0].priority).selectpicker('refresh');
+          $('#messenger').val(data[0].messenger).selectpicker('refresh');
+          document.getElementById('summary').value = data[0].summary;
+          document.getElementById('description').value = data[0].description;
+          document.getElementById('description_de').value = data[0].description_de;
+          document.getElementById('solution').value = data[0].solution;
+          document.getElementById('solution_de').value = data[0].solution_de;
+          document.getElementById('c2c').value = data[0].c2c;
+          if ($('#charm').val() !== "") {
+            $('#work,#vsn,#status,#priority').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status,#priority').prop('disabled', false);
+          }
+          if ($('#defect').val() !== "") {
+            $('#work,#status,#vsn').prop('disabled', true);
+          } else {
+            $('#work,#status,#vsn').prop('disabled', false);
+          }
+          $('#priority').selectpicker('refresh');
+          issueBaseline(issueID);
+          issueKey(issueID);
+          // customer list
+          checkCustomers(issueID);
+          // action current + history
+          updateAction(document.getElementById('issueID').value);
+          // update file list 
+          $('#files-table-body').empty();
+          $('#delete_btn').removeClass('disabled').attr("disabled", false);
+          refreshFiles(document.getElementById('issueID').value);
+          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+        });
+    }
   });
 
   $('#first_issue').addClass('disabled').attr("disabled", "disabled");
@@ -1542,56 +1563,61 @@ $('#last_issue').click(function () {
   var project_name = document.getElementById('project_name');
   var project_ID = project_name.options[project_name.selectedIndex].value;
   getCustomersList(project_ID);
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT TOP 1 * FROM [issues] WHERE project_id = @project_id ORDER BY id DESC')
-      .then(function (data) {
-        issueID = data[0].id;
-        document.getElementById('issueID').value = data[0].id;
-        document.getElementById('form_type').value = 'update';
-        document.getElementById('dbid').value = data[0].dbid;
-        document.getElementById('work').value = data[0].work;
-        document.getElementById('vsn').value = data[0].vsn;
-        document.getElementById('date').value = data[0].date;
-        $('#area').val(data[0].area).selectpicker('refresh');
-        $('#key').val(data[0].key).selectpicker('refresh');
-        document.getElementById('defect').value = data[0].defect;
-        document.getElementById('charm').value = data[0].charm;
-        document.getElementById('status').value = data[0].status;
-        document.getElementById('no_further_action').checked = data[0].no_further_action;
-        $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
-        $('#priority').val(data[0].priority).selectpicker('refresh');
-        $('#messenger').val(data[0].messenger).selectpicker('refresh');
-        document.getElementById('summary').value = data[0].summary;
-        document.getElementById('description').value = data[0].description;
-        document.getElementById('description_de').value = data[0].description_de;
-        document.getElementById('solution').value = data[0].solution;
-        document.getElementById('solution_de').value = data[0].solution_de;
-        document.getElementById('c2c').value = data[0].c2c;
-        if ($('#charm').val() !== "") {
-          $('#work,#vsn,#status,#priority').prop('disabled', true);
-        } else {
-          $('#work,#vsn,#status,#priority').prop('disabled', false);
-        }
-        if ($('#defect').val() !== "") {
-          $('#work,#status,#vsn').prop('disabled', true);
-        } else {
-          $('#work,#status,#vsn').prop('disabled', false);
-        }
-        $('#priority').selectpicker('refresh');
-        issueBaseline(issueID);
-        issueKey(issueID);
-        // customer list
-        checkCustomers(issueID);
-        // action current + history
-        updateAction(document.getElementById('issueID').value);
-        // update file list 
-        $('#files-table-body').empty();
-        refreshFiles(document.getElementById('issueID').value);
-        loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-        loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-      });
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT TOP 1 * FROM [issues] WHERE project_id = @project_id ORDER BY id DESC')
+        .then(function (data) {
+          issueID = data[0].id;
+          document.getElementById('issueID').value = data[0].id;
+          document.getElementById('form_type').value = 'update';
+          document.getElementById('dbid').value = data[0].dbid;
+          document.getElementById('work').value = data[0].work;
+          document.getElementById('vsn').value = data[0].vsn;
+          document.getElementById('date').value = data[0].date;
+          $('#area').val(data[0].area).selectpicker('refresh');
+          $('#key').val(data[0].key).selectpicker('refresh');
+          document.getElementById('defect').value = data[0].defect;
+          document.getElementById('charm').value = data[0].charm;
+          document.getElementById('status').value = data[0].status;
+          document.getElementById('no_further_action').checked = data[0].no_further_action;
+          $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+          $('#priority').val(data[0].priority).selectpicker('refresh');
+          $('#messenger').val(data[0].messenger).selectpicker('refresh');
+          document.getElementById('summary').value = data[0].summary;
+          document.getElementById('description').value = data[0].description;
+          document.getElementById('description_de').value = data[0].description_de;
+          document.getElementById('solution').value = data[0].solution;
+          document.getElementById('solution_de').value = data[0].solution_de;
+          document.getElementById('c2c').value = data[0].c2c;
+          if ($('#charm').val() !== "") {
+            $('#work,#vsn,#status,#priority').prop('disabled', true);
+          } else {
+            $('#work,#vsn,#status,#priority').prop('disabled', false);
+          }
+          if ($('#defect').val() !== "") {
+            $('#work,#status,#vsn').prop('disabled', true);
+          } else {
+            $('#work,#status,#vsn').prop('disabled', false);
+          }
+          $('#priority').selectpicker('refresh');
+          issueBaseline(issueID);
+          issueKey(issueID);
+          // customer list
+          checkCustomers(issueID);
+          // action current + history
+          updateAction(document.getElementById('issueID').value);
+          // update file list 
+          $('#files-table-body').empty();
+          refreshFiles(document.getElementById('issueID').value);
+          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+        });
+    }
   });
   $('#files-table-body').empty();
   refreshFiles(document.getElementById('issueID').value);
@@ -1876,7 +1902,7 @@ $('.search-btn').click(function (e) {
             $('.search-ph').removeClass('hidden').addClass('show');
             $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
           } else {
-            showNotification('Search returned '+data.length+' issues', 'success', 'glyphicon glyphicon-tasks');
+            showNotification('Search returned ' + data.length + ' issues', 'success', 'glyphicon glyphicon-tasks');
             $('.search-ph').removeClass('show').addClass('hidden');
             for (let i = 0; i < data.length; i++) {
               var charm = (data[i].charm) ? data[i].charm : 'null';
@@ -1922,6 +1948,7 @@ $('.search-btn').click(function (e) {
         }).catch(function (error) {
           showNotification('can\'t search: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
+
     }
   }).catch(function (error) {
     showNotification('error connecting for search : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
@@ -1944,86 +1971,90 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
     });
   } else {
     getCustomersList(project_ID);
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('id', sql.Int, id)
-        .input('project_id', sql.Int, project_ID)
-        .query('SELECT * FROM issues WHERE id = @id; ')
-        .then(function (data) {
-          var issueID = data[0].id;
-          document.getElementById('issueID').value = data[0].id;
-          document.getElementById('form_type').value = 'update';
-          document.getElementById('dbid').value = data[0].dbid;
-          document.getElementById('work').value = data[0].work;
-          document.getElementById('date').value = data[0].date;
-          $('#area').val(data[0].area).selectpicker('refresh');
-          $('#key').val(data[0].key).selectpicker('refresh');
-          document.getElementById('vsn').value = data[0].vsn;
-          document.getElementById('defect').value = data[0].defect;
-          document.getElementById('charm').value = data[0].charm;
-          document.getElementById('status').value = data[0].status;
-          document.getElementById('no_further_action').checked = data[0].no_further_action;
+    var conn4 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn4);
+        request
+          .input('id', sql.Int, id)
+          .input('project_id', sql.Int, project_ID)
+          .query('SELECT * FROM issues WHERE id = @id; ')
+          .then(function (data) {
+            var issueID = data[0].id;
+            document.getElementById('issueID').value = data[0].id;
+            document.getElementById('form_type').value = 'update';
+            document.getElementById('dbid').value = data[0].dbid;
+            document.getElementById('work').value = data[0].work;
+            document.getElementById('date').value = data[0].date;
+            $('#area').val(data[0].area).selectpicker('refresh');
+            $('#key').val(data[0].key).selectpicker('refresh');
+            document.getElementById('vsn').value = data[0].vsn;
+            document.getElementById('defect').value = data[0].defect;
+            document.getElementById('charm').value = data[0].charm;
+            document.getElementById('status').value = data[0].status;
+            document.getElementById('no_further_action').checked = data[0].no_further_action;
 
-          $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
-          $('#priority').val(data[0].priority).selectpicker('refresh');
-          $('#messenger').val(data[0].messenger).selectpicker('refresh');
-          document.getElementById('summary').value = data[0].summary;
-          document.getElementById('description').value = data[0].description;
-          document.getElementById('description_de').value = data[0].description_de;
-          document.getElementById('solution').value = data[0].solution;
-          document.getElementById('solution_de').value = data[0].solution_de;
-          document.getElementById('c2c').value = data[0].c2c;
-          // customer list
-          checkCustomers(issueID);
-          if ($('#charm').val() !== "") {
-            $('#work,#vsn,#status,#priority').prop('disabled', true);
-          } else {
-            $('#work,#vsn,#status,#priority').prop('disabled', false);
-          }
-          if ($('#defect').val() !== "") {
-            $('#work,#status,#vsn').prop('disabled', true);
-          } else {
-            $('#work,#status,#vsn').prop('disabled', false);
-          }
-          $('#priority').selectpicker('refresh');
-          issueBaseline(data[0].id);
-          issueKey(issueID);
-          // action current + history
-          updateAction(document.getElementById('issueID').value);
-          $('#delete_btn').removeClass('disabled').attr("disabled", false);
-          $('#files-table-body').empty();
-          refreshFiles(document.getElementById('issueID').value);
-          loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-          loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
-        }).catch(function (error) {
-          showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-      // check if issue is the last issue
-      new sql.Request()
-        .input('project_id', sql.Int, project_ID)
-        .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
-        .then(function (data) {
-          if (document.getElementById('issueID').value == data[0].max_id) {
+            $('#reproducible').val(data[0].reproducible).selectpicker('refresh');
+            $('#priority').val(data[0].priority).selectpicker('refresh');
+            $('#messenger').val(data[0].messenger).selectpicker('refresh');
+            document.getElementById('summary').value = data[0].summary;
+            document.getElementById('description').value = data[0].description;
+            document.getElementById('description_de').value = data[0].description_de;
+            document.getElementById('solution').value = data[0].solution;
+            document.getElementById('solution_de').value = data[0].solution_de;
+            document.getElementById('c2c').value = data[0].c2c;
+            // customer list
+            checkCustomers(issueID);
+            if ($('#charm').val() !== "") {
+              $('#work,#vsn,#status,#priority').prop('disabled', true);
+            } else {
+              $('#work,#vsn,#status,#priority').prop('disabled', false);
+            }
+            if ($('#defect').val() !== "") {
+              $('#work,#status,#vsn').prop('disabled', true);
+            } else {
+              $('#work,#status,#vsn').prop('disabled', false);
+            }
+            $('#priority').selectpicker('refresh');
+            issueBaseline(data[0].id);
+            issueKey(issueID);
+            // action current + history
+            updateAction(document.getElementById('issueID').value);
+            $('#delete_btn').removeClass('disabled').attr("disabled", false);
+            $('#files-table-body').empty();
+            refreshFiles(document.getElementById('issueID').value);
+            loadCharm(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+            loadTFS(data[0].vsn, data[0].description, data[0].summary, data[0].status, data[0].work, data[0].priority);
+          }).catch(function (error) {
+            showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+        // check if issue is the last issue
+        new sql.Request()
+          .input('project_id', sql.Int, project_ID)
+          .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
+          .then(function (data) {
+            if (document.getElementById('issueID').value == data[0].max_id) {
 
-            $('#last_issue').addClass('disabled').attr("disabled", "disabled");
-            $('#next_issue').addClass('disabled').attr("disabled", "disabled");
-            $('#first_issue').removeClass('disabled').attr("disabled", false);
-            $('#previous_issue').removeClass('disabled').attr("disabled", false);
-          } else if (document.getElementById('issueID').value == data[0].min_id) {
-            $('#last_issue').removeClass('disabled').attr("disabled", false);
-            $('#next_issue').removeClass('disabled').attr("disabled", false);
-            $('#first_issue').addClass('disabled').attr("disabled", "disabled");
-            $('#previous_issue').addClass('disabled').attr("disabled", "disabled");
-          } else {
-            $('#last_issue').removeClass('disabled').attr("disabled", false);
-            $('#next_issue').removeClass('disabled').attr("disabled", false);
-            $('#first_issue').removeClass('disabled').attr("disabled", false);
-            $('#previous_issue').removeClass('disabled').attr("disabled", false);
-          }
-        }).catch(function (error) {
-          showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-
+              $('#last_issue').addClass('disabled').attr("disabled", "disabled");
+              $('#next_issue').addClass('disabled').attr("disabled", "disabled");
+              $('#first_issue').removeClass('disabled').attr("disabled", false);
+              $('#previous_issue').removeClass('disabled').attr("disabled", false);
+            } else if (document.getElementById('issueID').value == data[0].min_id) {
+              $('#last_issue').removeClass('disabled').attr("disabled", false);
+              $('#next_issue').removeClass('disabled').attr("disabled", false);
+              $('#first_issue').addClass('disabled').attr("disabled", "disabled");
+              $('#previous_issue').addClass('disabled').attr("disabled", "disabled");
+            } else {
+              $('#last_issue').removeClass('disabled').attr("disabled", false);
+              $('#next_issue').removeClass('disabled').attr("disabled", false);
+              $('#first_issue').removeClass('disabled').attr("disabled", false);
+              $('#previous_issue').removeClass('disabled').attr("disabled", false);
+            }
+          }).catch(function (error) {
+            showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+      }
     }).catch(function (error) {
       showNotification('Error connecting for getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     });
@@ -2153,28 +2184,31 @@ $('.search-without-btn').click(function (e) {
   var project_ID = project_name.options[project_name.selectedIndex].value;
   $('.search-div').empty();
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
-        ' WHERE  [issues].[charm] IS NULL AND [issues].[defect] IS NULL AND [issues].[project_id] = @project_id ' +
-        'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
-      .then(function (data) {
-        if (data.length == 0) {
-          $('.search-ph').removeClass('hidden').addClass('show');
-          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
-        } else {
-          $('.search-ph').removeClass('show').addClass('hidden');
-          for (let i = 0; i < data.length; i++) {
-            $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-purple animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
+          ' WHERE  [issues].[charm] IS NULL AND [issues].[defect] IS NULL AND [issues].[project_id] = @project_id ' +
+          'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
+        .then(function (data) {
+          if (data.length == 0) {
+            $('.search-ph').removeClass('hidden').addClass('show');
+            $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+          } else {
+            $('.search-ph').removeClass('show').addClass('hidden');
+            for (let i = 0; i < data.length; i++) {
+              $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-purple animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+            }
           }
-        }
-      }).catch(function (error) {
-        showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for searching the issues : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }).catch(function (error) {
+          showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 });
 
@@ -2202,26 +2236,29 @@ $('#s-success').on('click', function (e) {
   e.preventDefault();
   $('.search-div').empty();
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues] WHERE [issues].[no_further_action] = 1 AND [issues].[project_id] = @project_id')
-      .then(function (data) {
-        if (data.length == 0) {
-          $('.search-ph').removeClass('hidden').addClass('show');
-          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
-        } else {
-          $('.search-ph').removeClass('show').addClass('hidden');
-          for (let i = 0; i < data.length; i++) {
-            $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-success animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[no_further_action],[issues].[charm],[issues].[defect] FROM [issues] WHERE [issues].[no_further_action] = 1 AND [issues].[project_id] = @project_id')
+        .then(function (data) {
+          if (data.length == 0) {
+            $('.search-ph').removeClass('hidden').addClass('show');
+            $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+          } else {
+            $('.search-ph').removeClass('show').addClass('hidden');
+            for (let i = 0; i < data.length; i++) {
+              $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-success animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+            }
           }
-        }
-      }).catch(function (error) {
-        showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for searching the issues : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }).catch(function (error) {
+          showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 
 });
@@ -2232,28 +2269,31 @@ $('#s-danger').on('click', function (e) {
   e.preventDefault();
   $('.search-div').empty();
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[dbid],[issues].[no_further_action],[issues].[charm] ,[issues].[defect],[issues].[summary] FROM [issues] LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id] WHERE [actions].[issue_id] IS NULL AND [issues].[project_id] = @project_id')
-      .then(function (data) {
-        if (data.length == 0) {
-          $('.search-ph').removeClass('hidden').addClass('show');
-          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
-        } else {
-          $('.search-ph').removeClass('show').addClass('hidden');
-          for (let i = 0; i < data.length; i++) {
-            $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id +
-              '"><li class="list-group-item list-group-item-danger animated fadeInDown"><h4 class="list-group-item-heading">' +
-              data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[dbid],[issues].[no_further_action],[issues].[charm] ,[issues].[defect],[issues].[summary] FROM [issues] LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id] WHERE [actions].[issue_id] IS NULL AND [issues].[project_id] = @project_id')
+        .then(function (data) {
+          if (data.length == 0) {
+            $('.search-ph').removeClass('hidden').addClass('show');
+            $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+          } else {
+            $('.search-ph').removeClass('show').addClass('hidden');
+            for (let i = 0; i < data.length; i++) {
+              $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id +
+                '"><li class="list-group-item list-group-item-danger animated fadeInDown"><h4 class="list-group-item-heading">' +
+                data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+            }
           }
-        }
-      }).catch(function (error) {
-        showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for searching the issues : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }).catch(function (error) {
+          showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 });
 
@@ -2263,30 +2303,33 @@ $('#s-info').on('click', function (e) {
   e.preventDefault();
   $('.search-div').empty();
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
-        'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
-        ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
-        'AND ([issues].[charm] IS NOT NULL OR [issues].[defect] IS NOT NULL ) AND [issues].[project_id] = @project_id ' +
-        'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
-      .then(function (data) {
-        if (data.length == 0) {
-          $('.search-ph').removeClass('hidden').addClass('show');
-          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
-        } else {
-          $('.search-ph').removeClass('show').addClass('hidden');
-          for (let i = 0; i < data.length; i++) {
-            $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-info animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm] , [issues].[defect] , [issues].[no_further_action] FROM [issues] ' +
+          'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
+          ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
+          'AND ([issues].[charm] IS NOT NULL OR [issues].[defect] IS NOT NULL ) AND [issues].[project_id] = @project_id ' +
+          'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
+        .then(function (data) {
+          if (data.length == 0) {
+            $('.search-ph').removeClass('hidden').addClass('show');
+            $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+          } else {
+            $('.search-ph').removeClass('show').addClass('hidden');
+            for (let i = 0; i < data.length; i++) {
+              $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-info animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+            }
           }
-        }
-      }).catch(function (error) {
-        showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for searching the issues : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }).catch(function (error) {
+          showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 });
 
@@ -2296,30 +2339,33 @@ $('#s-warning').on('click', function (e) {
   var project_ID = project_name.options[project_name.selectedIndex].value;
   $('.search-div').empty();
 
-  sql.connect(config).then(function () {
-    new sql.Request()
-      .input('project_id', sql.Int, project_ID)
-      .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm],[issues].[defect],[issues].[no_further_action] FROM [issues] ' +
-        'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
-        ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
-        'AND ([issues].[charm] IS NULL AND [issues].[defect] IS NULL ) AND [issues].[project_id] = @project_id ' +
-        'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
-      .then(function (data) {
-        if (data.length == 0) {
-          $('.search-ph').removeClass('hidden').addClass('show');
-          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
-        } else {
-          $('.search-ph').removeClass('show').addClass('hidden');
-          for (let i = 0; i < data.length; i++) {
-            $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
-              ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-warning animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+        .input('project_id', sql.Int, project_ID)
+        .query('SELECT [issues].[id],[issues].[dbid],[issues].[summary],[issues].[charm],[issues].[defect],[issues].[no_further_action] FROM [issues] ' +
+          'LEFT JOIN [actions] ON [actions].[issue_id] = [issues].[id]' +
+          ' WHERE [actions].[issue_id] IS NOT NULL AND [issues].[no_further_action] = 0 ' +
+          'AND ([issues].[charm] IS NULL AND [issues].[defect] IS NULL ) AND [issues].[project_id] = @project_id ' +
+          'GROUP BY [issues].[summary],[issues].[dbid],[issues].[id],[issues].[charm], [issues].[defect], [issues].[no_further_action] ')
+        .then(function (data) {
+          if (data.length == 0) {
+            $('.search-ph').removeClass('hidden').addClass('show');
+            $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+          } else {
+            $('.search-ph').removeClass('show').addClass('hidden');
+            for (let i = 0; i < data.length; i++) {
+              $('.search-div').append('<a class="search-result" data-nfa="' + data[i].no_further_action + '"' +
+                ' data-charm="' + data[i].charm + '" data-defect="' + data[i].defect + '" href="' + data[i].id + '"><li class="list-group-item list-group-item-warning animated fadeInDown"><h4 class="list-group-item-heading">' + data[i].dbid + '</h4> <p class="list-group-item-text">' + data[i].summary + '</p></li></a>');
+            }
           }
-        }
-      }).catch(function (error) {
-        showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-      });
-  }).catch(function (error) {
-    showNotification('error connecting for searching the issues : ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        }).catch(function (error) {
+          showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+        });
+    }
   });
 });
 
@@ -2333,22 +2379,24 @@ $('#new-action-btn').on('click', function (e) {
   let date = getDate();
 
   if (desc) {
-    sql.connect(config).then(function () {
-      new sql.Request()
-        .input('desc', sql.NVarChar(sql.MAX), desc)
-        .input('issue_id', sql.Int, issueID)
-        .input('date', sql.NVarChar(10), date)
-        .query('INSERT INTO actions (issue_id,description,date) VALUES (@issue_id ,@desc,@date)')
-        .then(function (data) {
-          showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
-          updateAction(issueID);
-        }).catch(function (error) {
-          showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
-        });
-
+    var conn4 = new sql.Connection(config, function (err) {
+      if (err) {
+        showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+      } else {
+        var request = new sql.Request(conn4);
+        request
+          .input('desc', sql.NVarChar(sql.MAX), desc)
+          .input('issue_id', sql.Int, issueID)
+          .input('date', sql.NVarChar(10), date)
+          .query('INSERT INTO actions (issue_id,description,date) VALUES (@issue_id ,@desc,@date)')
+          .then(function (data) {
+            showNotification('Action inserted successfully', 'success', 'glyphicon glyphicon-tasks');
+            updateAction(issueID);
+          }).catch(function (error) {
+            showNotification('can\'t add new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+          });
+      }
       $('#new-action').val(' ');
-    }).catch(function (error) {
-      showNotification('error connecting for creating new action: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     });
   } else {
     showNotification('Action field is empty', 'danger', 'glyphicon glyphicon-tasks');

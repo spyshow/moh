@@ -158,7 +158,7 @@ app.on('ready', function () {
     show: false,
     icon: path.join(__dirname, 'img/icons/png/64x64.png')
   });
-  //newEvaluation.openDevTools();
+  newEvaluation.openDevTools();
   newEvaluation.setMenu(null);
   newEvaluation.loadURL(newEvaluationPath);
   newEvaluation.on('close', function (event) {
@@ -428,7 +428,7 @@ function sendMail(issue_id, project_title) {
               '<td  class="td">No Number</td>';
           }
           arr += '<td></td>' +
-            '<td class="bold" style="vertical-align: top;">Stauts: ' + data2[0][0].status + '</td>' +
+            '<td class="bold" style="vertical-align: top;">Status: ' + data2[0][0].status + '</td>' +
             '</tr>' +
             '</tbody>' +
             '</table>' +

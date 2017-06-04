@@ -290,7 +290,7 @@ function allIssues(project_id) {
                                                 '<td class="bold">Charm/Defect:   </td>' +
                                                 '<td>No Number</td>';
                                         }
-                                        arr1 += '<td style="vertical-align: top;" class="bold">Stauts:</td>' +
+                                        arr1 += '<td style="vertical-align: top;" class="bold">Status:</td>' +
                                             '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
@@ -502,7 +502,7 @@ function allIssuesCustomer(project_id, customer_id) {
                                                 '<td class="bold">Charm/Defect:   </td>' +
                                                 '<td>No Number</td>';
                                         }
-                                        arr1 += '<td class="bold">Stauts:</td>' +
+                                        arr1 += '<td class="bold">Status:</td>' +
                                             '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
@@ -709,7 +709,7 @@ function allIssuesBaseline(project_id, baseline_id) {
                                                 '<td class="bold">Charm/Defect:   </td>' +
                                                 '<td>No Number</td>';
                                         }
-                                        arr1 += '<td class="bold">Stauts:</td>' +
+                                        arr1 += '<td class="bold">Status:</td>' +
                                             '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
@@ -919,7 +919,7 @@ function allIssueBoth(project_id, customer_id, baseline_id) {
                                                 '<td class="bold">Charm/Defect:   </td>' +
                                                 '<td>No Number</td>';
                                         }
-                                        arr1 += '<td class="bold">Stauts:</td>' +
+                                        arr1 += '<td class="bold">Status:</td>' +
                                             '<td>' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
@@ -1161,7 +1161,7 @@ function allIssuespdf(project_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold" style="vertical-align: top;">Stauts: ' + status + '</td>' +
+                                            '<td class="bold" style="vertical-align: top;">Status: ' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1385,7 +1385,7 @@ function allIssuesCustomerpdf(project_id, customer_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + status + '</td>' +
+                                            '<td class="bold">Status: ' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1605,7 +1605,7 @@ function allIssuesBaselinepdf(project_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + status + '</td>' +
+                                            '<td class="bold">Status: ' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
@@ -1827,7 +1827,7 @@ function allIssueBothpdf(project_id, customer_id, baseline_id) {
                                                 '<td  class="td">No Number</td>';
                                         }
                                         arr1 += '<td></td>' +
-                                            '<td class="bold">Stauts: ' + status + '</td>' +
+                                            '<td class="bold">Status: ' + status + '</td>' +
                                             '</tr>' +
                                             '</tbody>' +
                                             '</table>' +
