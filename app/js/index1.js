@@ -377,14 +377,15 @@ function loadCharm(vsn, description, summary, status, work, priority) {
         .input('id', 'MR_00' + document.getElementById('charm').value)
         .query('SELECT priority ,state_num as status,summary ,details,remain_name as work,real_version as vsn FROM Defect where id=@id')
         .then(function (data) {
-          console.log(data[0].details)
-          console.log(description)
+          console.log(data[0])
+          console.log()
           if (data[0] === undefined) {
+            console.log(true)
             showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
             $('#charm').val('');
           } else {
-            var priority = data[0].priority;
-            switch (priority.trim()) {
+            var priority = data[0].priority.trim();
+            switch (priority) {
               case '1-high':
                 $('#priority').val(1).selectpicker('refresh');
                 break;
@@ -413,8 +414,10 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             }
             if (description === "") {
               description = null
+            } else if (description === undefined ){
+              description = ""
             }
-            console.log(description.trim().replace(/\s+/g," ") , data[0].details.trim().replace(/\s+/g," "));
+            //console.log(description.trim().replace(/\s+/g," ") , data[0].details.trim().replace(/\s+/g," "));
             if (description.trim().replace(/\s+/g," ") != data[0].details.trim().replace(/\s+/g," ")) {
               $('#description').css('background-color', '#f0ad4e');
               if (descriptionTimer) clearTimeout(descriptionTimer);
@@ -462,7 +465,7 @@ function loadCharm(vsn, description, summary, status, work, priority) {
           }
 
         }).catch(function (error) {
-          showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
+          showNotification('Charm Number Error: Wrong Charm Number'+ error, 'danger', 'glyphicon glyphicon-tasks');
           $('#charm').val('');
         });
     }).catch(function (error) {
