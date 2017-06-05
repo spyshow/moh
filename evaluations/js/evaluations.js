@@ -377,8 +377,7 @@ $('#area').on('click', function (e) {
                                         break;
                                 }
                                 chartData.data.datasets[0].data.push(data2[0][0]['']);
-                                console.log(chartData.data)
-                                console.log(data1.area)
+
                             }).catch(function (error) {
                                 showNotification('Error on selecting area for chart:' + error.message, 'danger', 'glyphicon glyphicon-tasks');
                             });
@@ -1088,7 +1087,7 @@ function distWord(project_id) {
                                 });                                
                               });
                               //FileSaver.saveAs(converted, 'table.docx', true);
-                            }, 500);
+                            }, 1500);
                         });
 
 
@@ -1233,7 +1232,7 @@ function distPdf(project_id) {
                                 }, function (filename) {
                                     pdf.create(docx, conf).toFile(filename, function (err, res) {});
                                 });
-                            }, 500);
+                            }, 1500);
                         });
                     });
                 });
@@ -1374,7 +1373,7 @@ function distExcel(project_id) {
                                     });
                                 });
 
-                            }, 500);
+                            }, 1500);
                         });
 
 
@@ -1409,8 +1408,7 @@ function getbasedata(area, key, baselines, project_id, callback) {
                     }
                 }
                 query += ' FROM issues';
-                console.log(query);
-                console.log(data1);
+
                 request
                     .input('area', area)
                     .input('project_id', sql.Int, project_id)
@@ -1606,7 +1604,7 @@ function fragWord(project_id) {
                           });                                
                         });
                         //FileSaver.saveAs(converted, 'table.docx');
-                    }, 500);
+                    }, 1500);
                 });
                 callback(null, docx);
             });
@@ -1766,7 +1764,6 @@ function fragPdf(project_id) {
                                 "height": "20mm"
                             }
                         };
-                        console.log(docx);
                         dialog.showSaveDialog({
                             filters: [{
                                 name: 'PDFs',
@@ -1777,7 +1774,7 @@ function fragPdf(project_id) {
                         }, function (filename) {
                             pdf.create(docx, conf).toFile(filename, function (err, res) {});
                         });
-                    }, 500);
+                    }, 1500);
                 });
                 callback(null, docx);
             });
@@ -1947,7 +1944,7 @@ function fragExcel(project_id) {
                             });
                         });
 
-                    }, 500);
+                    }, 1500);
                 });
                 callback(null, docx);
             });
