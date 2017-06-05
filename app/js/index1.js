@@ -382,24 +382,25 @@ function loadCharm(vsn, description, summary, status, work, priority) {
         .query('SELECT priority ,state_num as status,summary ,details,remain_name as work,real_version as vsn FROM Defect where id=@id')
         .then(function (data) {
           if (data[0] === undefined) {
-            console.log(true)
             showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
             $('#charm').val('');
           } else {
-            var priority = data[0].priority.trim();
-            switch (priority) {
+            var charmPriority= data[0].priority.trim();
+            switch (charmPriority) {
               case '1-high':
                 $('#priority').val(1).selectpicker('refresh');
+                charmPriority = 1;
                 break;
               case '2-medium':
                 $('#priority').val(2).selectpicker('refresh');
+                charmPriority = 2;
                 break;
               case '3-low':
                 $('#priority').val(3).selectpicker('refresh');
+                charmPriority = 3;
                 break;
             }
-            console.log(priority.trim() , data[0].priority)
-            if (priority !== data[0].priority) {
+            if (priority !== charmPriority) {
               $('#priority').selectpicker('setStyle', 'btn-warning');
               if (priorityTimer) clearTimeout(priorityTimer);
               priorityTimer = setTimeout(function () {
@@ -420,7 +421,6 @@ function loadCharm(vsn, description, summary, status, work, priority) {
             } else if (description === undefined ){
               description = ""
             }
-            //console.log(description.trim().replace(/\s+/g," ") , data[0].details.trim().replace(/\s+/g," "));
             if (description.trim().replace(/\s+/g," ") != data[0].details.trim().replace(/\s+/g," ")) {
               $('#description').css('background-color', '#f0ad4e');
               if (descriptionTimer) clearTimeout(descriptionTimer);
