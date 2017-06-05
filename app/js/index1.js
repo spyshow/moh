@@ -2033,7 +2033,8 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
             showNotification('Error getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
           });
         // check if issue is the last issue
-        new sql.Request()
+        var req = new sql.Request(conn4);
+        req
           .input('project_id', sql.Int, project_ID)
           .query('select MIN(id) AS min_id, MAX(id) AS max_id from issues where project_id = @project_id')
           .then(function (data) {
