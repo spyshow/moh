@@ -259,7 +259,7 @@ function getprojectKey(project_id) {
         .input('project_id', project_id)
         .query('SELECT * FROM keys' +
           ' INNER JOIN projects_keys AS pb ON keys.id = pb.key_id ' +
-          ' WHERE  pb.project_id = @project_id')
+          ' WHERE  pb.project_id = @project_id ORDER BY name')
         .then(function (data) {
           var html = '';
           for (var i = 0; i < data.length; i++) {
