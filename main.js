@@ -714,7 +714,7 @@ const template = [{
         `);
     }
   }]
-}, {
+}/*, {
   label: 'dev',
   submenu: [{
     label: 'reload',
@@ -729,7 +729,7 @@ const template = [{
       if (focusedWindow) focusedWindow.webContents.toggleDevTools();
     }
   }]
-}];
+}*/];
 
 
 // to handel the error when user press cancel on update Datebase save dialog

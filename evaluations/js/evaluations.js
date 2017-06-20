@@ -1087,7 +1087,7 @@ function distWord(project_id) {
                                 });                                
                               });
                               //FileSaver.saveAs(converted, 'table.docx', true);
-                            }, 1500);
+                            }, 2200);
                         });
 
 
@@ -1232,7 +1232,7 @@ function distPdf(project_id) {
                                 }, function (filename) {
                                     pdf.create(docx, conf).toFile(filename, function (err, res) {});
                                 });
-                            }, 1500);
+                            }, 2200);
                         });
                     });
                 });
@@ -1373,7 +1373,7 @@ function distExcel(project_id) {
                                     });
                                 });
 
-                            }, 1500);
+                            }, 2200);
                         });
 
 
@@ -1604,7 +1604,7 @@ function fragWord(project_id) {
                           });                                
                         });
                         //FileSaver.saveAs(converted, 'table.docx');
-                    }, 1500);
+                    }, 2200);
                 });
                 callback(null, docx);
             });
@@ -1774,7 +1774,7 @@ function fragPdf(project_id) {
                         }, function (filename) {
                             pdf.create(docx, conf).toFile(filename, function (err, res) {});
                         });
-                    }, 1500);
+                    }, 2200);
                 });
                 callback(null, docx);
             });
@@ -1944,7 +1944,7 @@ function fragExcel(project_id) {
                             });
                         });
 
-                    }, 1500);
+                    }, 2200);
                 });
                 callback(null, docx);
             });
