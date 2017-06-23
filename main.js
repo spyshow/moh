@@ -589,8 +589,12 @@ ipc.on('updateDatabase', function (event, project_ID, project_title) {
                     if (data[n].status != data2[0].status) {
                       docx += '<p>in Charm number  MR_00' + data[n].charm + ' the status  changed from "' + data[n].status + '" to "' + data2[0].status + '"</p>';
                     }
-                    if (data[n].vsn != data2[0].vsn) {
-                      docx += '<p>in Charm number  MR_00' + data[n].charm + ' the vsn changed from "' + data[n].vsn + '" to "' + data2[0].vsn + '"</p>';
+                    var vsn = data[n].vsn;
+                    if(data[n].vsn === ""){
+                      vsn = null;
+                    }
+                    if (vsn != data2[0].vsn) {
+                      docx += '<p>in Charm number  MR_00' + data[n].charm + ' the vsn changed from "' + vsn + '" to "' + data2[0].vsn + '"</p>';
                     }
                   }).catch(function (error) {
                     // showNotification('Charm Number Error: Wrong Charm Number', 'danger', 'glyphicon glyphicon-tasks');
