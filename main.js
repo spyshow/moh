@@ -718,7 +718,7 @@ const template = [{
         `);
     }
   }]
-}/*, {
+}, /*{
   label: 'dev',
   submenu: [{
     label: 'reload',

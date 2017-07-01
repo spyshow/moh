@@ -743,61 +743,61 @@ ipc.on('updateTFSprocess', function () {
         '<br><br><br><p style="text-align:center;font-size: 36px;font-weight: bold;">Project: ' + project_title + '</p><div style="page-break-after:always;"></div>';
       var request = new sql.Request(connection1);
       request
-        .input('project_id', sql.Int, project_ID)
-        .query('SELECT [issues].[id],[issues].[defect],[issues].[status],[issues].[vsn]' +
-          ' FROM [issues] ' +
-          ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
-        .then(function (data) {
-          async.timesSeries(data.length, function (n, callback) {
-            var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
-            //var url = __dirname + '\\test.json';
-            $.ajax({
-              url: url,
-              type: 'GET',
-              crossDomain: false,
-              dataType: 'json',
-              username: 'Ad005\\z003psst',
-              password: 'Ml998877665544332211',
-              xhrFields: {
-                withCredentials: true
-              }
-            }).done(function (data1) {
-              if (data[n].status != data1.fields["System.State"]) {
-                docx += '<p>in Defect number ' + data[n].defect + ' the status  changed from "' + data[n].status + '" to "' + data1.fields["System.State"] + '"</p>';
-              }
-              if (data[n].vsn != data1.fields["Siemens.IKM.Common.ProductRelease"]) {
-                docx += '<p>in Defect number ' + data[n].defect + ' the vsn changed from "' + data[n].vsn + '" to "' + data1.fields["Siemens.IKM.Common.ProductRelease"] + '"</p>';
-              }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-              console.log('failed with tfs id = ' + data[n].defect);
-              console.log(textStatus);
-            });
-            callback();
-          }, function () {
-            setTimeout(function () {
-              var conf = {
-                "format": "A4",
-                "header": {
-                  "height": "20mm"
-                }
-              };
-              var date = getDate();
-              dialog.showSaveDialog({
-                filters: [{
-                  name: 'PDFs',
-                  extensions: ['pdf']
-                }],
-                title: 'Save the Update TFS as PDF',
-                defaultPath: path.join(app.getPath('desktop'), 'Update TFS-' + project_title + '-' + date + '.pdf')
-              }, function (filename) {
-                pdf.create(docx, conf).toFile(filename, function (err, res) {
-                  if (err) return console.log(err);
-                });
-
-              });
-            }, 100);
+      .input('project_id', sql.Int, project_ID)
+      .query('SELECT [issues].[id],[issues].[defect],[issues].[status],[issues].[vsn]' +
+        ' FROM [issues] ' +
+        ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
+      .then(function (data) {
+        async.timesSeries(data.length, function (n, callback) {
+          var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
+          //var url = __dirname + '\\test.json';
+          $.ajax({
+            url: url,
+            type: 'GET',
+            crossDomain: false,
+            dataType: 'json',
+            username: 'Ad005\\z003psst',
+            password: 'Ml998877665544332211',
+            xhrFields: {
+              withCredentials: true
+            }
+          }).done(function (data1) {
+            if (data[n].status != data1.fields["System.State"]) {
+              docx += '<p>in Defect number ' + data[n].defect + ' the status  changed from "' + data[n].status + '" to "' + data1.fields["System.State"] + '"</p>';
+            }
+            if (data[n].vsn != data1.fields["Siemens.IKM.Common.ProductRelease"]) {
+              docx += '<p>in Defect number ' + data[n].defect + ' the vsn changed from "' + data[n].vsn + '" to "' + data1.fields["Siemens.IKM.Common.ProductRelease"] + '"</p>';
+            }
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('failed with tfs id = ' + data[n].defect);
+            console.log(textStatus);
           });
+          callback();
+        }, function () {
+          setTimeout(function () {
+            var conf = {
+              "format": "A4",
+              "header": {
+                "height": "20mm"
+              }
+            };
+            var date = getDate();
+            dialog.showSaveDialog({
+              filters: [{
+                name: 'PDFs',
+                extensions: ['pdf']
+              }],
+              title: 'Save the Update TFS as PDF',
+              defaultPath: path.join(app.getPath('desktop'), 'Update TFS-' + project_title + '-' + date + '.pdf')
+            }, function (filename) {
+              pdf.create(docx, conf).toFile(filename, function (err, res) {
+                if (err) return console.log(err);
+              });
+
+            });
+          }, 100);
         });
+      });
     }
   });
 });
@@ -2061,8 +2061,6 @@ $('.s_list').delegate('.search-result', 'click', function (e) {
           showNotification('error checking if issue is the last issue: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
       }
-    }).catch(function (error) {
-      showNotification('Error connecting for getting the searched issue :' + error.message, 'danger', 'glyphicon glyphicon-tasks');
     });
 
   }
@@ -2214,6 +2212,112 @@ $('.search-without-btn').click(function (e) {
         }).catch(function (error) {
           showNotification('can\'t search the issues: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
         });
+    }
+  });
+});
+
+$('.search-updatedatabase-btn').click(function (e) {
+  e.preventDefault();
+  var project_name = document.getElementById('project_name');
+  var project_ID = project_name.options[project_name.selectedIndex].value;
+  $('.search-div').empty();
+
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+      .input('project_id', sql.Int, project_ID)
+      .query('SELECT [issues].[id],[issues].[charm],[issues].[no_further_action],[issues].[defect],[issues].[summary],[issues].[dbid],[issues].[status],[issues].[vsn] ' +
+        ' FROM [issues] ' +
+        ' WHERE [issues].[project_id] = @project_id AND [issues].[charm] IS NOT NULL  ORDER BY [issues].[id] DESC')
+      .then(function (data) {
+        console.log(data)
+        if (data.length == 0) {
+          $('.search-ph').removeClass('hidden').addClass('show');
+          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+        } else {
+          $('.search-ph').removeClass('show').addClass('hidden');
+          async.timesSeries(data.length, function (n, callback) {
+            var conn2 = new sql.Connection(charm, function (err) {
+              if (err) {
+                // showNotification('error connecting for selecting actions for ALL issues: ' + err.message, 'danger', 'glyphicon glyphicon-tasks');
+              } else {
+                var request = new sql.Request(conn2);
+                request
+                  .input('id', 'MR_00' + data[n].charm)
+                  .query('SELECT state_num as status,real_version as vsn FROM Defect where id=@id')
+                  .then(function (data2) {
+                    console.log(data[n])
+                    var vsn = data[n].vsn;
+                    if(data[n].vsn === ""){
+                      vsn = null;
+                    }
+                    if (data[n].status != data2[0].status || vsn != data2[0].vsn) {
+                      $('.search-div').append('<a class="search-result" data-nfa="' + data[n].no_further_action + '"' +
+                        ' data-charm="' + data[n].charm + '" data-defect="' + data[n].defect + '" href="' + data[n].id + '"><li class="list-group-item list-group-item-pink animated fadeInDown"><h4 class="list-group-item-heading">' + data[n].dbid + '</h4> <p class="list-group-item-text">' + data[n].summary + '</p></li></a>');
+                    }
+                  });
+                callback();  
+              }
+            });
+          });
+        }
+      });
+    }
+  });
+});
+
+$('.search-updatetfs-btn').click(function (e) {
+  e.preventDefault();
+  var project_name = document.getElementById('project_name');
+  var project_ID = project_name.options[project_name.selectedIndex].value;
+  $('.search-div').empty();
+
+  var conn4 = new sql.Connection(config, function (err) {
+    if (err) {
+      showNotification('error connecting for geting files: ' + error.message, 'danger', 'glyphicon glyphicon-tasks');
+    } else {
+      var request = new sql.Request(conn4);
+      request
+      .input('project_id', sql.Int, project_ID)
+      .query('SELECT [issues].[id],[issues].[charm],[issues].[no_further_action],[issues].[defect],[issues].[summary],[issues].[dbid],[issues].[status],[issues].[vsn] ' +
+        ' FROM [issues] ' +
+        ' WHERE [issues].[project_id] = @project_id AND [issues].[defect] IS NOT NULL  ORDER BY [issues].[id] DESC')
+      .then(function (data) {
+        if (data.length == 0) {
+          $('.search-ph').removeClass('hidden').addClass('show');
+          $('#search-ph-msg').text('No Result returned from DataBase  ').addClass('text-danger');
+        } else {
+          $('.search-ph').removeClass('show').addClass('hidden');
+          async.timesSeries(data.length, function (n, callback) {
+            var url = " https://tfs.healthcare.siemens.com:8090/tfs/IKM.TPC.Projects/_apis/wit/workitems/" + data[n].defect + "?api-version=3.0-preview";
+            //var url = __dirname + '\\test.json';
+            $.ajax({
+              url: url,
+              type: 'GET',
+              crossDomain: false,
+              dataType: 'json',
+              username: 'Ad005\\z003psst',
+              password: 'Ml998877665544332211',
+              xhrFields: {
+                withCredentials: true
+              }
+            }).done(function (data1) {
+              if (data[n].status != data1.fields["System.State"] || data[n].vsn != data1.fields["Siemens.IKM.Common.ProductRelease"]) {
+                $('.search-div').append('<a class="search-result" data-nfa="' + data[n].no_further_action + '"' +
+                  ' data-charm="' + data[n].charm + '" data-defect="' + data[n].defect + '" href="' + data[n].id + '"><li class="list-group-item list-group-item-light-blue animated fadeInDown"><h4 class="list-group-item-heading">' + data[n].dbid + '</h4> <p class="list-group-item-text">' + data[n].summary + '</p></li></a>');
+              }
+              
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+              console.log('failed with tfs id = ' + data[n].defect);
+              console.log(textStatus);
+            });
+            callback();
+          });
+        }
+      });
     }
   });
 });

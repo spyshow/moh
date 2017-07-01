@@ -361,7 +361,7 @@ textarea {
 
 #s-buttons {
     width: 50%;
-    margin-top: 43px;
+    margin-top: 1px;
 }
 
 #s-info,
@@ -395,6 +395,20 @@ textarea {
     width: 100%;
 }
 
+.search-updatedatabase-btn {
+    padding: 6px;
+    margin-bottom: 10px;
+    float: right;
+    width: 100%;
+}
+
+.search-updatetfs-btn {
+    padding: 6px;
+    margin-bottom: 10px;
+    float: right;
+    width: 100%;
+}
+
 .list-group {
     overflow-y: auto;
     overflow-x: auto;
@@ -419,8 +433,19 @@ textarea {
 .list-group-item-purple{
     color: #b05fd8;
     background-color: #edd4f9;
-    border-radius: 4px;
-    
+    border-radius: 4px; 
+}
+
+.list-group-item-pink{
+    color: #F4E1E1;
+    background-color: #edd4f9;
+    border-radius: 4px; 
+}
+
+.list-group-item-light-blue{
+    color: #000;
+    background-color: #a0b0b8;
+    border-radius: 4px; 
 }
 
 
